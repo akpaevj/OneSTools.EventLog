@@ -7,6 +7,8 @@ namespace OneSTools.EventLog
     {
         public DateTime DateTime { get; set; }
         public string TransactionStatus { get; set; }
+        public DateTime TransactionDateTime { get; set; }
+        public int TransactionNumber { get; set; }
         public string UserUuid { get; set; }
         public string User { get; set; }
         public string Computer { get; set; }
@@ -18,6 +20,7 @@ namespace OneSTools.EventLog
         public string MetadataUuid { get; set; }
         public string Metadata { get; set; }
         public string Data { get; set; }
+        public string DataUuid { get; set; }
         public string DataPresentation { get; set; }
         public string Server { get; set; }
         public int MainPort { get; set; }

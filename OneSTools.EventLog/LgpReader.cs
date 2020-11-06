@@ -144,7 +144,7 @@ namespace OneSTools.EventLog
             var eventLogItem = new EventLogItem
             {
                 DateTime = DateTime.ParseExact((string)parsedData[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture),
-                TransactionStatus = (string)parsedData[1]
+                TransactionStatus = GetTransactionPresentation((string)parsedData[1])
             };
 
             var (Value, Uuid) = _lgfReader.GetReferencedObjectValue(ObjectType.Users, (int)parsedData[3], cancellationToken);
@@ -155,28 +155,109 @@ namespace OneSTools.EventLog
             eventLogItem.Application = _lgfReader.GetObjectValue(ObjectType.Applications, (int)parsedData[5], cancellationToken);
             eventLogItem.Connection = (int)parsedData[6];
             eventLogItem.Event = _lgfReader.GetObjectValue(ObjectType.Events, (int)parsedData[7], cancellationToken);
-            eventLogItem.Severity = (string)parsedData[8];
+            eventLogItem.Severity = GetSeverityPresentation((string)parsedData[8]);
             eventLogItem.Comment = (string)parsedData[9];
 
             (Value, Uuid) = _lgfReader.GetReferencedObjectValue(ObjectType.Metadata, (int)parsedData[10], cancellationToken);
             eventLogItem.MetadataUuid = Uuid;
             eventLogItem.Metadata = Value;
 
-            eventLogItem.Data = (string)parsedData[11];
+            eventLogItem.Data = GetData(parsedData[11]);
             eventLogItem.DataPresentation = (string)parsedData[12];
             eventLogItem.Server = _lgfReader.GetObjectValue(ObjectType.Servers, (int)parsedData[13], cancellationToken);
 
             var mainPort = _lgfReader.GetObjectValue(ObjectType.MainPorts, (int)parsedData[14], cancellationToken);
-            if (mainPort != null)
+            if (mainPort != "")
                 eventLogItem.MainPort = int.Parse(mainPort);
 
             var addPort = _lgfReader.GetObjectValue(ObjectType.AddPorts, (int)parsedData[15], cancellationToken);
-            if (addPort != null)
+            if (addPort != "")
                 eventLogItem.AddPort = int.Parse(addPort);
 
             eventLogItem.Session = (int)parsedData[16];
 
             return eventLogItem;
+        }
+
+        private string GetTransactionPresentation(string str)
+        {
+            switch (str)
+            {
+                case "U":
+                    return "Commited";
+                case "C":
+                    return "RolledBack";
+                case "R":
+                    return "InProgress";
+                case "N":
+                    return "NotApplicable";
+                default:
+                    return "";
+            }
+        }
+
+        private string GetData(BracketsFileNode node)
+        {
+            var dataType = (string)node[0];
+
+            switch (dataType)
+            {
+                case "R":
+                    return (string)node[1];
+                case "U":
+                    return "";
+                case "S":
+                    return (string)node[1];
+                case "P":
+                    StringBuilder str = new StringBuilder();
+
+                    var subDataNode = node[1];
+                    var subDataType = (int)subDataNode[0];
+
+                    if (subDataType == 1) // This is additional data of "Authentication (Windows auth) in thin or thick client"
+                    {
+                        var osUserName = GetData(subDataNode[1]);
+                    }
+                    else if (subDataType == 6) // This is additional data of "Authentication in thin or thick client" event
+                    {
+                        var userName = GetData(subDataNode[1]);
+                    }
+                    else if (subDataType == 2) // This is additional data of "Authentication in COM connection" event
+                    {
+                        var userName = GetData(subDataNode[1]);
+                    }
+                    else if (subDataType == 11) // This is additional data of "Access denied" event
+                    {
+                        var right = GetData(subDataNode[1]);
+                        var action = GetData(subDataNode[2]);
+                        var accessObject = GetData(subDataNode[3]);
+                    }
+                    else
+                    {
+                        
+                    }
+
+                    return str.ToString();
+                default:
+                    return "";
+            }
+        }
+
+        private string GetSeverityPresentation(string str)
+        {
+            switch (str)
+            {
+                case "I":
+                    return "Information";
+                case "E":
+                    return "Error";
+                case "W":
+                    return "Warning";
+                case "N":
+                    return "Notification";
+                default:
+                    return "";
+            }
         }
 
         public void Dispose()

@@ -16,7 +16,6 @@ namespace OneSTools.EventLog
         private readonly bool _liveMode;
         private readonly LgfReader _lgfReader;
         private LgpReader _lgpReader;
-        private FileSystemWatcher _lgpWatcher;
 
         public EventLogReader(string logFolder, bool liveMode = false)
         {
@@ -27,9 +26,6 @@ namespace OneSTools.EventLog
 
         public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken)
         {
-            if (_liveMode)
-                StartLgpFilesWatcher();
-
             if (_lgpReader == null)
                 SetNextLgpReader();
 
@@ -61,18 +57,6 @@ namespace OneSTools.EventLog
             return item;
         }
 
-        private void StartLgpFilesWatcher()
-        {
-            _lgpWatcher = new FileSystemWatcher(_logFolder)
-            {
-                Filter = "*.lgp",
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.LastWrite
-            };
-            _lgpWatcher.Created += LgpWatcher_Created;
-
-            _lgpWatcher.EnableRaisingEvents = true;
-        }
-
         private bool SetNextLgpReader()
         {
             var currentReaderLastWriteDateTime = DateTime.MinValue;
@@ -100,19 +84,8 @@ namespace OneSTools.EventLog
             return false;
         }
 
-        private void LgpWatcher_Created(object sender, FileSystemEventArgs e)
-        {
-            if (e.ChangeType == WatcherChangeTypes.Created)
-            {
-
-            }
-        }
-
         public void Dispose()
         {
-            if (_lgpWatcher != null)
-                _lgpWatcher.Dispose();
-
             if (_lgfReader != null)
                 _lgfReader.Dispose();
         }

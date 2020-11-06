@@ -8,7 +8,6 @@ namespace OneSTools.EventLog
 {
     sealed class LgfReader : IDisposable
     {
-        CancellationToken _cancellationToken;
         private FileStream fileStream;
         private StreamReader streamReader;
 
@@ -110,7 +109,7 @@ namespace OneSTools.EventLog
         public string GetObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken)
         {
             if (number == 0)
-                return null;
+                return "";
 
             if (_objects.TryGetValue((objectType, number), out var value))
                 return value;
@@ -126,7 +125,7 @@ namespace OneSTools.EventLog
         public (string Value, string Uuid) GetReferencedObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken)
         {
             if (number == 0)
-                return (null, null);
+                return ("", "");
 
             if (_referencedObjects.TryGetValue((objectType, number), out var value))
                 return value;
