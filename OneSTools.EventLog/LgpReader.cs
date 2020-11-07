@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -12,14 +13,15 @@ using System.Threading.Tasks;
 
 namespace OneSTools.EventLog
 {
-    sealed class LgpReader : IDisposable
+    internal class LgpReader : IDisposable
     {
         private LgfReader _lgfReader;
         private FileStream fileStream;
         private StreamReader streamReader;
+        private long _lastPosition;
 
         public string LgpPath { get; private set; }
-        public bool EndOfStream => streamReader.EndOfStream;
+        public string LgpFileName => Path.GetFileNameWithoutExtension(LgpPath);
 
         public LgpReader(string lgpPath, LgfReader lgfReader)
         {
@@ -27,9 +29,12 @@ namespace OneSTools.EventLog
             _lgfReader = lgfReader;
         }
 
-        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken)
+        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken, long position = 0)
         {
             InitializeStreams();
+
+            if (position != 0)
+                SetPosition(position);
 
             return ReadEventLogItemData(cancellationToken);
         }
@@ -41,7 +46,7 @@ namespace OneSTools.EventLog
             streamReader.SetPosition(position);
         }
 
-        public long GetPosition(long position)
+        public long GetPosition()
         {
             InitializeStreams();
 
@@ -78,7 +83,7 @@ namespace OneSTools.EventLog
                 if (!File.Exists(LgpPath))
                     throw new Exception($"Cannot find lgp file by path {LgpPath}");
 
-                fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read);
+                fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 streamReader = new StreamReader(fileStream);
 
                 // skip header (first three lines)
@@ -91,8 +96,9 @@ namespace OneSTools.EventLog
         {
             StringBuilder data = new StringBuilder();
 
-            var quotesCount = 0;
-            var bracketsCount = 0;
+            var quotesQuantity = 0;
+            var bracketsQuantity = 0;
+            bool start = false;
             bool end = false;
 
             while (true)
@@ -100,22 +106,38 @@ namespace OneSTools.EventLog
                 if (cancellationToken.IsCancellationRequested)
                     break;
 
+                if (_lastPosition != 0)
+                    SetPosition(_lastPosition);
+
                 var currentLine = streamReader.ReadLine();
 
                 if (currentLine is null)
+                {
+                    _lastPosition = GetPosition();
                     break;
+                }
+                else
+                    _lastPosition = 0;
 
-                bracketsCount += currentLine.Count(c => c == '{');
-                bracketsCount -= currentLine.Count(c => c == '}');
-                quotesCount += currentLine.Count(c => c == '"');
+                if (!start && currentLine.Length > 0 && currentLine[0] == '{')
+                    start = true;
 
-                data.Append(currentLine + '\n');
+                if (start)
+                {
+                    data.Append(currentLine + '\n');
 
-                if (bracketsCount == 0)
-                    end = true;
+                    bracketsQuantity += currentLine.Count(c => c == '{');
+                    bracketsQuantity -= currentLine.Count(c => c == '}');
+                    quotesQuantity += currentLine.Count(c => c == '"');
 
-                if (bracketsCount == 0 && quotesCount != 0)
-                    end = (quotesCount % 2) == 0;
+                    if (currentLine == "}," && bracketsQuantity == 0 || streamReader.EndOfStream)
+                    {
+                        end = true;
+
+                        if (bracketsQuantity != 0)
+                            end = (bracketsQuantity % 2) == 0;
+                    }
+                }
 
                 if (end)
                     break;
@@ -162,7 +184,7 @@ namespace OneSTools.EventLog
             eventLogItem.MetadataUuid = Uuid;
             eventLogItem.Metadata = Value;
 
-            eventLogItem.Data = GetData(parsedData[11]);
+            eventLogItem.Data = GetData(parsedData[11]).Trim();
             eventLogItem.DataPresentation = (string)parsedData[12];
             eventLogItem.Server = _lgfReader.GetObjectValue(ObjectType.Servers, (int)parsedData[13], cancellationToken);
 
@@ -212,30 +234,20 @@ namespace OneSTools.EventLog
                     StringBuilder str = new StringBuilder();
 
                     var subDataNode = node[1];
-                    var subDataType = (int)subDataNode[0];
 
-                    if (subDataType == 1) // This is additional data of "Authentication (Windows auth) in thin or thick client"
-                    {
-                        var osUserName = GetData(subDataNode[1]);
-                    }
-                    else if (subDataType == 6) // This is additional data of "Authentication in thin or thick client" event
-                    {
-                        var userName = GetData(subDataNode[1]);
-                    }
-                    else if (subDataType == 2) // This is additional data of "Authentication in COM connection" event
-                    {
-                        var userName = GetData(subDataNode[1]);
-                    }
-                    else if (subDataType == 11) // This is additional data of "Access denied" event
-                    {
-                        var right = GetData(subDataNode[1]);
-                        var action = GetData(subDataNode[2]);
-                        var accessObject = GetData(subDataNode[3]);
-                    }
-                    else
-                    {
-                        
-                    }
+                    //var subDataType = (int)subDataNode[0];
+                    // What's known (subDataNode):
+                    // 1 - additional data of "Authentication (Windows auth) in thin or thick client"
+                    // 2 - additional data of "Authentication in COM connection" event
+                    // 6 - additional data of "Authentication in thin or thick client" event
+                    // 11 - additional data of "Access denied" event
+
+                    // I hope this is temporarily method
+                    var subDataCount = subDataNode.Count - 1;
+
+                    if (subDataCount > 0)
+                        for (int i = 1; i <= subDataCount; i++)
+                            str.AppendLine($"Item {i}: {GetData(subDataNode[i])}");
 
                     return str.ToString();
                 default:

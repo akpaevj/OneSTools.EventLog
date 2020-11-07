@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OneSTools.EventLog
 {
-    sealed class LgfReader : IDisposable
+    internal class LgfReader : IDisposable
     {
         private FileStream fileStream;
         private StreamReader streamReader;
@@ -34,7 +34,7 @@ namespace OneSTools.EventLog
 
             if (fileStream is null)
             {
-                fileStream = new FileStream(LgfPath, FileMode.Open, FileAccess.Read);
+                fileStream = new FileStream(LgfPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                 streamReader = new StreamReader(fileStream);
 
                 // skip header (first three lines)
