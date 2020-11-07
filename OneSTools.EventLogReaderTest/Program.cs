@@ -14,7 +14,7 @@ namespace OneSTools.EventLogReaderTest
         {
             var count = 0;
 
-            using var reader = new EventLogReader("C:\\Users\\akpaev.e.ENTERPRISE\\Desktop\\1Cv8Log");
+            using var reader = new EventLogReader("C:\\Users\\akpaev.e.ENTERPRISE\\Desktop\\1Cv8Log", true);
 
             var watcher = new Stopwatch();
 
@@ -28,13 +28,20 @@ namespace OneSTools.EventLogReaderTest
                     break;
                 else
                     count++;
+
+                var sec = watcher.ElapsedMilliseconds / 1000;
+
+                if (sec > 0)
+                    WriteOnLine($"Считано {count} событий ({count / sec} событий в секунду)", 0);
+                else
+                    WriteOnLine($"Считано {count} событий ({count} событий в секунду)", 0);
             }
 
             watcher.Stop();
 
-            var sec = watcher.ElapsedMilliseconds / 1000;
+            //var sec = watcher.ElapsedMilliseconds / 1000;
 
-            WriteOnLine($"Считано {count} событий ({count / sec} событий в секунду)", 0);
+            //WriteOnLine($"Считано {count} событий ({count / sec} событий в секунду)", 0);
 
             Console.ReadKey();
         }

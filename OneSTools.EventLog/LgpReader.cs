@@ -29,12 +29,12 @@ namespace OneSTools.EventLog
             _lgfReader = lgfReader;
         }
 
-        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken, long position = 0)
+        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken, long startPosition = 0)
         {
             InitializeStreams();
 
-            if (position != 0)
-                SetPosition(position);
+            if (startPosition != 0)
+                _lastPosition = startPosition;
 
             return ReadEventLogItemData(cancellationToken);
         }

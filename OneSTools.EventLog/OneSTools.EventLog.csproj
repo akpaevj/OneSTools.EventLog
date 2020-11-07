@@ -5,7 +5,16 @@
     <LangVersion>8.0</LangVersion>
     <AssemblyName>OneSTools.EventLog</AssemblyName>
     <RootNamespace>OneSTools.EventLog</RootNamespace>
-    <PackageIcon></PackageIcon>
+    <PackageIcon>onestools_icon_nuget.png</PackageIcon>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Библиотека для чтения и парсинга журнала регистрации 1С</Description>
+    <Copyright>Akpaev Evgeny</Copyright>
+    <Authors>Akpaev Evgeny</Authors>
+    <Company>Akpaev Evgeny</Company>
+    <RepositoryUrl>https://github.com/akpaevj/OneSTools.EventLog</RepositoryUrl>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/akpaevj/OneSTools.EventLog</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,6 +31,17 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\onestools_icon_nuget.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
