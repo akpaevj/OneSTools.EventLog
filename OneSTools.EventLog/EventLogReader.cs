@@ -10,14 +10,30 @@ using System.Threading.Tasks.Dataflow;
 
 namespace OneSTools.EventLog
 {
+    /// <summary>
+    ///  Presents methods for reading 1C event log
+    /// </summary>    
     public class EventLogReader : IDisposable
     {
         private readonly string _logFolder;
         private readonly bool _liveMode;
         private readonly LgfReader _lgfReader;
         private LgpReader _lgpReader;
-        private FileSystemWatcher _lgpWatcher;
 
+        /// <summary>
+        /// Current reader's "lgp" file name
+        /// </summary>
+        public string CurrentLgpFileName => _lgpReader.LgpFileName;
+        /// <summary>
+        /// Current position of the "lgp" file
+        /// </summary>
+        public long CurrentLgpFilePosition => _lgpReader.GetPosition();
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="logFolder">1C event log's folder. Supported only lgf and lgp files (old version)</param>
+        /// <param name="liveMode">Flag of "live" reading mode. In this mode it'll be waiting for a new event without returning a null element/param>
         public EventLogReader(string logFolder, bool liveMode = false)
         {
             _logFolder = logFolder;
@@ -25,11 +41,13 @@ namespace OneSTools.EventLog
             _lgfReader = new LgfReader(Path.Combine(_logFolder, "1Cv8.lgf"));
         }
 
+        /// <summary>
+        /// The behaviour of the method depends on the mode of the reader. In the "live" mode it'll be waiting for an appearing of the new event item, otherwise It'll just return null
+        /// </summary>
+        /// <param name="cancellationToken">Token for interrupting of the reader</param>
+        /// <returns></returns>
         public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken)
         {
-            if (_liveMode)
-                StartLgpFilesWatcher();
-
             if (_lgpReader == null)
                 SetNextLgpReader();
 
@@ -61,18 +79,6 @@ namespace OneSTools.EventLog
             return item;
         }
 
-        private void StartLgpFilesWatcher()
-        {
-            _lgpWatcher = new FileSystemWatcher(_logFolder)
-            {
-                Filter = "*.lgp",
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.LastWrite
-            };
-            _lgpWatcher.Created += LgpWatcher_Created;
-
-            _lgpWatcher.EnableRaisingEvents = true;
-        }
-
         private bool SetNextLgpReader()
         {
             var currentReaderLastWriteDateTime = DateTime.MinValue;
@@ -100,19 +106,8 @@ namespace OneSTools.EventLog
             return false;
         }
 
-        private void LgpWatcher_Created(object sender, FileSystemEventArgs e)
-        {
-            if (e.ChangeType == WatcherChangeTypes.Created)
-            {
-
-            }
-        }
-
         public void Dispose()
         {
-            if (_lgpWatcher != null)
-                _lgpWatcher.Dispose();
-
             if (_lgfReader != null)
                 _lgfReader.Dispose();
         }

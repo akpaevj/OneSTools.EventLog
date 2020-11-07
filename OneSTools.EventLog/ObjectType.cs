@@ -1,6 +1,6 @@
 ﻿namespace OneSTools.EventLog
 {
-    public enum ObjectType
+    internal enum ObjectType
     {
         None = 0,
         Users,

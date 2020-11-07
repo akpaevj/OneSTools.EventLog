@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace OneSTools.EventLog
 {
-    sealed class LgfReader : IDisposable
+    internal class LgfReader : IDisposable
     {
-        CancellationToken _cancellationToken;
         private FileStream fileStream;
         private StreamReader streamReader;
 
@@ -35,7 +34,7 @@ namespace OneSTools.EventLog
 
             if (fileStream is null)
             {
-                fileStream = new FileStream(LgfPath, FileMode.Open, FileAccess.Read);
+                fileStream = new FileStream(LgfPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                 streamReader = new StreamReader(fileStream);
 
                 // skip header (first three lines)
@@ -110,7 +109,7 @@ namespace OneSTools.EventLog
         public string GetObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken)
         {
             if (number == 0)
-                return null;
+                return "";
 
             if (_objects.TryGetValue((objectType, number), out var value))
                 return value;
@@ -126,7 +125,7 @@ namespace OneSTools.EventLog
         public (string Value, string Uuid) GetReferencedObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken)
         {
             if (number == 0)
-                return (null, null);
+                return ("", "");
 
             if (_referencedObjects.TryGetValue((objectType, number), out var value))
                 return value;
