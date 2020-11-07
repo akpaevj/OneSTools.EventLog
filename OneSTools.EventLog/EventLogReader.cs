@@ -15,10 +15,12 @@ namespace OneSTools.EventLog
     /// </summary>    
     public class EventLogReader : IDisposable
     {
+        private ManualResetEvent _lgpChangedCreated;
         private readonly string _logFolder;
         private readonly bool _liveMode;
         private readonly LgfReader _lgfReader;
         private LgpReader _lgpReader;
+        private FileSystemWatcher _lgpFilesWatcher;
 
         /// <summary>
         /// Current reader's "lgp" file name
@@ -34,11 +36,19 @@ namespace OneSTools.EventLog
         /// </summary>
         /// <param name="logFolder">1C event log's folder. Supported only lgf and lgp files (old version)</param>
         /// <param name="liveMode">Flag of "live" reading mode. In this mode it'll be waiting for a new event without returning a null element/param>
-        public EventLogReader(string logFolder, bool liveMode = false)
+        public EventLogReader(string logFolder, bool liveMode = false, string lgpFileName = "", long startPosition = 0)
         {
             _logFolder = logFolder;
             _liveMode = liveMode;
             _lgfReader = new LgfReader(Path.Combine(_logFolder, "1Cv8.lgf"));
+
+            if (lgpFileName != string.Empty)
+            {
+                var file = Path.Combine(_logFolder, lgpFileName);
+
+                _lgpReader = new LgpReader(file, _lgfReader);
+                _lgpReader.SetPosition(startPosition);
+            }
         }
 
         /// <summary>
@@ -50,6 +60,9 @@ namespace OneSTools.EventLog
         {
             if (_lgpReader == null)
                 SetNextLgpReader();
+
+            if (_liveMode && _lgpFilesWatcher == null)
+                StartLgpFilesWatcher();
 
             EventLogItem item = null;
 
@@ -64,7 +77,13 @@ namespace OneSTools.EventLog
                     if (_liveMode)
                     {
                         if (!newReader)
-                            Thread.Sleep(5000);
+                        {
+                            _lgpChangedCreated.Reset();
+
+                            WaitHandle.WaitAny(new WaitHandle[] { _lgpChangedCreated, cancellationToken.WaitHandle });
+
+                            _lgpChangedCreated.Reset();
+                        }
                     }
                     else
                     {
@@ -106,8 +125,40 @@ namespace OneSTools.EventLog
             return false;
         }
 
+        private void StartLgpFilesWatcher()
+        {
+            _lgpChangedCreated = new ManualResetEvent(false);
+
+            _lgpFilesWatcher = new FileSystemWatcher(_logFolder, "*.lgp")
+            {
+                NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
+            };
+            _lgpFilesWatcher.Changed += _lgpFilesWatcher_Changed;
+            _lgpFilesWatcher.Created += _lgpFilesWatcher_Created;
+            _lgpFilesWatcher.EnableRaisingEvents = true;
+        }
+
+        private void _lgpFilesWatcher_Created(object sender, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Created)
+                _lgpChangedCreated.Set();
+        }
+
+        private void _lgpFilesWatcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Changed)
+                _lgpChangedCreated.Set();
+        }
+
         public void Dispose()
         {
+            if (_lgpFilesWatcher != null)
+            {
+                _lgpFilesWatcher.Dispose();
+
+                _lgpChangedCreated.Dispose();
+            }
+
             if (_lgfReader != null)
                 _lgfReader.Dispose();
         }
