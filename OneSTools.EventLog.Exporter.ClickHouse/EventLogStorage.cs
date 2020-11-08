@@ -21,25 +21,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             _connection = new ClickHouseConnection(connectionString);
             _connection.Open();
 
-            CreateEventLogPositionsTable();
             CreateEventLogItemsTable();
-        }
-
-        private void CreateEventLogPositionsTable()
-        {
-            var commandText =
-                @"CREATE TABLE IF NOT EXISTS EventLogPositions
-                (
-                    LgpFileName LowCardinality(String),
-                    LgpFilePosition Int64 Codec(DoubleDelta, LZ4)
-                )
-                engine = MergeTree()
-                PRIMARY KEY (LgpFileName)
-                ORDER BY (LgpFileName)";
-
-            using var cmd = _connection.CreateCommand();
-            cmd.CommandText = commandText;
-            cmd.ExecuteNonQuery();
         }
 
         private void CreateEventLogItemsTable()
@@ -48,6 +30,8 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 @"CREATE TABLE IF NOT EXISTS EventLogItems
                 (
                     Id Int64 Codec(DoubleDelta, LZ4),
+                    FileName LowCardinality(String),
+                    EndPosition Int64 Codec(DoubleDelta, LZ4),
                     DateTime DateTime Codec(Delta, LZ4),
                     TransactionStatus LowCardinality(String),
                     TransactionDate DateTime Codec(Delta, LZ4),
@@ -80,9 +64,9 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             cmd.ExecuteNonQuery();
         }
 
-        public async Task<EventLogPosition> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
+        public async Task<(string FileName, long EndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
         {
-            var commandText = "SELECT TOP 1 LgpFileName, LgpFilePosition FROM EventLogPositions";
+            var commandText = "SELECT TOP 1 FileName, EndPosition FROM EventLogItems ORDER BY Id DESC";
 
             using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
@@ -91,44 +75,14 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
 
             if (await reader.ReadAsync())
             {
-                var position = new EventLogPosition
-                {
-                    LgpFileName = reader.GetString(0),
-                    LgpFilePosition = reader.GetInt64(1)
-                };
 
-                return position;
+                return (reader.GetString(0), reader.GetInt64(1));
             }
             else
-                return null;
+                return ("", 0);
         }
 
-        public async Task WriteEventLogDataAsync(EventLogPosition eventLogPosition, List<EventLogItem> entities, CancellationToken cancellationToken = default)
-        {
-            await TruncateEventLogPositionsTableAsync(cancellationToken);
-            await WriteEventLogPositionAsync(eventLogPosition, cancellationToken);
-            await WriteEventLogItemsAsync(entities, cancellationToken);
-        }
-
-        private async Task TruncateEventLogPositionsTableAsync(CancellationToken cancellationToken = default)
-        {
-            var commandText = "TRUNCATE TABLE EventLogPositions";
-
-            using var cmd = _connection.CreateCommand();
-            cmd.CommandText = commandText;
-            await cmd.ExecuteNonQueryAsync(cancellationToken);
-        }
-
-        private async Task WriteEventLogPositionAsync(EventLogPosition eventLogPosition, CancellationToken cancellationToken = default)
-        {
-            var commandText = $"INSERT INTO EventLogPositions VALUES ('{eventLogPosition.LgpFileName}',{eventLogPosition.LgpFilePosition})";
-
-            using var cmd = _connection.CreateCommand();
-            cmd.CommandText = commandText;
-            await cmd.ExecuteNonQueryAsync(cancellationToken);
-        }
-
-        private async Task WriteEventLogItemsAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
+        public async Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
         {
             using var copy = new ClickHouseBulkCopy(_connection)
             {
@@ -136,8 +90,10 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 BatchSize = entities.Count
             };
 
-            var data = entities.Select(item => new object[] { 
+            var data = entities.Select(item => new object[] {
                 item.Id,
+                item.FileName ?? "",
+                item.EndPosition,
                 item.DateTime,
                 item.TransactionStatus ?? "",
                 item.TransactionDateTime,

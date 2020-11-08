@@ -12,7 +12,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSTools.EventLog.Exporter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSTools.EventLog.Exporter.SqlServer", "OneSTools.EventLog.Exporter.SqlServer\OneSTools.EventLog.Exporter.SqlServer.csproj", "{8B44BAB5-0C45-4AF5-8CDF-38A98EB2B35B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneSTools.EventLog.Exporter.ClickHouse", "OneSTools.EventLog.Exporter.ClickHouse\OneSTools.EventLog.Exporter.ClickHouse.csproj", "{A78CC8A8-195C-4127-8FC5-7978EF9436A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSTools.EventLog.Exporter.ClickHouse", "OneSTools.EventLog.Exporter.ClickHouse\OneSTools.EventLog.Exporter.ClickHouse.csproj", "{A78CC8A8-195C-4127-8FC5-7978EF9436A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneSTools.EventLog.Exporter.ElasticSearch", "OneSTools.EventLog.Exporter.ElasticSearch\OneSTools.EventLog.Exporter.ElasticSearch.csproj", "{F7C8344A-6C12-46E9-8498-8C5863B1C491}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{A78CC8A8-195C-4127-8FC5-7978EF9436A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A78CC8A8-195C-4127-8FC5-7978EF9436A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A78CC8A8-195C-4127-8FC5-7978EF9436A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7C8344A-6C12-46E9-8498-8C5863B1C491}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7C8344A-6C12-46E9-8498-8C5863B1C491}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7C8344A-6C12-46E9-8498-8C5863B1C491}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7C8344A-6C12-46E9-8498-8C5863B1C491}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

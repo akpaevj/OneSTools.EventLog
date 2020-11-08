@@ -10,7 +10,7 @@ using OneSTools.EventLog.Exporter.SqlServer;
 namespace OneSTools.EventLog.Exporter.SqlServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201107182534_Init")]
+    [Migration("20201108210936_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,57 +23,71 @@ namespace OneSTools.EventLog.Exporter.SqlServer.Migrations
 
             modelBuilder.Entity("OneSTools.EventLog.EventLogItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AddPort")
                         .HasColumnType("int");
 
                     b.Property<string>("Application")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Comment")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Computer")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Connection")
                         .HasColumnType("int");
 
                     b.Property<string>("Data")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DataPresentation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DataUuid")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<long>("EndPosition")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Event")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MainPort")
                         .HasColumnType("int");
 
                     b.Property<string>("Metadata")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MetadataUuid")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Server")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Session")
                         .HasColumnType("int");
 
                     b.Property<string>("Severity")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TransactionDateTime")
@@ -83,30 +97,20 @@ namespace OneSTools.EventLog.Exporter.SqlServer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TransactionStatus")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("User")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserUuid")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("EventLogs");
-                });
-
-            modelBuilder.Entity("OneSTools.EventLog.Exporter.Core.EventLogPosition", b =>
-                {
-                    b.Property<string>("LgpFileName")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<long>("LgpFilePosition")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("LgpFileName");
-
-                    b.ToTable("EventLogPositions");
+                    b.ToTable("EventLogItems");
                 });
 #pragma warning restore 612, 618
         }

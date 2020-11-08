@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OneSTools.EventLog.Exporter.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,39 +19,29 @@ namespace OneSTools.EventLog.Exporter.SqlServer
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<EventLogPosition> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
+        public async Task<(string FileName, long EndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
         {
             using var scope = _serviceProvider.CreateScope();
             using var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-            return await context.EventLogPositions.FirstOrDefaultAsync(cancellationToken);
+            var item = await context.EventLogItems.OrderByDescending(c => c.Id).FirstOrDefaultAsync();
+
+            if (item == null)
+                return ("", 0);
+            else
+                return (item.FileName, item.EndPosition);
         }
 
-        public async Task WriteEventLogDataAsync(EventLogPosition eventLogPosition, List<EventLogItem> entities, CancellationToken cancellationToken = default)
+        public async Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
         {
             using var scope = _serviceProvider.CreateScope();
             using var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
             context.ChangeTracker.AutoDetectChangesEnabled = false;
+            await context.BulkInsertAsync(entities);
+            context.ChangeTracker.AutoDetectChangesEnabled = true;
 
-            using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
-
-            try
-            {
-                await context.Database.ExecuteSqlRawAsync($"TRUNCATE TABLE [EventLogPositions]", cancellationToken);
-                await context.EventLogPositions.AddAsync(eventLogPosition, cancellationToken);
-                await context.BulkInsertAsync(entities);
-
-                context.ChangeTracker.AutoDetectChangesEnabled = true;
-                await context.SaveChangesAsync();
-
-                await transaction.CommitAsync(cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync(cancellationToken);
-
-                throw ex;
-            }
+            await context.SaveChangesAsync();
         }
 
         public void Dispose()

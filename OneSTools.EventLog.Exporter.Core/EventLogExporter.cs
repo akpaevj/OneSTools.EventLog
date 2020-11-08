@@ -36,7 +36,7 @@ namespace OneSTools.EventLog.Exporter.Core
             catch (OperationCanceledException) { }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex.ToString());
+                _logger.LogCritical(ex, "Failed to start EventLogExporter");
                 throw ex;
             }
 
@@ -47,12 +47,12 @@ namespace OneSTools.EventLog.Exporter.Core
         {
             try
             {
-                var eventLogPosition = await _storage.ReadEventLogPositionAsync(stoppingToken);
+                var (FileName, EndPosition) = await _storage.ReadEventLogPositionAsync(stoppingToken);
 
-                if (eventLogPosition == null)
+                if (FileName == string.Empty)
                     _eventLogReader = new EventLogReader(_logFolder, _liveMode);
                 else
-                    _eventLogReader = new EventLogReader(_logFolder, _liveMode, eventLogPosition.LgpFileName + ".lgp", eventLogPosition.LgpFilePosition);
+                    _eventLogReader = new EventLogReader(_logFolder, _liveMode, FileName + ".lgp", EndPosition);
 
                 while (!stoppingToken.IsCancellationRequested)
                 {
@@ -65,15 +65,9 @@ namespace OneSTools.EventLog.Exporter.Core
 
                     if (_entities.Count == _entities.Capacity)
                     {
-                        var currentEventLogPosition = new EventLogPosition
-                        {
-                            LgpFileName = _eventLogReader.CurrentLgpFileName,
-                            LgpFilePosition = _eventLogReader.CurrentLgpFilePosition
-                        };
+                        await _storage.WriteEventLogDataAsync(_entities, stoppingToken);
 
-                        await _storage.WriteEventLogDataAsync(currentEventLogPosition, _entities, stoppingToken);
-
-                        _logger.LogInformation($"{DateTime.Now.ToString("hh:mm:ss.fffff")}: EventLogExporter has written {_entities.Count} items");
+                        _logger.LogInformation($"{DateTime.Now:hh:mm:ss.fffff}: EventLogExporter has written {_entities.Count} items");
 
                         _entities.Clear();
                     }
@@ -82,7 +76,7 @@ namespace OneSTools.EventLog.Exporter.Core
             catch (OperationCanceledException) { }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex.ToString());
+                _logger.LogCritical(ex, "Failed to execute EventLogExporter");
                 throw ex;
             }
         }

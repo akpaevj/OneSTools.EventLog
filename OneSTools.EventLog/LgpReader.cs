@@ -89,7 +89,7 @@ namespace OneSTools.EventLog
             }
         }
 
-        private string ReadNextEventLogItemData(CancellationToken cancellationToken = default)
+        private (string Data, long EndPosition) ReadNextEventLogItemData(CancellationToken cancellationToken = default)
         {
             StringBuilder data = new StringBuilder();
 
@@ -97,6 +97,7 @@ namespace OneSTools.EventLog
             var bracketsQuantity = 0;
             bool start = false;
             bool end = false;
+            long endPosition = 0;
 
             while (true)
             {
@@ -137,33 +138,38 @@ namespace OneSTools.EventLog
                 }
 
                 if (end)
+                {
+                    endPosition = GetPosition();
                     break;
+                }
             }
 
             if (data.Length > 0 && data[data.Length - 1] == ',')
                 data.Remove(data.Length - 1, 1);
 
-            return data.ToString();
+            return (data.ToString(), endPosition);
         }
 
         private EventLogItem ReadEventLogItemData(CancellationToken cancellationToken = default)
         {
-            var data = ReadNextEventLogItemData(cancellationToken);
+            (string Data, long EndPosition) data = ReadNextEventLogItemData(cancellationToken);
 
-            if (data == string.Empty)
+            if (data.Data == string.Empty)
                 return null;
 
-            return ParseEventLogItemData(data, cancellationToken);
+            return ParseEventLogItemData(data.Data, data.EndPosition, cancellationToken);
         }
 
-        private EventLogItem ParseEventLogItemData(string eventLogItemData, CancellationToken cancellationToken = default)
+        private EventLogItem ParseEventLogItemData(string eventLogItemData, long endPosition, CancellationToken cancellationToken = default)
         {
             var parsedData = BracketsFileParser.Parse(eventLogItemData);
 
             var eventLogItem = new EventLogItem
             {
                 DateTime = DateTime.ParseExact((string)parsedData[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture),
-                TransactionStatus = GetTransactionPresentation((string)parsedData[1])
+                TransactionStatus = GetTransactionPresentation((string)parsedData[1]),
+                FileName = LgpFileName,
+                EndPosition = endPosition
             };
 
             var (Value, Uuid) = _lgfReader.GetReferencedObjectValue(ObjectType.Users, (int)parsedData[3], cancellationToken);
