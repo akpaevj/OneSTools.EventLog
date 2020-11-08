@@ -29,11 +29,11 @@ namespace OneSTools.EventLog
             _lgfReader = lgfReader;
         }
 
-        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken = default)
+        public IEventLogItem ReadNextEventLogItem<T>(CancellationToken cancellationToken = default) where T : class, IEventLogItem
         {
             InitializeStreams();
 
-            return ReadEventLogItemData(cancellationToken);
+            return ReadEventLogItemData<T>(cancellationToken);
         }
 
         public void SetPosition(long position)
@@ -150,17 +150,17 @@ namespace OneSTools.EventLog
             return (data.ToString(), endPosition);
         }
 
-        private EventLogItem ReadEventLogItemData(CancellationToken cancellationToken = default)
+        private IEventLogItem ReadEventLogItemData<T>(CancellationToken cancellationToken = default) where T : class, IEventLogItem
         {
             (string Data, long EndPosition) data = ReadNextEventLogItemData(cancellationToken);
 
             if (data.Data == string.Empty)
                 return null;
 
-            return ParseEventLogItemData(data.Data, data.EndPosition, cancellationToken);
+            return ParseEventLogItemData<T>(data.Data, data.EndPosition, cancellationToken);
         }
 
-        private EventLogItem ParseEventLogItemData(string eventLogItemData, long endPosition, CancellationToken cancellationToken = default)
+        private IEventLogItem ParseEventLogItemData<T>(string eventLogItemData, long endPosition, CancellationToken cancellationToken = default) where T : class, IEventLogItem
         {
             var parsedData = BracketsFileParser.Parse(eventLogItemData);
 

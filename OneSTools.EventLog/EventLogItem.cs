@@ -5,9 +5,8 @@ using System.Transactions;
 
 namespace OneSTools.EventLog
 {
-    public class EventLogItem
+    public class EventLogItem : IEventLogItem
     {
-        public long Id { get; internal set; }
         [Required]
         public string FileName { get; internal set; } = "";
         public long EndPosition { get; internal set; } = 0;

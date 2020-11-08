@@ -54,7 +54,7 @@ namespace OneSTools.EventLog
         /// </summary>
         /// <param name="cancellationToken">Token for interrupting of the reader</param>
         /// <returns></returns>
-        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken = default)
+        public IEventLogItem ReadNextEventLogItem<T>(CancellationToken cancellationToken = default) where T : class, IEventLogItem
         {
             if (_lgpReader == null)
                 SetNextLgpReader();
@@ -62,11 +62,11 @@ namespace OneSTools.EventLog
             if (_liveMode && _lgpFilesWatcher == null)
                 StartLgpFilesWatcher();
 
-            EventLogItem item = null;
+            IEventLogItem item = null;
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                item = _lgpReader.ReadNextEventLogItem(cancellationToken);
+                item = _lgpReader.ReadNextEventLogItem<T>(cancellationToken);
 
                 if (item == null)
                 {

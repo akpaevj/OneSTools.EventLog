@@ -30,7 +30,7 @@ namespace OneSTools.EventLog.Exporter.SqlServer
 
                     services.AddSingleton<IEventLogStorage, EventLogStorage>();
                     services.AddSingleton<IEventLogExporter, EventLogExporter>();
-                    services.AddHostedService<EventLogExporterService>();
+                    services.AddHostedService<EventLogExporterService<EventLogItem>>();
                 });
     }
 }

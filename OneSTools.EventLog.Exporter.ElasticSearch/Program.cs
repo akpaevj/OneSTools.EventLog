@@ -29,7 +29,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                         new EventLogStorage(host, port, index));
                     services.AddSingleton<IEventLogExporter, EventLogExporter>();
 
-                    services.AddHostedService<EventLogExporterService>();
+                    services.AddHostedService<EventLogExporterService<EventLogItem>>();
                 });
     }
 }

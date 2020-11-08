@@ -25,7 +25,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                         new EventLogStorage(configuration["ConnectionStrings:Default"]));
                     services.AddSingleton<IEventLogExporter, EventLogExporter>();
 
-                    services.AddHostedService<EventLogExporterService>();
+                    services.AddHostedService<EventLogExporterService<EventLogItem>>();
                 });
     }
 }

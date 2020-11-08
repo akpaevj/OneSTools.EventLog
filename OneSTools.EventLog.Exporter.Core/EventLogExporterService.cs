@@ -11,14 +11,14 @@ using OneSTools.EventLog.Exporter.Core;
 
 namespace OneSTools.EventLog.Exporter.Core
 {
-    public class EventLogExporterService : BackgroundService
+    public class EventLogExporterService<T> : BackgroundService where T : class, IEventLogItem
     {
         private string _logFolder;
         private int _portion;
-        private readonly ILogger<EventLogExporterService> _logger;
+        private readonly ILogger<EventLogExporterService<T>> _logger;
         private readonly IEventLogExporter _eventLogExporter;
 
-        public EventLogExporterService(IConfiguration configuration, ILogger<EventLogExporterService> logger, IEventLogExporter eventLogExporter)
+        public EventLogExporterService(IConfiguration configuration, ILogger<EventLogExporterService<T>> logger, IEventLogExporter eventLogExporter)
         {
             _logger = logger;
             _eventLogExporter = eventLogExporter;
@@ -58,7 +58,7 @@ namespace OneSTools.EventLog.Exporter.Core
         {
             try
             {
-                await _eventLogExporter.ExecuteAsync(stoppingToken);
+                await _eventLogExporter.ExecuteAsync<T>(stoppingToken);
             }
             catch (Exception ex)
             {

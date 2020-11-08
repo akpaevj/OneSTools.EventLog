@@ -29,7 +29,6 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             var commandText =
                 @"CREATE TABLE IF NOT EXISTS EventLogItems
                 (
-                    Id Int64 Codec(DoubleDelta, LZ4),
                     FileName LowCardinality(String),
                     EndPosition Int64 Codec(DoubleDelta, LZ4),
                     DateTime DateTime Codec(Delta, LZ4),
@@ -55,8 +54,8 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 )
                 engine = MergeTree()
                 PARTITION BY (toYYYYMM(DateTime))
-                PRIMARY KEY (DateTime, Id)
-                ORDER BY (DateTime, Id)
+                PRIMARY KEY (DateTime)
+                ORDER BY (DateTime)
                 SETTINGS index_granularity = 8192;";
 
             using var cmd = _connection.CreateCommand();
@@ -66,7 +65,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
 
         public async Task<(string FileName, long EndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
         {
-            var commandText = "SELECT TOP 1 FileName, EndPosition FROM EventLogItems ORDER BY Id DESC";
+            var commandText = "SELECT TOP 1 FileName, EndPosition FROM EventLogItems ORDER BY DateTime DESC";
 
             using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
@@ -82,7 +81,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 return ("", 0);
         }
 
-        public async Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
+        public async Task WriteEventLogDataAsync<T>(List<T> entities, CancellationToken cancellationToken = default) where T : class, IEventLogItem
         {
             using var copy = new ClickHouseBulkCopy(_connection)
             {
@@ -91,7 +90,6 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             };
 
             var data = entities.Select(item => new object[] {
-                item.Id,
                 item.FileName ?? "",
                 item.EndPosition,
                 item.DateTime,

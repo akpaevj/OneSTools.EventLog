@@ -35,7 +35,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
         {
             var response = await _client.SearchAsync<EventLogItem>(sd => sd
                 .Sort(ss => 
-                    ss.Descending("Id"))
+                    ss.Descending("DateTime"))
                 .Size(1)
             );
 
@@ -49,7 +49,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
             return ("", 0);
         }
 
-        public async Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
+        public async Task WriteEventLogDataAsync<T>(List<T> entities, CancellationToken cancellationToken = default) where T : class, IEventLogItem
         {
             var responseItems = await _client.IndexManyAsync(entities, null, cancellationToken);
 

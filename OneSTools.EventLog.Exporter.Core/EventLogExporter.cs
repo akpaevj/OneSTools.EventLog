@@ -14,7 +14,7 @@ namespace OneSTools.EventLog.Exporter.Core
         private string _logFolder;
         private bool _liveMode;
         private EventLogReader _eventLogReader;
-        private List<EventLogItem> _entities;
+        private List<IEventLogItem> _entities;
 
         public EventLogExporter(ILogger<EventLogExporter> logger, IEventLogStorage storage)
         {
@@ -29,7 +29,7 @@ namespace OneSTools.EventLog.Exporter.Core
                 await Task.Run(() =>
                 {
                     _logFolder = logFolder;
-                    _entities = new List<EventLogItem>(portion);
+                    _entities = new List<IEventLogItem>(portion);
                     _liveMode = liveMode;
                 }, cancellationToken);
             }
@@ -43,7 +43,7 @@ namespace OneSTools.EventLog.Exporter.Core
             _logger.LogInformation("EventLogExporter started");
         }
 
-        public async Task ExecuteAsync(CancellationToken stoppingToken = default)
+        public async Task ExecuteAsync<T>(CancellationToken stoppingToken = default) where T : class, IEventLogItem
         {
             try
             {
@@ -56,7 +56,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
                 while (!stoppingToken.IsCancellationRequested)
                 {
-                    var item = _eventLogReader.ReadNextEventLogItem(stoppingToken);
+                    var item = _eventLogReader.ReadNextEventLogItem<T>(stoppingToken);
 
                     if (item != null)
                     {

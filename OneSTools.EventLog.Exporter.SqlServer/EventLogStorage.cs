@@ -32,7 +32,7 @@ namespace OneSTools.EventLog.Exporter.SqlServer
                 return (item.FileName, item.EndPosition);
         }
 
-        public async Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
+        public async Task WriteEventLogDataAsync<T>(List<T> entities, CancellationToken cancellationToken = default) where T : class, IEventLogItem
         {
             using var scope = _serviceProvider.CreateScope();
             using var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
