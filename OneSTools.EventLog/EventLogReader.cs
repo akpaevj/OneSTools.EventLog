@@ -54,7 +54,7 @@ namespace OneSTools.EventLog
         /// </summary>
         /// <param name="cancellationToken">Token for interrupting of the reader</param>
         /// <returns></returns>
-        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken)
+        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken = default)
         {
             if (_lgpReader == null)
                 SetNextLgpReader();

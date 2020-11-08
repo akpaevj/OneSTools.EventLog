@@ -106,7 +106,7 @@ namespace OneSTools.EventLog
             }
         }
 
-        public string GetObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken)
+        public string GetObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken = default)
         {
             if (number == 0)
                 return "";
@@ -122,7 +122,7 @@ namespace OneSTools.EventLog
                 throw new Exception($"Cannot find objectType {objectType} with number {number} in objects collection");
         }
 
-        public (string Value, string Uuid) GetReferencedObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken)
+        public (string Value, string Uuid) GetReferencedObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken = default)
         {
             if (number == 0)
                 return ("", "");

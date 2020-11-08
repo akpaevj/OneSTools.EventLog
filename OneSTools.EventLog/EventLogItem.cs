@@ -5,6 +5,7 @@ namespace OneSTools.EventLog
 {
     public class EventLogItem
     {
+        public int Id { get; internal set; }
         public DateTime DateTime { get; internal set; }
         public string TransactionStatus { get; internal set; }
         public DateTime TransactionDateTime { get; internal set; }
@@ -20,7 +21,6 @@ namespace OneSTools.EventLog
         public string MetadataUuid { get; internal set; }
         public string Metadata { get; internal set; }
         public string Data { get; internal set; }
-        public string DataUuid { get; internal set; }
         public string DataPresentation { get; internal set; }
         public string Server { get; internal set; }
         public int MainPort { get; internal set; }

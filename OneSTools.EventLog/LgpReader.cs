@@ -29,12 +29,9 @@ namespace OneSTools.EventLog
             _lgfReader = lgfReader;
         }
 
-        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken, long startPosition = 0)
+        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken = default)
         {
             InitializeStreams();
-
-            if (startPosition != 0)
-                _lastPosition = startPosition;
 
             return ReadEventLogItemData(cancellationToken);
         }
@@ -92,7 +89,7 @@ namespace OneSTools.EventLog
             }
         }
 
-        private string ReadNextEventLogItemData(CancellationToken cancellationToken)
+        private string ReadNextEventLogItemData(CancellationToken cancellationToken = default)
         {
             StringBuilder data = new StringBuilder();
 
@@ -149,7 +146,7 @@ namespace OneSTools.EventLog
             return data.ToString();
         }
 
-        private EventLogItem ReadEventLogItemData(CancellationToken cancellationToken)
+        private EventLogItem ReadEventLogItemData(CancellationToken cancellationToken = default)
         {
             var data = ReadNextEventLogItemData(cancellationToken);
 
@@ -159,7 +156,7 @@ namespace OneSTools.EventLog
             return ParseEventLogItemData(data, cancellationToken);
         }
 
-        private EventLogItem ParseEventLogItemData(string eventLogItemData, CancellationToken cancellationToken)
+        private EventLogItem ParseEventLogItemData(string eventLogItemData, CancellationToken cancellationToken = default)
         {
             var parsedData = BracketsFileParser.Parse(eventLogItemData);
 

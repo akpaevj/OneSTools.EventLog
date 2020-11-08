@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>dotnet-OneSTools.EventLog.Exporter.ClickHouse-0EAA2A34-8510-4D4E-A64C-1FDCCBB01F1D</UserSecretsId>
+    <AssemblyName>EventLogExporterClickHouse</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClickHouse.Client" Version="2.2.1.285" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OneSTools.EventLog.Exporter.Core\OneSTools.EventLog.Exporter.Core.csproj" />
+  </ItemGroup>
+</Project>
