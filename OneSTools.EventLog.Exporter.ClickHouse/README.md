@@ -1,3 +1,3 @@
 # OneSTools.EventLog.Exporter.ClickHouse
 
-В разработке
+Документация в разработке
