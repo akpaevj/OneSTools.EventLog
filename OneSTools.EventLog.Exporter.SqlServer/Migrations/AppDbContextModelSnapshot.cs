@@ -8,7 +8,7 @@ using OneSTools.EventLog.Exporter.SqlServer;
 
 namespace OneSTools.EventLog.Exporter.SqlServer.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(AppDbContext<EventLogItem>))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

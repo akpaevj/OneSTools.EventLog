@@ -13,7 +13,7 @@ using ClickHouse.Client.ADO.Readers;
 
 namespace OneSTools.EventLog.Exporter.ClickHouse
 {
-    public class EventLogStorage : IEventLogStorage, IDisposable
+    public class EventLogStorage<T> : IEventLogStorage<T>, IDisposable where T : class, IEventLogItem, new()
     {
         private readonly ClickHouseConnection _connection;
         public EventLogStorage(string connectionString)
@@ -81,7 +81,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 return ("", 0);
         }
 
-        public async Task WriteEventLogDataAsync<T>(List<T> entities, CancellationToken cancellationToken = default) where T : class, IEventLogItem
+        public async Task WriteEventLogDataAsync(List<T> entities, CancellationToken cancellationToken = default)
         {
             using var copy = new ClickHouseBulkCopy(_connection)
             {

@@ -4,27 +4,27 @@ namespace OneSTools.EventLog
 {
     public interface IEventLogItem
     {
-        int AddPort { get; }
-        string Application { get; }
-        string Comment { get; }
-        string Computer { get; }
-        int Connection { get; }
-        string Data { get; }
-        string DataPresentation { get; }
-        DateTime DateTime { get; }
-        long EndPosition { get; }
-        string Event { get; }
-        string FileName { get; }
-        int MainPort { get; }
-        string Metadata { get; }
-        string MetadataUuid { get; }
-        string Server { get; }
-        int Session { get; }
-        string Severity { get; }
-        DateTime TransactionDateTime { get; }
-        int TransactionNumber { get; }
-        string TransactionStatus { get; }
-        string User { get; }
-        string UserUuid { get; }
+        int AddPort { get; set; }
+        string Application { get; set; }
+        string Comment { get; set; }
+        string Computer { get; set; }
+        int Connection { get; set; }
+        string Data { get; set; }
+        string DataPresentation { get; set; }
+        DateTime DateTime { get; set; }
+        long EndPosition { get; set; }
+        string Event { get; set; }
+        string FileName { get; set; }
+        int MainPort { get; set; }
+        string Metadata { get; set; }
+        string MetadataUuid { get; set; }
+        string Server { get; set; }
+        int Session { get; set; }
+        string Severity { get; set; }
+        DateTime TransactionDateTime { get; set; }
+        int TransactionNumber { get; set; }
+        string TransactionStatus { get; set; }
+        string User { get; set; }
+        string UserUuid { get; set; }
     }
 }

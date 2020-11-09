@@ -7,16 +7,16 @@ using OneSTools.EventLog;
 
 namespace OneSTools.EventLog.Exporter.Core
 {
-    public class EventLogExporter : IEventLogExporter
+    public class EventLogExporter<T> : IEventLogExporter<T> where T : class, IEventLogItem, new()
     {
-        private readonly ILogger<EventLogExporter> _logger;
-        private readonly IEventLogStorage _storage;
+        private readonly ILogger<EventLogExporter<T>> _logger;
+        private readonly IEventLogStorage<T> _storage;
         private string _logFolder;
         private bool _liveMode;
-        private EventLogReader _eventLogReader;
-        private List<IEventLogItem> _entities;
+        private EventLogReader<T> _eventLogReader;
+        private List<T> _entities;
 
-        public EventLogExporter(ILogger<EventLogExporter> logger, IEventLogStorage storage)
+        public EventLogExporter(ILogger<EventLogExporter<T>> logger, IEventLogStorage<T> storage)
         {
             _logger = logger;
             _storage = storage;
@@ -29,7 +29,7 @@ namespace OneSTools.EventLog.Exporter.Core
                 await Task.Run(() =>
                 {
                     _logFolder = logFolder;
-                    _entities = new List<IEventLogItem>(portion);
+                    _entities = new List<T>(portion);
                     _liveMode = liveMode;
                 }, cancellationToken);
             }
@@ -43,27 +43,39 @@ namespace OneSTools.EventLog.Exporter.Core
             _logger.LogInformation("EventLogExporter started");
         }
 
-        public async Task ExecuteAsync<T>(CancellationToken stoppingToken = default) where T : class, IEventLogItem
+        public async Task ExecuteAsync(CancellationToken stoppingToken = default)
         {
             try
             {
                 var (FileName, EndPosition) = await _storage.ReadEventLogPositionAsync(stoppingToken);
 
                 if (FileName == string.Empty)
-                    _eventLogReader = new EventLogReader(_logFolder, _liveMode);
+                    _eventLogReader = new EventLogReader<T>(_logFolder, _liveMode, "", 0, 1000);
                 else
-                    _eventLogReader = new EventLogReader(_logFolder, _liveMode, FileName + ".lgp", EndPosition);
+                    _eventLogReader = new EventLogReader<T>(_logFolder, _liveMode, FileName + ".lgp", EndPosition, 1000);
 
                 while (!stoppingToken.IsCancellationRequested)
                 {
-                    var item = _eventLogReader.ReadNextEventLogItem<T>(stoppingToken);
+                    bool forceSending = false;
+                    T item = default;
 
-                    if (item != null)
+                    try
                     {
-                        _entities.Add(item);
+                        item = _eventLogReader.ReadNextEventLogItem(stoppingToken);
+                    }
+                    catch (EventLogReaderTimeoutException)
+                    {
+                        forceSending = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
                     }
 
-                    if (_entities.Count == _entities.Capacity)
+                    if (item != null)
+                        _entities.Add(item);
+
+                    if ((forceSending && _entities.Count > 0) || _entities.Count == _entities.Capacity)
                     {
                         await _storage.WriteEventLogDataAsync(_entities, stoppingToken);
 
@@ -71,6 +83,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
                         _entities.Clear();
                     }
+
                 }
             }
             catch (OperationCanceledException) { }

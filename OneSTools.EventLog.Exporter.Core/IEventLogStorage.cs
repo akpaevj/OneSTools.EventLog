@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace OneSTools.EventLog.Exporter.Core
 {
-    public interface IEventLogStorage : IDisposable
+    public interface IEventLogStorage<T> : IDisposable where T : class, IEventLogItem, new()
     {
         Task<(string FileName, long EndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default);
-        Task WriteEventLogDataAsync<T>(List<T> entities, CancellationToken cancellationToken = default) where T : class, IEventLogItem;
+        Task WriteEventLogDataAsync(List<T> entities, CancellationToken cancellationToken = default);
     }
 }

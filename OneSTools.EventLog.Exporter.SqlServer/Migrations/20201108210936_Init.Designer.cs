@@ -9,7 +9,7 @@ using OneSTools.EventLog.Exporter.SqlServer;
 
 namespace OneSTools.EventLog.Exporter.SqlServer.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(AppDbContext<EventLogItem>))]
     [Migration("20201108210936_Init")]
     partial class Init
     {

@@ -11,13 +11,14 @@ namespace OneSTools.EventLog
     /// <summary>
     ///  Presents methods for reading 1C event log
     /// </summary>    
-    public class EventLogReader : IDisposable
+    public class EventLogReader<T> : IDisposable where T : class, IEventLogItem, new()
     {
         private ManualResetEvent _lgpChangedCreated;
         private readonly string _logFolder;
+        private readonly int _readingTimeout;
         private readonly bool _liveMode;
         private readonly LgfReader _lgfReader;
-        private LgpReader _lgpReader;
+        private LgpReader<T> _lgpReader;
         private FileSystemWatcher _lgpFilesWatcher;
 
         /// <summary>
@@ -34,9 +35,14 @@ namespace OneSTools.EventLog
         /// </summary>
         /// <param name="logFolder">1C event log's folder. Supported only lgf and lgp files (old version)</param>
         /// <param name="liveMode">Flag of "live" reading mode. In this mode it'll be waiting for a new event without returning a null element/param>
-        public EventLogReader(string logFolder, bool liveMode = false, string lgpFileName = "", long startPosition = 0)
+        /// <param name="lgpFileName">LGP file name that will be used for reading</param>
+        /// <param name="startPosition">LGP file position that will be used for reading</param>
+        /// <param name="readingTimout">Timeout of the reading next event. if this is set to -1 the reader will wait forever, 
+        /// otherwise it'll throw exception when the timeout occurs</param>
+        public EventLogReader(string logFolder, bool liveMode = false, string lgpFileName = "", long startPosition = 0, int readingTimout = -1)
         {
             _logFolder = logFolder;
+            _readingTimeout = readingTimout;
             _liveMode = liveMode;
             _lgfReader = new LgfReader(Path.Combine(_logFolder, "1Cv8.lgf"));
 
@@ -44,7 +50,7 @@ namespace OneSTools.EventLog
             {
                 var file = Path.Combine(_logFolder, lgpFileName);
 
-                _lgpReader = new LgpReader(file, _lgfReader);
+                _lgpReader = new LgpReader<T>(file, _lgfReader);
                 _lgpReader.SetPosition(startPosition);
             }
         }
@@ -54,7 +60,7 @@ namespace OneSTools.EventLog
         /// </summary>
         /// <param name="cancellationToken">Token for interrupting of the reader</param>
         /// <returns></returns>
-        public IEventLogItem ReadNextEventLogItem<T>(CancellationToken cancellationToken = default) where T : class, IEventLogItem
+        public T ReadNextEventLogItem(CancellationToken cancellationToken = default)
         {
             if (_lgpReader == null)
                 SetNextLgpReader();
@@ -62,11 +68,11 @@ namespace OneSTools.EventLog
             if (_liveMode && _lgpFilesWatcher == null)
                 StartLgpFilesWatcher();
 
-            IEventLogItem item = null;
+            T item = null;
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                item = _lgpReader.ReadNextEventLogItem<T>(cancellationToken);
+                item = _lgpReader.ReadNextEventLogItem(cancellationToken);
 
                 if (item == null)
                 {
@@ -78,7 +84,10 @@ namespace OneSTools.EventLog
                         {
                             _lgpChangedCreated.Reset();
 
-                            WaitHandle.WaitAny(new WaitHandle[] { _lgpChangedCreated, cancellationToken.WaitHandle });
+                            var waitHandle = WaitHandle.WaitAny(new WaitHandle[] { _lgpChangedCreated, cancellationToken.WaitHandle }, _readingTimeout);
+
+                            if (_readingTimeout != Timeout.Infinite && waitHandle == WaitHandle.WaitTimeout)
+                                throw new EventLogReaderTimeoutException();
 
                             _lgpChangedCreated.Reset();
                         }
@@ -114,7 +123,7 @@ namespace OneSTools.EventLog
                     if (_lgpReader != null)
                         _lgpReader.Dispose();
 
-                    _lgpReader = new LgpReader(file, _lgfReader);
+                    _lgpReader = new LgpReader<T>(file, _lgfReader);
 
                     return true;
                 }

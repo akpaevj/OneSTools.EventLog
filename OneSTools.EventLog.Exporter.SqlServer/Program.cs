@@ -24,12 +24,12 @@ namespace OneSTools.EventLog.Exporter.SqlServer
                     var configuration = hostContext.Configuration;
 
                     services.AddEntityFrameworkSqlServer()
-                        .AddDbContext<AppDbContext>((sp, opt) =>
+                        .AddDbContext<AppDbContext<EventLogItem>>((sp, opt) =>
                             opt.UseSqlServer(configuration["ConnectionStrings:Default"])
                                 .UseInternalServiceProvider(sp));
 
-                    services.AddSingleton<IEventLogStorage, EventLogStorage>();
-                    services.AddSingleton<IEventLogExporter, EventLogExporter>();
+                    services.AddSingleton<IEventLogStorage<EventLogItem>, EventLogStorage>();
+                    services.AddSingleton<IEventLogExporter<EventLogItem>, EventLogExporter<EventLogItem>>();
                     services.AddHostedService<EventLogExporterService<EventLogItem>>();
                 });
     }

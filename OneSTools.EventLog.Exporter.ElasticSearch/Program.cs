@@ -24,10 +24,11 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                     var host = configuration.GetValue("ElasticSearch:Host", "");
                     var port = configuration.GetValue("ElasticSearch:Port", 9200);
                     var index = configuration.GetValue("ElasticSearch:Index", "");
+                    var separation = configuration.GetValue("ElasticSearch:Separation", "");
 
-                    services.AddSingleton<IEventLogStorage>(sp =>
-                        new EventLogStorage(host, port, index));
-                    services.AddSingleton<IEventLogExporter, EventLogExporter>();
+                    services.AddSingleton<IEventLogStorage<EventLogItem>>(sp =>
+                        new EventLogStorage<EventLogItem>(host, port, index, separation));
+                    services.AddSingleton<IEventLogExporter<EventLogItem>, EventLogExporter<EventLogItem>>();
 
                     services.AddHostedService<EventLogExporterService<EventLogItem>>();
                 });

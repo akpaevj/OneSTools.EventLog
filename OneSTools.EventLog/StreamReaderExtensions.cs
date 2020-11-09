@@ -37,6 +37,9 @@ namespace OneSTools.EventLog
         {
             reader.DiscardBufferedData();
             reader.BaseStream.Seek(position, SeekOrigin.Begin);
+
+            if (reader.BaseStream.Position != position)
+                throw new Exception("Couldn't set the stream position");
         }
     }
 }

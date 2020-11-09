@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace OneSTools.EventLog
 {
-    internal class LgpReader : IDisposable
+    internal class LgpReader<T> : IDisposable where T : class, IEventLogItem, new()
     {
         private LgfReader _lgfReader;
         private FileStream fileStream;
@@ -29,11 +29,11 @@ namespace OneSTools.EventLog
             _lgfReader = lgfReader;
         }
 
-        public IEventLogItem ReadNextEventLogItem<T>(CancellationToken cancellationToken = default) where T : class, IEventLogItem
+        public T ReadNextEventLogItem(CancellationToken cancellationToken = default)
         {
             InitializeStreams();
 
-            return ReadEventLogItemData<T>(cancellationToken);
+            return ReadEventLogItemData(cancellationToken);
         }
 
         public void SetPosition(long position)
@@ -48,29 +48,6 @@ namespace OneSTools.EventLog
             InitializeStreams();
 
             return streamReader.GetPosition();
-        }
-
-        public void GoToEventLogItem(int position)
-        {
-            InitializeStreams();
-
-            streamReader.SetPosition(position);
-            
-            GoToEndOfEvent();
-        }
-
-        private void GoToEndOfEvent()
-        {
-            while (!streamReader.EndOfStream)
-            {
-                var currentLine = streamReader.ReadLine();
-
-                if (currentLine == null)
-                    break;
-
-                if (Regex.IsMatch(currentLine, @"^}\.$"))
-                    break;
-            }
         }
 
         private void InitializeStreams()
@@ -150,21 +127,21 @@ namespace OneSTools.EventLog
             return (data.ToString(), endPosition);
         }
 
-        private IEventLogItem ReadEventLogItemData<T>(CancellationToken cancellationToken = default) where T : class, IEventLogItem
+        private T ReadEventLogItemData(CancellationToken cancellationToken = default)
         {
             (string Data, long EndPosition) data = ReadNextEventLogItemData(cancellationToken);
 
             if (data.Data == string.Empty)
                 return null;
 
-            return ParseEventLogItemData<T>(data.Data, data.EndPosition, cancellationToken);
+            return ParseEventLogItemData(data.Data, data.EndPosition, cancellationToken);
         }
 
-        private IEventLogItem ParseEventLogItemData<T>(string eventLogItemData, long endPosition, CancellationToken cancellationToken = default) where T : class, IEventLogItem
+        private T ParseEventLogItemData(string eventLogItemData, long endPosition, CancellationToken cancellationToken = default)
         {
             var parsedData = BracketsFileParser.Parse(eventLogItemData);
 
-            var eventLogItem = new EventLogItem
+            var eventLogItem = new T
             {
                 DateTime = DateTime.ParseExact((string)parsedData[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture),
                 TransactionStatus = GetTransactionPresentation((string)parsedData[1]),

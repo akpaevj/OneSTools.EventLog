@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OneSTools.EventLog.Exporter.SqlServer
 {
-    public class EventLogStorage : IEventLogStorage
+    public class EventLogStorage : IEventLogStorage<EventLogItem>
     {
         private readonly IServiceProvider _serviceProvider;
         public EventLogStorage(IServiceProvider serviceProvider)
@@ -22,7 +22,7 @@ namespace OneSTools.EventLog.Exporter.SqlServer
         public async Task<(string FileName, long EndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
         {
             using var scope = _serviceProvider.CreateScope();
-            using var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            using var context = scope.ServiceProvider.GetRequiredService<AppDbContext<EventLogItem>>();
 
             var item = await context.EventLogItems.OrderByDescending(c => c.Id).FirstOrDefaultAsync();
 
@@ -32,10 +32,10 @@ namespace OneSTools.EventLog.Exporter.SqlServer
                 return (item.FileName, item.EndPosition);
         }
 
-        public async Task WriteEventLogDataAsync<T>(List<T> entities, CancellationToken cancellationToken = default) where T : class, IEventLogItem
+        public async Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
         {
             using var scope = _serviceProvider.CreateScope();
-            using var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            using var context = scope.ServiceProvider.GetRequiredService<AppDbContext<EventLogItem>>();
 
             context.ChangeTracker.AutoDetectChangesEnabled = false;
             await context.BulkInsertAsync(entities);

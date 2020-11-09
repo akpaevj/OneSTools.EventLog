@@ -14,4 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\OneSTools.EventLog.Exporter.Core\OneSTools.EventLog.Exporter.Core.csproj" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

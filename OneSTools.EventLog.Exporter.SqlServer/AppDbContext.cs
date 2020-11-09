@@ -9,11 +9,11 @@ using EFCore.BulkExtensions;
 
 namespace OneSTools.EventLog.Exporter.SqlServer
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext<T> : DbContext where T : class, IEventLogItem, new()
     {
-        public DbSet<EventLogItem> EventLogItems { get; set; }
+        public DbSet<T> EventLogItems { get; set; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext<T>> options) : base(options)
             => Database.Migrate();
     }
 }

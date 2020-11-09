@@ -8,40 +8,40 @@ namespace OneSTools.EventLog
     public class EventLogItem : IEventLogItem
     {
         [Required]
-        public string FileName { get; internal set; } = "";
-        public long EndPosition { get; internal set; } = 0;
-        public DateTime DateTime { get; internal set; } = DateTime.MinValue;
+        public string FileName { get; set; } = "";
+        public long EndPosition { get; set; } = 0;
+        public DateTime DateTime { get; set; } = DateTime.MinValue;
         [Required]
-        public string TransactionStatus { get; internal set; } = "";
-        public DateTime TransactionDateTime { get; internal set; } = DateTime.MinValue;
-        public int TransactionNumber { get; internal set; } = 0;
+        public string TransactionStatus { get; set; } = "";
+        public DateTime TransactionDateTime { get; set; } = DateTime.MinValue;
+        public int TransactionNumber { get; set; } = 0;
         [Required]
-        public string UserUuid { get; internal set; } = "";
+        public string UserUuid { get; set; } = "";
         [Required]
-        public string User { get; internal set; } = "";
+        public string User { get; set; } = "";
         [Required]
-        public string Computer { get; internal set; } = "";
+        public string Computer { get; set; } = "";
         [Required]
-        public string Application { get; internal set; } = "";
-        public int Connection { get; internal set; } = 0;
+        public string Application { get; set; } = "";
+        public int Connection { get; set; } = 0;
         [Required]
-        public string Event { get; internal set; } = "";
+        public string Event { get; set; } = "";
         [Required]
-        public string Severity { get; internal set; } = "";
+        public string Severity { get; set; } = "";
         [Required]
-        public string Comment { get; internal set; } = "";
+        public string Comment { get; set; } = "";
         [Required]
-        public string MetadataUuid { get; internal set; } = "";
+        public string MetadataUuid { get; set; } = "";
         [Required]
-        public string Metadata { get; internal set; } = "";
+        public string Metadata { get; set; } = "";
         [Required]
-        public string Data { get; internal set; } = "";
+        public string Data { get; set; } = "";
         [Required]
-        public string DataPresentation { get; internal set; } = "";
+        public string DataPresentation { get; set; } = "";
         [Required]
-        public string Server { get; internal set; } = "";
-        public int MainPort { get; internal set; } = 0;
-        public int AddPort { get; internal set; } = 0;
-        public int Session { get; internal set; } = 0;
+        public string Server { get; set; } = "";
+        public int MainPort { get; set; } = 0;
+        public int AddPort { get; set; } = 0;
+        public int Session { get; set; } = 0;
     }
 }
