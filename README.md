@@ -1,35 +1,16 @@
-# OneSTools.EventLog
-[![Nuget](https://img.shields.io/nuget/v/OneSTools.EventLog)](https://www.nuget.org/packages/OneSTools.EventLog)<br>
-Библиотека для чтения и парсинга данных журнала регистрации 1С
+# Инструменты для чтения и экспорта журнала регистрации 1С
 
-Предоставляет легкий интерфейс для чтения журнала регистрации. Позволяет работать в "live" режиме, либо считывать только доступные данные журнала.
+# В разработке
 
-### Конструктор:
------------
-#### Параметры:
-*logFolder* - путь к папке с журналом регистрации. Поддерживается только журнал старого формата (LGF и LGP файлы)<br/>
-*liveMode* (false по умолчанию) - если флаг выставлен в true, то ридер, после достижения конца файла, будет ожидать появления нового события в этом файле, либо появления нового файла LGP. Если false, то при достижении конца файла, ридер вернет null.<br/>
-*lgpFileName* - Имя файла LGP, с которого требуется начать чтение<br/>
-*startPosition* - Позиция в файле, с которой требуется начать чтение
+Репозиторий содержит как библиотеки так и готовые инструменты для чтения и экспорта журнала регистрации 1С в различные СУБД.
 
-### Методы:
------------
-#### Название:
-ReadNextEventLogItem
-#### Описание:
-Возвращает элемент с данными текущего события, поведение метода зависит от режима, в котором работает ридер.
-#### Возвращаемое значение:
-Экземпляр класса EventLogItem или null, если достигнут конец файла(только не в "live" режиме)
+## Состав:
 
-### Свойства:
------------
-#### Название:
-CurrentLgpFileName
-#### Описание:
-Название текущего LGP файла, с которого производится чтение данных
+[OneSTools.EventLog](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog) - Библиотека для чтения журнала регистрации (старый формат, LGF и LGP файлы). Позволяет выполнять как разовое чтение данных, так и запуск в "live" режиме</br>
+[OneSTools.EventLog.Exporter.Core](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Core) - Библиотека для экспорта журнала регистрации. Предоставляет легкие интерфейсы для реализации и является ядром инструментов для экспорта в различные СУБД</br>
+[OneSTools.EventLog.Exporter.ClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ClickHouse) - Инструмент для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/)</br>
+[OneSTools.EventLog.Exporter.ElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ElasticSearch) - Инструмент для экспорта журнала регистрации в [ElasticSearch](https://www.elastic.co/)</br>
+[OneSTools.EventLog.Exporter.SqlServer](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.SqlServer) - Инструмент для экспорта журнала регистрации в [Microsoft SQL Server](https://www.microsoft.com/ru-ru/sql-server/sql-server-2019)</br>
 
------------
-#### Название:
-CurrentLgpFilePosition
-#### Описание:
-Текущая позиция в LGP файле
+*Инструменты реализованные для конечных СУБД могут быть запущены как службы Windows/Linux</br>
+Примеры конфигурационных файлов и детальное описание можно найти, перейдя на страницы соответствующих инструментов*
