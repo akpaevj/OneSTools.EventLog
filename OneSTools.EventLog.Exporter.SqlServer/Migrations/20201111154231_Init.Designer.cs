@@ -10,7 +10,7 @@ using OneSTools.EventLog.Exporter.SqlServer;
 namespace OneSTools.EventLog.Exporter.SqlServer.Migrations
 {
     [DbContext(typeof(AppDbContext<EventLogItem>))]
-    [Migration("20201108210936_Init")]
+    [Migration("20201111154231_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace OneSTools.EventLog.Exporter.SqlServer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("OneSTools.EventLog.EventLogItem", b =>
+            modelBuilder.Entity("OneSTools.EventLog.Exporter.SqlServer.EventLogItem", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

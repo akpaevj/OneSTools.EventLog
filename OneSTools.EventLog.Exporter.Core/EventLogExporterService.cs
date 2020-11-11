@@ -13,52 +13,20 @@ namespace OneSTools.EventLog.Exporter.Core
 {
     public class EventLogExporterService<T> : BackgroundService where T : class, IEventLogItem, new()
     {
-        private string _logFolder;
-        private int _portion;
         private readonly ILogger<EventLogExporterService<T>> _logger;
         private readonly IEventLogExporter<T> _eventLogExporter;
 
-        public EventLogExporterService(IConfiguration configuration, ILogger<EventLogExporterService<T>> logger, IEventLogExporter<T> eventLogExporter)
+        public EventLogExporterService(ILogger<EventLogExporterService<T>> logger, IEventLogExporter<T> eventLogExporter)
         {
             _logger = logger;
             _eventLogExporter = eventLogExporter;
-
-            var exporterSection = configuration.GetSection("Exporter");
-
-            _logFolder = exporterSection.GetValue("LogFolder", "");
-
-            if (_logFolder == string.Empty)
-            {
-                var msg = "Log's folder is not set";
-                _logger.LogCritical(msg);
-
-                throw new Exception(msg);
-            }
-
-            _portion = exporterSection.GetValue("Portion", 10000);
-        }
-
-        public override async Task StartAsync(CancellationToken cancellationToken)
-        {
-            try
-            {
-                await _eventLogExporter.StartAsync(_logFolder, _portion, true, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to start EventLogExporter");
-
-                await StopAsync(cancellationToken);
-            }
-
-            await base.StartAsync(cancellationToken);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             try
             {
-                await _eventLogExporter.ExecuteAsync(stoppingToken);
+                await _eventLogExporter.StartAsync(stoppingToken);
             }
             catch (Exception ex)
             {
@@ -68,18 +36,11 @@ namespace OneSTools.EventLog.Exporter.Core
             }
         }
 
-        public override async Task StopAsync(CancellationToken cancellationToken)
+        public override void Dispose()
         {
-            try
-            {
-                await _eventLogExporter.StopAsync(cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to stop EventLogExporter");
-            }
+            _eventLogExporter?.Dispose();
 
-            await base.StopAsync(cancellationToken);
+            base.Dispose();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace OneSTools.EventLog.Exporter.SqlServer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("OneSTools.EventLog.EventLogItem", b =>
+            modelBuilder.Entity("OneSTools.EventLog.Exporter.SqlServer.EventLogItem", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

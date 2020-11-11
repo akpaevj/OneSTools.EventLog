@@ -140,7 +140,7 @@ namespace OneSTools.EventLog
 
         public void Dispose()
         {
-            streamReader.Dispose();
+            streamReader?.Dispose();
         }
     }
 }

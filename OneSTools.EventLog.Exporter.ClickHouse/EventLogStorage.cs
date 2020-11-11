@@ -10,14 +10,24 @@ using OneSTools.EventLog.Exporter.Core;
 using System.Linq;
 using System.Data;
 using ClickHouse.Client.ADO.Readers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace OneSTools.EventLog.Exporter.ClickHouse
 {
     public class EventLogStorage<T> : IEventLogStorage<T>, IDisposable where T : class, IEventLogItem, new()
     {
+        private ILogger<EventLogStorage<T>> _logger;
         private readonly ClickHouseConnection _connection;
-        public EventLogStorage(string connectionString)
+
+        public EventLogStorage(ILogger<EventLogStorage<T>> logger, IConfiguration configuration)
         {
+            _logger = logger;
+
+            var connectionString = configuration.GetConnectionString("Default");
+            if (connectionString == string.Empty)
+                throw new Exception("Connection string is not specified");
+
             _connection = new ClickHouseConnection(connectionString);
             _connection.Open();
 
@@ -43,7 +53,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                     Event LowCardinality(String),
                     Severity LowCardinality(String),
                     Comment String Codec(ZSTD),
-                    MetadataUuid LowCardinality(String),
+                    MetadataUuid String Codec(ZSTD),
                     Metadata LowCardinality(String),
                     Data String Codec(ZSTD),
                     DataPresentation String Codec(ZSTD),
@@ -73,10 +83,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             using var reader = await cmd.ExecuteReaderAsync(cancellationToken);
 
             if (await reader.ReadAsync())
-            {
-
                 return (reader.GetString(0), reader.GetInt64(1));
-            }
             else
                 return ("", 0);
         }
@@ -86,7 +93,8 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             using var copy = new ClickHouseBulkCopy(_connection)
             {
                 DestinationTableName = "EventLogItems",
-                BatchSize = entities.Count
+                BatchSize = entities.Count,
+                MaxDegreeOfParallelism = Environment.ProcessorCount
             };
 
             var data = entities.Select(item => new object[] {
@@ -115,12 +123,13 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             }).AsEnumerable();
 
             await copy.WriteToServerAsync(data, cancellationToken);
+
+            _logger.LogInformation($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
         }
 
         public void Dispose()
         {
-            if (_connection != null)
-                _connection.Dispose();
+            _connection?.Dispose();
         }
     }
 }

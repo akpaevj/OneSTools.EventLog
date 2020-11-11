@@ -39,7 +39,7 @@ namespace OneSTools.EventLog
         /// <param name="startPosition">LGP file position that will be used for reading</param>
         /// <param name="readingTimout">Timeout of the reading next event. if this is set to -1 the reader will wait forever, 
         /// otherwise it'll throw exception when the timeout occurs</param>
-        public EventLogReader(string logFolder, bool liveMode = false, string lgpFileName = "", long startPosition = 0, int readingTimout = -1)
+        public EventLogReader(string logFolder, bool liveMode = false, string lgpFileName = "", long startPosition = 0, int readingTimout = Timeout.Infinite)
         {
             _logFolder = logFolder;
             _readingTimeout = readingTimout;
@@ -159,15 +159,10 @@ namespace OneSTools.EventLog
 
         public void Dispose()
         {
-            if (_lgpFilesWatcher != null)
-            {
-                _lgpFilesWatcher.Dispose();
-
-                _lgpChangedCreated.Dispose();
-            }
-
-            if (_lgfReader != null)
-                _lgfReader.Dispose();
+            _lgpFilesWatcher?.Dispose();
+            _lgpChangedCreated?.Dispose();
+            _lgfReader?.Dispose();
+            _lgpReader?.Dispose();
         }
     }
 }

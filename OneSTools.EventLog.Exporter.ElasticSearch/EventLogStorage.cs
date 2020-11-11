@@ -8,24 +8,36 @@ using System.Linq;
 using System.Data;
 using Elasticsearch.Net;
 using Nest;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace OneSTools.EventLog.Exporter.ElasticSearch
 {
     public class EventLogStorage<T> : IEventLogStorage<T>, IDisposable where T : class, IEventLogItem, new()
     {
-        private string _eventLogitemsIndex;
-        private string _separation;
-        ElasticClient _client;
+        private readonly string _eventLogitemsIndex;
+        private readonly string _separation;
+        readonly ElasticClient _client;
 
-        public EventLogStorage(string host, int port = 9200, string index = "", string separation = "")
+        public EventLogStorage(IConfiguration configuration)
         {
+            var host = configuration.GetValue("ElasticSearch:Host", "");
+            if (host == string.Empty)
+                throw new Exception("ElasticSearch host is not specified");
+
+            var port = configuration.GetValue("ElasticSearch:Port", 9200);
+
+            var index = configuration.GetValue("ElasticSearch:Index", "");
+            if (index == string.Empty)
+                throw new Exception("ElasticSearch index name is not specified");
+
+            _separation = configuration.GetValue("ElasticSearch:Separation", "H");
+
             var uri = new Uri($"{host}:{port}");
             _eventLogitemsIndex = $"{index}-el";
 
             var settings = new ConnectionSettings(uri);
             settings.DefaultIndex(_eventLogitemsIndex);
-
-            _separation = separation;
 
             _client = new ElasticClient(settings);
             var response = _client.Ping();

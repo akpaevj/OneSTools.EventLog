@@ -21,11 +21,9 @@ namespace OneSTools.EventLog.Exporter.SqlServer
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    var configuration = hostContext.Configuration;
-
                     services.AddEntityFrameworkSqlServer()
                         .AddDbContext<AppDbContext<EventLogItem>>((sp, opt) =>
-                            opt.UseSqlServer(configuration["ConnectionStrings:Default"])
+                            opt.UseSqlServer(hostContext.Configuration["ConnectionStrings:Default"])
                                 .UseInternalServiceProvider(sp));
 
                     services.AddSingleton<IEventLogStorage<EventLogItem>, EventLogStorage>();

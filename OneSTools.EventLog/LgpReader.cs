@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -204,13 +205,15 @@ namespace OneSTools.EventLog
 
             switch (dataType)
             {
-                case "R":
+                case "R": // Reference
                     return (string)node[1];
-                case "U":
+                case "U": // Undefined
                     return "";
-                case "S":
+                case "S": // String
                     return (string)node[1];
-                case "P":
+                case "B": // Boolean
+                    return (string)node[1] == "0" ? "false" : "true";
+                case "P": // Complex data
                     StringBuilder str = new StringBuilder();
 
                     var subDataNode = node[1];
@@ -227,7 +230,12 @@ namespace OneSTools.EventLog
 
                     if (subDataCount > 0)
                         for (int i = 1; i <= subDataCount; i++)
-                            str.AppendLine($"Item {i}: {GetData(subDataNode[i])}");
+                        {
+                            var value = GetData(subDataNode[i]);
+
+                            if (value != string.Empty)
+                                str.AppendLine($"Item {i}: {value}");
+                        }
 
                     return str.ToString();
                 default:
@@ -237,24 +245,19 @@ namespace OneSTools.EventLog
 
         private string GetSeverityPresentation(string str)
         {
-            switch (str)
+            return str switch
             {
-                case "I":
-                    return "Information";
-                case "E":
-                    return "Error";
-                case "W":
-                    return "Warning";
-                case "N":
-                    return "Notification";
-                default:
-                    return "";
-            }
+                "I" => "Information",
+                "E" => "Error",
+                "W" => "Warning",
+                "N" => "Notification",
+                _ => "",
+            };
         }
 
         public void Dispose()
         {
-            streamReader.Dispose();
+            streamReader?.Dispose();
         }
     }
 }

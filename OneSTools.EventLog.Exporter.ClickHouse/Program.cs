@@ -19,12 +19,8 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    var configuration = hostContext.Configuration;
-
-                    services.AddSingleton<IEventLogStorage<EventLogItem>>(sp => 
-                        new EventLogStorage<EventLogItem>(configuration["ConnectionStrings:Default"]));
+                    services.AddSingleton<IEventLogStorage<EventLogItem>, EventLogStorage<EventLogItem>>();
                     services.AddSingleton<IEventLogExporter<EventLogItem>, EventLogExporter<EventLogItem>>();
-
                     services.AddHostedService<EventLogExporterService<EventLogItem>>();
                 });
     }

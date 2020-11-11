@@ -14,6 +14,7 @@ namespace OneSTools.EventLog.Exporter.SqlServer
     public class EventLogStorage : IEventLogStorage<EventLogItem>
     {
         private readonly IServiceProvider _serviceProvider;
+
         public EventLogStorage(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;

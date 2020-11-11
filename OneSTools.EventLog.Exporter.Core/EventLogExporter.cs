@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OneSTools.EventLog;
 
@@ -12,39 +16,43 @@ namespace OneSTools.EventLog.Exporter.Core
         private readonly ILogger<EventLogExporter<T>> _logger;
         private readonly IEventLogStorage<T> _storage;
         private string _logFolder;
+        private int _portion;
         private bool _liveMode;
         private EventLogReader<T> _eventLogReader;
-        private List<T> _entities;
+        private ActionBlock<T[]> _writeBlock;
+        private BatchBlock<T> _batchBlock;
 
-        public EventLogExporter(ILogger<EventLogExporter<T>> logger, IEventLogStorage<T> storage)
+        public EventLogExporter(ILogger<EventLogExporter<T>> logger, IConfiguration configuration, IEventLogStorage<T> storage)
         {
             _logger = logger;
             _storage = storage;
+
+            _logFolder = configuration.GetValue("Exporter:LogFolder", "");
+            if (_logFolder == string.Empty)
+                throw new Exception("Event log folder is not specified");
+
+            if (!Directory.Exists(_logFolder))
+                throw new Exception("Event log folder doesn't exist");
+
+            _portion = configuration.GetValue("Exporter:Portion", 10000);
+
+            _liveMode = configuration.GetValue("Exporter:LiveMode", true);
         }
-
-        public async Task StartAsync(string logFolder, int portion, bool liveMode = false, CancellationToken cancellationToken = default)
+        public async Task StartAsync(CancellationToken stoppingToken = default)
         {
-            try
-            {
-                await Task.Run(() =>
-                {
-                    _logFolder = logFolder;
-                    _entities = new List<T>(portion);
-                    _liveMode = liveMode;
-                }, cancellationToken);
-            }
-            catch (OperationCanceledException) { }
-            catch (Exception ex)
-            {
-                _logger.LogCritical(ex, "Failed to start EventLogExporter");
-                throw ex;
-            }
+            _writeBlock = new ActionBlock<T[]>(c => _storage.WriteEventLogDataAsync(c.ToList(), stoppingToken), new ExecutionDataflowBlockOptions()
+            { 
+                CancellationToken = stoppingToken,
+                BoundedCapacity = 2
+            });
+            _batchBlock = new BatchBlock<T>(_portion, new GroupingDataflowBlockOptions() 
+            { 
+                CancellationToken = stoppingToken,
+                BoundedCapacity = _portion * 2
+            });
 
-            _logger.LogInformation("EventLogExporter started");
-        }
+            _batchBlock.LinkTo(_writeBlock, new DataflowLinkOptions() { PropagateCompletion = true });
 
-        public async Task ExecuteAsync(CancellationToken stoppingToken = default)
-        {
             try
             {
                 var (FileName, EndPosition) = await _storage.ReadEventLogPositionAsync(stoppingToken);
@@ -66,24 +74,21 @@ namespace OneSTools.EventLog.Exporter.Core
                     catch (EventLogReaderTimeoutException)
                     {
                         forceSending = true;
+
+                        _logger.LogDebug($"Sending items will be forced");
                     }
                     catch (Exception ex)
                     {
+                        _batchBlock.Complete();
+
                         throw ex;
                     }
 
                     if (item != null)
-                        _entities.Add(item);
+                        await SendAsync(_batchBlock, item);
 
-                    if ((forceSending && _entities.Count > 0) || _entities.Count == _entities.Capacity)
-                    {
-                        await _storage.WriteEventLogDataAsync(_entities, stoppingToken);
-
-                        _logger.LogInformation($"{DateTime.Now:hh:mm:ss.fffff}: EventLogExporter has written {_entities.Count} items");
-
-                        _entities.Clear();
-                    }
-
+                    if (forceSending)
+                        _batchBlock.TriggerBatch();
                 }
             }
             catch (OperationCanceledException) { }
@@ -92,34 +97,23 @@ namespace OneSTools.EventLog.Exporter.Core
                 _logger.LogCritical(ex, "Failed to execute EventLogExporter");
                 throw ex;
             }
-        }
 
-        public async Task StopAsync(CancellationToken cancellationToken = default)
+            _batchBlock.Complete();
+
+            await _writeBlock.Completion;
+        }
+        private async Task SendAsync(ITargetBlock<T> nextBlock, T item, CancellationToken stoppingToken = default)
         {
-            try
+            while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Run(() =>
-                {
-                    if (_eventLogReader != null)
-                        _eventLogReader.Dispose();
-                }, cancellationToken);
+                if (await nextBlock.SendAsync(item))
+                    break;
             }
-            catch (OperationCanceledException) { }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            _logger.LogInformation($"EventLogExporter stopped");
         }
-
         public void Dispose()
         {
-            if (_storage != null)
-                _storage.Dispose();
-
-            if (_eventLogReader != null)
-                _eventLogReader.Dispose();
+            _storage?.Dispose();
+            _eventLogReader?.Dispose();
         }
     }
 }
