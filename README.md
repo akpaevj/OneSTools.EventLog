@@ -89,7 +89,7 @@ sc create EventLogExporterClickHouse binPath= "C:\elexporterch\EventLogExporterC
 sc start EventLogExporterClickHouse
 ```
 **Linux: (на примере Ubuntu 20.04.1 LTS)**:</br>
-*В этом примере файлы приложения были помещены в каталог /opt/EventLogExporterClickHouse*
+*В этом примере файлы приложения были помещены в каталог /opt/EventLogExporterClickHouse*</br>
 В /etc/systemd/system создать файл eventlogexporterclickhouse.service с содержимым:
 ```
 [Service]
