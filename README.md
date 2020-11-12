@@ -36,7 +36,7 @@
     "Host": "http://127.0.0.1",
     "Port": 9200,
     "Index": "index-name",
-    "Separation": "H" // H - hour, D - day, M - Month
+    "Separation": "H"
   },
 ```
 где:</br>
