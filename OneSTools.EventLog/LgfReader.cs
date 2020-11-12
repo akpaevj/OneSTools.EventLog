@@ -21,6 +21,7 @@ namespace OneSTools.EventLog
         /// Value tuple - first value is an object value, second value is a guid of the object value
         /// </summary>
         public Dictionary<(ObjectType, int), (string, string)> _referencedObjects = new Dictionary<(ObjectType, int), (string, string)>();
+        private bool disposedValue;
 
         public LgfReader(string lgfPath)
         {
@@ -138,9 +139,35 @@ namespace OneSTools.EventLog
                 throw new Exception($"Cannot find objectType {objectType} with number {number} in referenced objects collection");
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _objects = null;
+                    _referencedObjects = null;
+                }
+
+                streamReader?.Dispose();
+                streamReader = null;
+                fileStream?.Dispose();
+                fileStream = null;
+
+                disposedValue = true;
+            }
+        }
+
+        ~LgfReader()
+        {
+            Dispose(disposing: false);
+        }
+
         public void Dispose()
         {
-            streamReader?.Dispose();
+            // Не изменяйте этот код. Разместите код очистки в методе "Dispose(bool disposing)".
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

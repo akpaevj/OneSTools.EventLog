@@ -17,9 +17,10 @@ namespace OneSTools.EventLog
         private readonly string _logFolder;
         private readonly int _readingTimeout;
         private readonly bool _liveMode;
-        private readonly LgfReader _lgfReader;
+        private LgfReader _lgfReader;
         private LgpReader<T> _lgpReader;
         private FileSystemWatcher _lgpFilesWatcher;
+        private bool disposedValue;
 
         /// <summary>
         /// Current reader's "lgp" file name
@@ -76,10 +77,9 @@ namespace OneSTools.EventLog
                 {
                     item = _lgpReader.ReadNextEventLogItem(cancellationToken);
                 }
-                catch (LgpReaderFileDeletedException)
+                catch (ObjectDisposedException)
                 {
                     item = null;
-                    _lgpReader.Dispose();
                     _lgpReader = null;
                     break;
                 }
@@ -171,12 +171,38 @@ namespace OneSTools.EventLog
                 _lgpChangedCreated.Set();
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: освободить управляемое состояние (управляемые объекты)
+                }
+
+                _lgpFilesWatcher?.Dispose();
+                _lgpFilesWatcher = null;
+                _lgpChangedCreated?.Dispose();
+                _lgpChangedCreated = null;
+                _lgfReader?.Dispose();
+                _lgfReader = null;
+                _lgpReader?.Dispose();
+                _lgpReader = null;
+
+                disposedValue = true;
+            }
+        }
+
+        ~EventLogReader()
+        {
+            Dispose(disposing: false);
+        }
+
         public void Dispose()
         {
-            _lgpFilesWatcher?.Dispose();
-            _lgpChangedCreated?.Dispose();
-            _lgfReader?.Dispose();
-            _lgpReader?.Dispose();
+            // Не изменяйте этот код. Разместите код очистки в методе "Dispose(bool disposing)".
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

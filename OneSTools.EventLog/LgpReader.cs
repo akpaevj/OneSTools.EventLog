@@ -21,6 +21,7 @@ namespace OneSTools.EventLog
         private StreamReader streamReader;
         private long _lastPosition;
         private FileSystemWatcher _lgpFileWatcher;
+        private bool disposedValue;
 
         public string LgpPath { get; private set; }
         public string LgpFileName => Path.GetFileNameWithoutExtension(LgpPath);
@@ -33,6 +34,9 @@ namespace OneSTools.EventLog
 
         public T ReadNextEventLogItem(CancellationToken cancellationToken = default)
         {
+            if (disposedValue)
+                throw new ObjectDisposedException(typeof(LgpReader<T>).Name);
+
             InitializeStreams();
 
             return ReadEventLogItemData(cancellationToken);
@@ -59,14 +63,14 @@ namespace OneSTools.EventLog
                 if (!File.Exists(LgpPath))
                     throw new Exception($"Cannot find lgp file by path {LgpPath}");
 
-                _lgpFileWatcher = new FileSystemWatcher(Path.GetDirectoryName(LgpPath), Path.GetFileName(LgpPath))
+                _lgpFileWatcher = new FileSystemWatcher(Path.GetDirectoryName(LgpPath), "*.lgp")
                 {
-                    NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
+                    NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Attributes
                 };
                 _lgpFileWatcher.Deleted += LgpFileWatcher_Deleted;
                 _lgpFileWatcher.EnableRaisingEvents = true;
 
-                fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                 streamReader = new StreamReader(fileStream);
 
                 // skip header (first three lines)
@@ -79,7 +83,7 @@ namespace OneSTools.EventLog
         {
             if (e.ChangeType == WatcherChangeTypes.Deleted && LgpPath == e.FullPath)
             {
-                throw new LgpReaderFileDeletedException();
+                Dispose();
             }
         }
 
@@ -271,10 +275,35 @@ namespace OneSTools.EventLog
             };
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: освободить управляемое состояние (управляемые объекты)
+                }
+
+                streamReader?.Dispose();
+                streamReader = null;
+                fileStream = null;
+
+                _lgpFileWatcher?.Dispose();
+                _lgpFileWatcher = null;
+                
+                disposedValue = true;
+            }
+        }
+
+        ~LgpReader()
+        {
+            Dispose(disposing: false);
+        }
+
         public void Dispose()
         {
-            streamReader?.Dispose();
-            _lgpFileWatcher?.Dispose();
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
