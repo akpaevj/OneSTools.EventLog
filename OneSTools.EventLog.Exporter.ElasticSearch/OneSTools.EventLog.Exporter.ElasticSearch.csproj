@@ -3,10 +3,22 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>dotnet-OneSTools.EventLog.Exporter.ElasticSearch-9E126234-2D62-43C5-8D46-3A8750DFDE96</UserSecretsId>
+    <Authors>Akpaev Evgeny</Authors>
+    <Copyright>Akpaev Evgeny</Copyright>
+    <AssemblyName>EventLogExporterElasticSearch</AssemblyName>
+    <PackageProjectUrl>https://github.com/akpaevj/OneSTools.EventLog</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/akpaevj/OneSTools.EventLog</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Elasticsearch.Net" Version="7.9.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.0" />
     <PackageReference Include="NEST" Version="7.9.0" />
   </ItemGroup>
 

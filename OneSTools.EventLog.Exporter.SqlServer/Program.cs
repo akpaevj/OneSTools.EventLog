@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using OneSTools.EventLog.Exporter.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.IO;
+using System.Reflection;
 
 namespace OneSTools.EventLog.Exporter.SqlServer
 {
@@ -19,6 +21,12 @@ namespace OneSTools.EventLog.Exporter.SqlServer
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(c => {
+                    c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+                    c.AddJsonFile("appsettings.json");
+                })
+                .UseWindowsService()
+                .UseSystemd()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddEntityFrameworkSqlServer()
@@ -27,7 +35,6 @@ namespace OneSTools.EventLog.Exporter.SqlServer
                                 .UseInternalServiceProvider(sp));
 
                     services.AddSingleton<IEventLogStorage<EventLogItem>, EventLogStorage>();
-                    services.AddSingleton<IEventLogExporter<EventLogItem>, EventLogExporter<EventLogItem>>();
                     services.AddHostedService<EventLogExporterService<EventLogItem>>();
                 });
     }

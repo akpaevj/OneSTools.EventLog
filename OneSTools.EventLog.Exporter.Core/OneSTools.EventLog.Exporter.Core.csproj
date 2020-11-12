@@ -6,6 +6,11 @@
     <RootNamespace>OneSTools.EventLog.Exporter.Core</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="EventLogExporter.cs~RF10cbf212.TMP" />
   </ItemGroup>

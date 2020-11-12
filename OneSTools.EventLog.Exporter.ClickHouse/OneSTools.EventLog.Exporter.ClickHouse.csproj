@@ -4,10 +4,22 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>dotnet-OneSTools.EventLog.Exporter.ClickHouse-0EAA2A34-8510-4D4E-A64C-1FDCCBB01F1D</UserSecretsId>
     <AssemblyName>EventLogExporterClickHouse</AssemblyName>
+    <Authors>Akpaev Evgeny</Authors>
+    <Copyright>Evgeny Akpaev</Copyright>
+    <PackageIcon></PackageIcon>
+    <PackageProjectUrl>https://github.com/akpaevj/OneSTools.EventLog</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/akpaevj/OneSTools.EventLog</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ClickHouse.Client" Version="2.2.1.285" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

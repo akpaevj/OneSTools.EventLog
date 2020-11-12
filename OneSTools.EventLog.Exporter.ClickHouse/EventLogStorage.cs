@@ -17,6 +17,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
 {
     public class EventLogStorage<T> : IEventLogStorage<T>, IDisposable where T : class, IEventLogItem, new()
     {
+        private const string TABLE_NAME = "EventLogItems";
         private ILogger<EventLogStorage<T>> _logger;
         private readonly ClickHouseConnection _connection;
 
@@ -37,7 +38,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
         private void CreateEventLogItemsTable()
         {
             var commandText =
-                @"CREATE TABLE IF NOT EXISTS EventLogItems
+                $@"CREATE TABLE IF NOT EXISTS {TABLE_NAME}
                 (
                     FileName LowCardinality(String),
                     EndPosition Int64 Codec(DoubleDelta, LZ4),
@@ -75,7 +76,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
 
         public async Task<(string FileName, long EndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
         {
-            var commandText = "SELECT TOP 1 FileName, EndPosition FROM EventLogItems ORDER BY DateTime DESC";
+            var commandText = $"SELECT TOP 1 FileName, EndPosition FROM {TABLE_NAME} ORDER BY DateTime DESC";
 
             using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
@@ -92,7 +93,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
         {
             using var copy = new ClickHouseBulkCopy(_connection)
             {
-                DestinationTableName = "EventLogItems",
+                DestinationTableName = TABLE_NAME,
                 BatchSize = entities.Count,
                 MaxDegreeOfParallelism = Environment.ProcessorCount
             };
@@ -124,7 +125,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
 
             await copy.WriteToServerAsync(data, cancellationToken);
 
-            _logger.LogInformation($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
+            _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
         }
 
         public void Dispose()

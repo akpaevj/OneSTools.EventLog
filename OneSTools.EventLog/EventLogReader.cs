@@ -72,7 +72,21 @@ namespace OneSTools.EventLog
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                item = _lgpReader.ReadNextEventLogItem(cancellationToken);
+                try
+                {
+                    item = _lgpReader.ReadNextEventLogItem(cancellationToken);
+                }
+                catch (LgpReaderFileDeletedException)
+                {
+                    item = null;
+                    _lgpReader.Dispose();
+                    _lgpReader = null;
+                    break;
+                }
+                catch(Exception ex)
+                {
+                    throw ex;
+                }
 
                 if (item == null)
                 {
@@ -140,18 +154,18 @@ namespace OneSTools.EventLog
             {
                 NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
             };
-            _lgpFilesWatcher.Changed += _lgpFilesWatcher_Changed;
-            _lgpFilesWatcher.Created += _lgpFilesWatcher_Created;
+            _lgpFilesWatcher.Changed += LgpFilesWatcher_Changed;
+            _lgpFilesWatcher.Created += LgpFilesWatcher_Created;
             _lgpFilesWatcher.EnableRaisingEvents = true;
         }
 
-        private void _lgpFilesWatcher_Created(object sender, FileSystemEventArgs e)
+        private void LgpFilesWatcher_Created(object sender, FileSystemEventArgs e)
         {
             if (e.ChangeType == WatcherChangeTypes.Created)
                 _lgpChangedCreated.Set();
         }
 
-        private void _lgpFilesWatcher_Changed(object sender, FileSystemEventArgs e)
+        private void LgpFilesWatcher_Changed(object sender, FileSystemEventArgs e)
         {
             if (e.ChangeType == WatcherChangeTypes.Changed)
                 _lgpChangedCreated.Set();

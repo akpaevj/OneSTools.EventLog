@@ -20,6 +20,7 @@ namespace OneSTools.EventLog
         private FileStream fileStream;
         private StreamReader streamReader;
         private long _lastPosition;
+        private FileSystemWatcher _lgpFileWatcher;
 
         public string LgpPath { get; private set; }
         public string LgpFileName => Path.GetFileNameWithoutExtension(LgpPath);
@@ -58,12 +59,27 @@ namespace OneSTools.EventLog
                 if (!File.Exists(LgpPath))
                     throw new Exception($"Cannot find lgp file by path {LgpPath}");
 
+                _lgpFileWatcher = new FileSystemWatcher(Path.GetDirectoryName(LgpPath), Path.GetFileName(LgpPath))
+                {
+                    NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
+                };
+                _lgpFileWatcher.Deleted += LgpFileWatcher_Deleted;
+                _lgpFileWatcher.EnableRaisingEvents = true;
+
                 fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 streamReader = new StreamReader(fileStream);
 
                 // skip header (first three lines)
                 for (int i = 0; i < 3; i++)
                     streamReader.ReadLine();
+            }
+        }
+
+        private void LgpFileWatcher_Deleted(object sender, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Deleted && LgpPath == e.FullPath)
+            {
+                throw new LgpReaderFileDeletedException();
             }
         }
 
@@ -258,6 +274,7 @@ namespace OneSTools.EventLog
         public void Dispose()
         {
             streamReader?.Dispose();
+            _lgpFileWatcher?.Dispose();
         }
     }
 }
