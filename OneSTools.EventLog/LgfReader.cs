@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,7 +30,7 @@ namespace OneSTools.EventLog
             LgfPath = lgfPath;
         }
 
-        private void ReadToEnd(CancellationToken cancellationToken)
+        private void ReadToEnd(CancellationToken cancellationToken = default)
         {
             if (!File.Exists(LgfPath))
                 throw new Exception("Cannot find \"1Cv8.lgf\"");
@@ -38,73 +40,102 @@ namespace OneSTools.EventLog
                 fileStream = new FileStream(LgfPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                 streamReader = new StreamReader(fileStream);
 
-                // skip header (first three lines)
-                for (int i = 0; i < 3; i++)
+                // skip header
+                while (true)
+                {
                     streamReader.ReadLine();
+
+                    if (streamReader.Peek() == '{')
+                        break;
+                }
             }
 
-            string currentLine;
-            while ((currentLine = streamReader.ReadLine()) != null && !cancellationToken.IsCancellationRequested)
+            while (!streamReader.EndOfStream && !cancellationToken.IsCancellationRequested)
             {
-                var firstCommaPos = currentLine.IndexOf(',');
-                var objectType = (ObjectType)int.Parse(currentLine.Substring(1, firstCommaPos - 1));
+                var itemStrData = ReadNextItemData(cancellationToken).Trim().Trim(',');
+                var itemData = BracketsFile.BracketsFileParser.Parse(itemStrData);
+
+                var objectType = (ObjectType)(int)itemData[0];
 
                 // Skip unknown object types
                 if (objectType >= ObjectType.Unknown)
                     continue;
 
-                bool hasGuid;
                 switch (objectType)
                 {
                     case ObjectType.Users:
                     case ObjectType.Metadata:
-                        hasGuid = true;
-                        break; 
+                        var key = (objectType, (int)itemData[3]);
+                        var value = ((string)itemData[2], (string)itemData[1]);
+
+                        if (_referencedObjects.ContainsKey(key))
+                            _referencedObjects.Remove(key);
+
+                        _referencedObjects.Add(key, value);
+
+                        break;
                     default:
-                        hasGuid = false;
+                        var key1 = (objectType, (int)itemData[2]);
+                        var value1 = (string)itemData[1];
+
+                        if (_objects.ContainsKey(key1))
+                            _objects.Remove(key1);
+
+                        _objects.Add(key1, value1);
                         break;
                 }
+            }
+        }
 
-                if (hasGuid)
+        private string  ReadNextItemData(CancellationToken cancellationToken = default)
+        {
+            StringBuilder data = new StringBuilder();
+
+            var quotesQuantity = 0;
+            var bracketsQuantity = 0;
+            bool start = false;
+            bool end = false;
+
+            while (true)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    break;
+
+                var currentLine = streamReader.ReadLine();
+
+                if (currentLine is null)
+                    break;
+
+                if (!start && currentLine.Length > 0 && currentLine[0] == '{')
+                    start = true;
+
+                if (start)
                 {
-                    var currentPos = firstCommaPos + 1;
-                    var guid = currentLine.Substring(currentPos, 36);
-                    currentPos += 36 + 1;
+                    data.Append(currentLine + '\n');
 
-                    var secondCommaPos = currentLine.IndexOf(',', currentPos);
-                    var value = currentLine.Substring(currentPos, secondCommaPos - currentPos).Trim('"');
-                    currentPos = secondCommaPos + 1;
+                    bracketsQuantity += currentLine.Count(c => c == '{');
+                    bracketsQuantity -= currentLine.Count(c => c == '}');
+                    quotesQuantity += currentLine.Count(c => c == '"');
 
-                    var lastBracketPos = currentLine.LastIndexOf('}');
-                    var number = int.Parse(currentLine.Substring(currentPos, lastBracketPos - currentPos));
+                    if (bracketsQuantity == 0 || streamReader.EndOfStream)
+                    {
+                        end = true;
 
-                    var keyTuple = (objectType, number);
-                    var valueTuple = (value, guid);
-
-                    if (_referencedObjects.ContainsKey(keyTuple))
-                        throw new Exception("\"Referenced objects\" already contains the same key");
-
-                    _referencedObjects[keyTuple] = valueTuple;
+                        if (bracketsQuantity != 0)
+                            end = (bracketsQuantity % 2) == 0;
+                    }
                 }
-                else
+
+                if (end)
                 {
-                    var currentPos = firstCommaPos + 1;
-
-                    var secondCommaPos = currentLine.IndexOf(',', currentPos);
-                    var value = currentLine.Substring(currentPos, secondCommaPos - currentPos).Trim('"');
-                    currentPos = secondCommaPos + 1;
-
-                    var lastBracketPos = currentLine.LastIndexOf('}');
-                    var number = int.Parse(currentLine.Substring(currentPos, lastBracketPos - currentPos));
-
-                    var keyTuple = (objectType, number);
-
-                    if (_objects.ContainsKey(keyTuple))
-                        throw new Exception("\"Objects\" already contains the same key");
-
-                    _objects[keyTuple] = value;
+                    break;
                 }
             }
+
+            if (data.Length > 0 && data[data.Length - 1] == ',')
+                data.Remove(data.Length - 1, 1);
+
+            return data.ToString();
         }
 
         public string GetObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken = default)

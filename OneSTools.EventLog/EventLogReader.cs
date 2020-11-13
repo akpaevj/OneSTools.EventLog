@@ -126,24 +126,35 @@ namespace OneSTools.EventLog
             if (_lgpReader != null)
                 currentReaderLastWriteDateTime = new FileInfo(_lgpReader.LgpPath).LastWriteTime;
 
+            var filesDateTime = new List<(string, DateTime)>();
+
             var files = Directory.GetFiles(_logFolder, "*.lgp");
 
             foreach (var file in files)
             {
-                var writeDateTime = new FileInfo(file).LastWriteTime;
-
-                if (writeDateTime > currentReaderLastWriteDateTime)
+                if (_lgpReader != null)
                 {
-                    if (_lgpReader != null)
-                        _lgpReader.Dispose();
-
-                    _lgpReader = new LgpReader<T>(file, _lgfReader);
-
-                    return true;
+                    if (_lgpReader.LgpPath != file)
+                        filesDateTime.Add((file, new FileInfo(file).LastWriteTime));
                 }
+                else
+                    filesDateTime.Add((file, new FileInfo(file).LastWriteTime));
             }
 
-            return false;
+            var orderedFiles = filesDateTime.OrderBy(c => c.Item2).ToList();
+
+            var nextFile = orderedFiles.FirstOrDefault(c => c.Item2 > currentReaderLastWriteDateTime);
+
+            if (string.IsNullOrEmpty(nextFile.Item1))
+                return false;
+            else
+            {
+                _lgpReader?.Dispose();
+
+                _lgpReader = new LgpReader<T>(nextFile.Item1, _lgfReader);
+
+                return true;
+            }
         }
 
         private void StartLgpFilesWatcher()

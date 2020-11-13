@@ -10,17 +10,21 @@ using Elasticsearch.Net;
 using Nest;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace OneSTools.EventLog.Exporter.ElasticSearch
 {
     public class EventLogStorage<T> : IEventLogStorage<T>, IDisposable where T : class, IEventLogItem, new()
     {
-        private readonly string _eventLogitemsIndex;
+        private readonly ILogger<EventLogStorage<T>> _logger;
+        private readonly string _eventLogItemsIndex;
         private readonly string _separation;
         readonly ElasticClient _client;
 
-        public EventLogStorage(IConfiguration configuration)
+        public EventLogStorage(ILogger<EventLogStorage<T>> logger, IConfiguration configuration)
         {
+            _logger = logger;
+
             var host = configuration.GetValue("ElasticSearch:Host", "");
             if (host == string.Empty)
                 throw new Exception("ElasticSearch host is not specified");
@@ -34,21 +38,41 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
             _separation = configuration.GetValue("ElasticSearch:Separation", "H");
 
             var uri = new Uri($"{host}:{port}");
-            _eventLogitemsIndex = $"{index}-el";
+            _eventLogItemsIndex = index;
 
             var settings = new ConnectionSettings(uri);
-            settings.DefaultIndex(_eventLogitemsIndex);
+            settings.EnableHttpCompression();
 
             _client = new ElasticClient(settings);
             var response = _client.Ping();
 
             if (!response.IsValid)
                 throw response.OriginalException;
+
+            CreateIndexTemplate();
+        }
+
+        private void CreateIndexTemplate()
+        {
+            var cmd = 
+                "{\n" +
+                $"  \"index_patterns\": [\"{_eventLogItemsIndex}-*\"],\n" +
+                "   \"template\": {\n" +
+                "       \"settings\": {\n" +
+                "           \"number_of_shards\": 5,\n" +
+                "           \"number_of_replicas\": 0\n," +
+                "           \"index.codec\": \"best_compression\"\n" +
+                "       }\n" +
+                "   }\n" +
+                "}";
+
+            var response = _client.LowLevel.DoRequest<StringResponse>(HttpMethod.PUT, $"_index_template/{_eventLogItemsIndex}", PostData.String(cmd));
         }
 
         public async Task<(string FileName, long EndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
         {
             var response = await _client.SearchAsync<T>(sd => sd
+                .Index($"{_eventLogItemsIndex}-*")
                 .Sort(ss => 
                     ss.Descending("DateTime"))
                 .Size(1)
@@ -57,6 +81,9 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
             if (response.IsValid)
             {
                 var item = response.Documents.FirstOrDefault();
+
+                if (item is null)
+                    return ("", 0);
 
                 return (item.FileName, item.EndPosition);
             }
@@ -73,20 +100,20 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                 case "H":
                     var groups = entities.GroupBy(c => c.DateTime.ToString("yyyyMMddhh")).OrderBy(c => c.Key);
                     foreach (IGrouping<string, T> item in groups)
-                        data.Add(($"{_eventLogitemsIndex}-{item.Key}", item.ToList()));
+                        data.Add(($"{_eventLogItemsIndex}-{item.Key}", item.ToList()));
                     break;
                 case "D":
                     groups = entities.GroupBy(c => c.DateTime.ToString("yyyyMMdd")).OrderBy(c => c.Key);
                     foreach (IGrouping<string, T> item in groups)
-                        data.Add(($"{_eventLogitemsIndex}-{item.Key}", item.ToList()));
+                        data.Add(($"{_eventLogItemsIndex}-{item.Key}", item.ToList()));
                     break;
                 case "M":
                     groups = entities.GroupBy(c => c.DateTime.ToString("yyyyMM")).OrderBy(c => c.Key);
                     foreach (IGrouping<string, T> item in groups)
-                        data.Add(($"{_eventLogitemsIndex}-{item.Key}", item.ToList()));
+                        data.Add(($"{_eventLogItemsIndex}-{item.Key}", item.ToList()));
                     break;
                 default:
-                    data.Add(($"{_eventLogitemsIndex}-all", entities));
+                    data.Add(($"{_eventLogItemsIndex}-all", entities));
                     break;
             }
 
@@ -94,11 +121,19 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
             {
                 var responseItems = await _client.IndexManyAsync(item.Entities, item.IndexName, cancellationToken);
 
-                if (!responseItems.IsValid)
+                if (responseItems.Errors)
                 {
+                    foreach (var itemWithError in responseItems.ItemsWithErrors)
+                    {
+                        _logger.LogError(responseItems.OriginalException, $"Fialed to index document {itemWithError.Id}: {itemWithError.Error}");
+                    }
+
+                    _logger.LogError(responseItems.OriginalException, "Fialed to write items");
                     throw responseItems.OriginalException;
                 }
             }
+
+            _logger.LogInformation($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
         }
 
         public void Dispose()

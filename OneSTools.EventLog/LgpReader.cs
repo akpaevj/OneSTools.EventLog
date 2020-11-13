@@ -73,9 +73,14 @@ namespace OneSTools.EventLog
                 fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                 streamReader = new StreamReader(fileStream);
 
-                // skip header (first three lines)
-                for (int i = 0; i < 3; i++)
+                // skip header
+                while (true)
+                {
                     streamReader.ReadLine();
+
+                    if (streamReader.Peek() == '{')
+                        break;
+                }
             }
         }
 

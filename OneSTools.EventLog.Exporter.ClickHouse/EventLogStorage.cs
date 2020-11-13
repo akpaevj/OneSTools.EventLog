@@ -18,7 +18,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
     public class EventLogStorage<T> : IEventLogStorage<T>, IDisposable where T : class, IEventLogItem, new()
     {
         private const string TABLE_NAME = "EventLogItems";
-        private ILogger<EventLogStorage<T>> _logger;
+        private readonly ILogger<EventLogStorage<T>> _logger;
         private readonly ClickHouseConnection _connection;
 
         public EventLogStorage(ILogger<EventLogStorage<T>> logger, IConfiguration configuration)
@@ -65,8 +65,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 )
                 engine = MergeTree()
                 PARTITION BY (toYYYYMM(DateTime))
-                PRIMARY KEY (DateTime)
-                ORDER BY (DateTime)
+                ORDER BY (DateTime, EndPosition)
                 SETTINGS index_granularity = 8192;";
 
             using var cmd = _connection.CreateCommand();
@@ -76,7 +75,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
 
         public async Task<(string FileName, long EndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
         {
-            var commandText = $"SELECT TOP 1 FileName, EndPosition FROM {TABLE_NAME} ORDER BY DateTime DESC";
+            var commandText = $"SELECT TOP 1 FileName, EndPosition FROM {TABLE_NAME} ORDER BY DateTime DESC, EndPosition DESC";
 
             using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
@@ -94,8 +93,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             using var copy = new ClickHouseBulkCopy(_connection)
             {
                 DestinationTableName = TABLE_NAME,
-                BatchSize = entities.Count,
-                MaxDegreeOfParallelism = Environment.ProcessorCount
+                BatchSize = entities.Count
             };
 
             var data = entities.Select(item => new object[] {
@@ -103,7 +101,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 item.EndPosition,
                 item.DateTime,
                 item.TransactionStatus ?? "",
-                item.TransactionDateTime,
+                item.TransactionDateTime ?? new DateTime(1970, 1, 1),
                 item.TransactionNumber,
                 item.UserUuid ?? "",
                 item.User ?? "",
@@ -123,9 +121,17 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 item.Session
             }).AsEnumerable();
 
-            await copy.WriteToServerAsync(data, cancellationToken);
+            try
+            {
+                await copy.WriteToServerAsync(data, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to write data");
+                throw ex;
+            }
 
-            _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
+            _logger.LogInformation($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
         }
 
         public void Dispose()

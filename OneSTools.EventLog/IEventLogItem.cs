@@ -21,7 +21,7 @@ namespace OneSTools.EventLog
         string Server { get; set; }
         int Session { get; set; }
         string Severity { get; set; }
-        DateTime TransactionDateTime { get; set; }
+        DateTime? TransactionDateTime { get; set; }
         int TransactionNumber { get; set; }
         string TransactionStatus { get; set; }
         string User { get; set; }
