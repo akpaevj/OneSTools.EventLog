@@ -109,4 +109,4 @@ systemctl start eventlogexporterclickhouse.service
 |ClickHouse   |10000 |7 мин. 28 сек.  | ~ 60 MiB            |66440        |7.18     |14.34 MiB              |
 |ElasticSearch|5000  |13 мин. 21 сек. | ~ 60 MiB            |37160        |4.02     |2023.2 MiB             |
 
-ClickHouse использовался as is, но на колонки (в зависимости от типа и состава данных) были выставлены кодк. Для шаблона индекса ElasticSearch были выставлены параметры number_of_shards = 6, number_of_replicas = 0, index.codec = best_compression.
+ClickHouse использовался as is, но на колонки (в зависимости от типа и состава данных) были выставлены кодеки. Для шаблона индекса ElasticSearch были выставлены параметры number_of_shards = 6, number_of_replicas = 0, index.codec = best_compression.
