@@ -6,7 +6,6 @@
 * [OneSTools.EventLog.Exporter.Core](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Core) - Библиотека-ядро для инструментов экспорта журнала регистрации, на основе которой можно создавать приложения для экспорта в новые СУБД.</br>
 * [OneSTools.EventLog.Exporter.ClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ClickHouse) - Инструмент для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/)</br>
 * [OneSTools.EventLog.Exporter.ElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ElasticSearch) - Инструмент для экспорта журнала регистрации в [ElasticSearch](https://www.elastic.co/)</br>
-* [OneSTools.EventLog.Exporter.SqlServer](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.SqlServer) - Инструмент для экспорта журнала регистрации в [Microsoft SQL Server](https://www.microsoft.com/ru-ru/sql-server/sql-server-2019)</br>
 
 ## Get started:
 
@@ -46,13 +45,6 @@
 *D* (Day) - делить индексы по дням. Пример конечного названия индекса: index-name-el-20200101</br>
 *M* (Month) - делить индексы по месяцам. Пример конечного названия индекса: index-name-el-202001</br>
 При указании любого другого (либо не указании вовсе) значения, разделения индекса не будет и конечное название индекса будет выглядеть так: index-name-el-all</br>
-
-**SQL Server:**
-```json
-"ConnectionStrings": {
-    "Default": "Data Source=localhost;Initial Catalog=database_name;Integrated Security=true"
-  }
-```
 
 **Полный файл конфигурации на примере ClickHouse:**
 ```json
