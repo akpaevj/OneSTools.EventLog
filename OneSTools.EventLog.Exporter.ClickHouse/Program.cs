@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Configuration;
 using OneSTools.EventLog.Exporter.Core;
 
 namespace OneSTools.EventLog.Exporter.ClickHouse
@@ -20,8 +22,16 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(c => {
+                    c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+                    c.AddJsonFile("appsettings.json");
+                })
                 .UseWindowsService()
                 .UseSystemd()
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<IEventLogStorage<EventLogItem>, EventLogStorage<EventLogItem>>();

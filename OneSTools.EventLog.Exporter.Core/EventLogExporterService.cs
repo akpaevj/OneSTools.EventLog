@@ -19,6 +19,7 @@ namespace OneSTools.EventLog.Exporter.Core
         private readonly IEventLogStorage<T> _storage;
         private string _logFolder;
         private int _portion;
+        private string _currentLgpFile;
         private EventLogReader<T> _eventLogReader;
         private ActionBlock<T[]> _writeBlock;
         private BatchBlock<T> _batchBlock;
@@ -91,7 +92,16 @@ namespace OneSTools.EventLog.Exporter.Core
                     }
 
                     if (item != null)
+                    {
                         await SendAsync(_batchBlock, item);
+
+                        if (_currentLgpFile != _eventLogReader.CurrentLgpFileName && !string.IsNullOrEmpty(_eventLogReader.CurrentLgpFileName))
+                        {
+                            _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | Reader started reading {_eventLogReader.CurrentLgpFileName}.lgp");
+
+                            _currentLgpFile = _eventLogReader.CurrentLgpFileName;
+                        }
+                    }
 
                     if (forceSending)
                         _batchBlock.TriggerBatch();

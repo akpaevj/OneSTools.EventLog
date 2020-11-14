@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using OneSTools.EventLog.Exporter.Core;
 
 namespace OneSTools.EventLog.Exporter.ElasticSearch
@@ -26,6 +27,10 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                 })
                 .UseWindowsService()
                 .UseSystemd()
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<IEventLogStorage<EventLogItem>, EventLogStorage<EventLogItem>>();

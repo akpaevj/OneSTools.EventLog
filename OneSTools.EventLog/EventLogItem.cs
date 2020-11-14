@@ -13,7 +13,7 @@ namespace OneSTools.EventLog
         public DateTime DateTime { get; set; } = DateTime.MinValue;
         [Required]
         public string TransactionStatus { get; set; } = "";
-        public DateTime? TransactionDateTime { get; set; } = DateTime.MinValue;
+        public DateTime TransactionDateTime { get; set; } = new DateTime(1970,1,1);
         public int TransactionNumber { get; set; } = 0;
         [Required]
         public string UserUuid { get; set; } = "";

@@ -67,6 +67,9 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                 "}";
 
             var response = _client.LowLevel.DoRequest<StringResponse>(HttpMethod.PUT, $"_index_template/{_eventLogItemsIndex}", PostData.String(cmd));
+
+            if (!response.Success)
+                throw response.OriginalException;
         }
 
         public async Task<(string FileName, long EndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
@@ -133,7 +136,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                 }
             }
 
-            _logger.LogInformation($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
+            _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
         }
 
         public void Dispose()

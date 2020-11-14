@@ -101,7 +101,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 item.EndPosition,
                 item.DateTime,
                 item.TransactionStatus ?? "",
-                item.TransactionDateTime ?? new DateTime(1970, 1, 1),
+                item.TransactionDateTime,
                 item.TransactionNumber,
                 item.UserUuid ?? "",
                 item.User ?? "",
@@ -131,7 +131,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 throw ex;
             }
 
-            _logger.LogInformation($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
+            _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
         }
 
         public void Dispose()
