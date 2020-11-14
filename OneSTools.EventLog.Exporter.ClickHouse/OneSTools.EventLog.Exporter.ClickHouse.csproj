@@ -9,7 +9,7 @@
     <PackageIcon></PackageIcon>
     <PackageProjectUrl>https://github.com/akpaevj/OneSTools.EventLog</PackageProjectUrl>
     <RepositoryUrl>https://github.com/akpaevj/OneSTools.EventLog</RepositoryUrl>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
