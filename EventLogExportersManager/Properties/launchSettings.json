@@ -1,6 +1,6 @@
-{
+﻿{
   "profiles": {
-    "OneSTools.EventLog.Exporter.ClickHouse": {
+    "EventLogExportersManager": {
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"

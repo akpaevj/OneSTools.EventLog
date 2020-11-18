@@ -4,11 +4,19 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>OneSTools.EventLog.Exporter.Core</AssemblyName>
     <RootNamespace>OneSTools.EventLog.Exporter.Core</RootNamespace>
+    <Authors>Akpaev Evgeny</Authors>
+    <Description>Базовый пакет экспортеров ЖР</Description>
+    <Copyright>Akpaev Evgeny</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

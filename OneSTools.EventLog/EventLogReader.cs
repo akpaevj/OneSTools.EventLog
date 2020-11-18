@@ -25,34 +25,22 @@ namespace OneSTools.EventLog
         /// <summary>
         /// Current reader's "lgp" file name
         /// </summary>
-        public string CurrentLgpFileName => _lgpReader.LgpFileName;
-        /// <summary>
-        /// Current position of the "lgp" file
-        /// </summary>
-        public long CurrentLgpFilePosition => _lgpReader.GetPosition();
+        public string LgpFileName => _lgpReader.LgpFileName;
 
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="logFolder">1C event log's folder. Supported only lgf and lgp files (old version)</param>
-        /// <param name="liveMode">Flag of "live" reading mode. In this mode it'll be waiting for a new event without returning a null element/param>
-        /// <param name="lgpFileName">LGP file name that will be used for reading</param>
-        /// <param name="startPosition">LGP file position that will be used for reading</param>
-        /// <param name="readingTimout">Timeout of the reading next event. if this is set to -1 the reader will wait forever, 
-        /// otherwise it'll throw exception when the timeout occurs</param>
-        public EventLogReader(string logFolder, bool liveMode = false, string lgpFileName = "", long startPosition = 0, int readingTimout = Timeout.Infinite)
+        public EventLogReader(EventLogReaderSetings settings)
         {
-            _logFolder = logFolder;
-            _readingTimeout = readingTimout;
-            _liveMode = liveMode;
+            _logFolder = settings.LogFolder;
+            _readingTimeout = settings.ReadingTimeout;
+            _liveMode = settings.LiveMode;
             _lgfReader = new LgfReader(Path.Combine(_logFolder, "1Cv8.lgf"));
+            _lgfReader.SetPosition(settings.LgpStartPosition);
 
-            if (lgpFileName != string.Empty)
+            if (settings.LgpFileName != string.Empty)
             {
-                var file = Path.Combine(_logFolder, lgpFileName);
+                var file = Path.Combine(_logFolder, settings.LgpFileName);
 
                 _lgpReader = new LgpReader<T>(file, _lgfReader);
-                _lgpReader.SetPosition(startPosition);
+                _lgpReader.SetPosition(settings.StartPosition);
             }
         }
 
@@ -150,6 +138,7 @@ namespace OneSTools.EventLog
             else
             {
                 _lgpReader?.Dispose();
+                _lgpReader = null;
 
                 _lgpReader = new LgpReader<T>(nextFile.Item1, _lgfReader);
 

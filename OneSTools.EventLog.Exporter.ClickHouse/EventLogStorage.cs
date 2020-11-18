@@ -6,12 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClickHouse.Client.ADO;
 using ClickHouse.Client.Utility;
-using OneSTools.EventLog.Exporter.Core;
 using System.Linq;
 using System.Data;
 using ClickHouse.Client.ADO.Readers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Text.RegularExpressions;
+using OneSTools.EventLog.Exporter.Core;
 
 namespace OneSTools.EventLog.Exporter.ClickHouse
 {
@@ -19,29 +20,57 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
     {
         private const string TABLE_NAME = "EventLogItems";
         private readonly ILogger<EventLogStorage<T>> _logger;
-        private readonly ClickHouseConnection _connection;
+        private readonly string _connectionString;
+        private string _databaseName;
+        private ClickHouseConnection _connection;
 
-        public EventLogStorage(ILogger<EventLogStorage<T>> logger, IConfiguration configuration)
+        public EventLogStorage(ILogger<EventLogStorage<T>> logger, string connectionString)
         {
             _logger = logger;
 
-            var connectionString = configuration.GetConnectionString("Default");
-            if (connectionString == string.Empty)
+            _connectionString = connectionString;
+            if (_connectionString == string.Empty)
                 throw new Exception("Connection string is not specified");
 
-            _connection = new ClickHouseConnection(connectionString);
-            _connection.Open();
+            _databaseName = Regex.Match(_connectionString, "(?<=Database=).*?(?=(;|$))", RegexOptions.IgnoreCase).Value;
+            _connectionString = Regex.Replace(_connectionString, "Database=.*?(;|$)", "");
 
-            CreateEventLogItemsTable();
+            if (string.IsNullOrWhiteSpace(_databaseName))
+                throw new Exception("Database name is not specified");
         }
 
-        private void CreateEventLogItemsTable()
+        public EventLogStorage(ILogger<EventLogStorage<T>> logger, IConfiguration configuration) : this(logger, configuration.GetConnectionString("Default"))
         {
+
+        }
+
+        private async Task CreateConnectionAsync(CancellationToken cancellationToken = default)
+        {
+            if (_connection is null)
+            {
+                _connection = new ClickHouseConnection(_connectionString);
+                await _connection.OpenAsync(cancellationToken);
+
+                await CreateEventLogItemsDatabaseAsync(cancellationToken);
+            }
+        }
+
+        private async Task CreateEventLogItemsDatabaseAsync(CancellationToken cancellationToken = default)
+        {
+            var commandDbText = $@"CREATE DATABASE IF NOT EXISTS {_databaseName}";
+
+            using var cmdDb = _connection.CreateCommand();
+            cmdDb.CommandText = commandDbText;
+            await cmdDb.ExecuteNonQueryAsync(cancellationToken);
+
+            await _connection.ChangeDatabaseAsync(_databaseName, cancellationToken);
+
             var commandText =
                 $@"CREATE TABLE IF NOT EXISTS {TABLE_NAME}
                 (
                     FileName LowCardinality(String),
                     EndPosition Int64 Codec(DoubleDelta, LZ4),
+                    LgfEndPosition Int64 Codec(DoubleDelta, LZ4),
                     DateTime DateTime Codec(Delta, LZ4),
                     TransactionStatus LowCardinality(String),
                     TransactionDate DateTime Codec(Delta, LZ4),
@@ -59,8 +88,8 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                     Data String Codec(ZSTD),
                     DataPresentation String Codec(ZSTD),
                     Server LowCardinality(String),
-                    MainPort LowCardinality(String),
-                    AddPort LowCardinality(String),
+                    MainPort Int32 Codec(DoubleDelta, LZ4),
+                    AddPort Int32 Codec(DoubleDelta, LZ4),
                     Session Int64 Codec(DoubleDelta, LZ4)
                 )
                 engine = MergeTree()
@@ -70,12 +99,14 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
 
             using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
-            cmd.ExecuteNonQuery();
+            await cmd.ExecuteNonQueryAsync(cancellationToken);
         }
 
-        public async Task<(string FileName, long EndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
+        public async Task<(string FileName, long EndPosition, long LgfEndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
         {
-            var commandText = $"SELECT TOP 1 FileName, EndPosition FROM {TABLE_NAME} ORDER BY DateTime DESC, EndPosition DESC";
+            await CreateConnectionAsync(cancellationToken);
+
+            var commandText = $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition FROM {TABLE_NAME} ORDER BY DateTime DESC, EndPosition DESC";
 
             using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
@@ -83,13 +114,15 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             using var reader = await cmd.ExecuteReaderAsync(cancellationToken);
 
             if (await reader.ReadAsync())
-                return (reader.GetString(0), reader.GetInt64(1));
+                return (reader.GetString(0), reader.GetInt64(1), reader.GetInt64(2));
             else
-                return ("", 0);
+                return ("", 0, 0);
         }
 
         public async Task WriteEventLogDataAsync(List<T> entities, CancellationToken cancellationToken = default)
         {
+            await CreateConnectionAsync();
+
             using var copy = new ClickHouseBulkCopy(_connection)
             {
                 DestinationTableName = TABLE_NAME,
@@ -99,6 +132,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             var data = entities.Select(item => new object[] {
                 item.FileName ?? "",
                 item.EndPosition,
+                item.LgfEndPosition,
                 item.DateTime,
                 item.TransactionStatus ?? "",
                 item.TransactionDateTime,
@@ -127,11 +161,11 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to write data");
+                _logger.LogError(ex, $"Failed to write data to {_databaseName}");
                 throw ex;
             }
 
-            _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items have been written");
+            _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items were being written to {_databaseName}");
         }
 
         public void Dispose()

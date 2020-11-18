@@ -25,7 +25,7 @@ namespace OneSTools.EventLog
         private bool disposedValue;
 
         public string LgpPath { get; private set; }
-        public string LgpFileName => Path.GetFileNameWithoutExtension(LgpPath);
+        public string LgpFileName => Path.GetFileName(LgpPath);
 
         public LgpReader(string lgpPath, LgfReader lgfReader)
         {
@@ -93,14 +93,10 @@ namespace OneSTools.EventLog
             }
         }
 
-        private (string Data, long EndPosition) ReadNextEventLogItemData(CancellationToken cancellationToken = default)
+        private (StringBuilder Data, long EndPosition) ReadNextEventLogItemData(CancellationToken cancellationToken = default)
         {
             StringBuilder data = new StringBuilder();
 
-            var quotesQuantity = 0;
-            var bracketsQuantity = 0;
-            bool start = false;
-            bool end = false;
             long endPosition = 0;
 
             while (true)
@@ -121,59 +117,42 @@ namespace OneSTools.EventLog
                 else
                     _lastPosition = 0;
 
-                if (!start && currentLine.Length > 0 && currentLine[0] == '{')
-                    start = true;
+                data.Append(currentLine);
 
-                if (start)
-                {
-                    data.Append(currentLine + '\n');
+                var blockEndIndex = BracketsFileParser.GetNodeEndIndex(data, 0);
 
-                    bracketsQuantity += currentLine.Count(c => c == '{');
-                    bracketsQuantity -= currentLine.Count(c => c == '}');
-                    quotesQuantity += currentLine.Count(c => c == '"');
-
-                    if (currentLine == "}," && bracketsQuantity == 0 || streamReader.EndOfStream)
-                    {
-                        end = true;
-
-                        if (bracketsQuantity != 0)
-                            end = (bracketsQuantity % 2) == 0;
-                    }
-                }
-
-                if (end)
+                if (blockEndIndex != -1)
                 {
                     endPosition = GetPosition();
+                    data.Remove(blockEndIndex + 1, data.Length - 1 - blockEndIndex);
                     break;
                 }
             }
 
-            if (data.Length > 0 && data[data.Length - 1] == ',')
-                data.Remove(data.Length - 1, 1);
-
-            return (data.ToString(), endPosition);
+            return (data, endPosition);
         }
 
         private T ReadEventLogItemData(CancellationToken cancellationToken = default)
         {
-            (string Data, long EndPosition) data = ReadNextEventLogItemData(cancellationToken);
+            (StringBuilder Data, long EndPosition) = ReadNextEventLogItemData(cancellationToken);
 
-            if (data.Data == string.Empty)
+            if (Data.Length == 0)
                 return null;
 
-            return ParseEventLogItemData(data.Data, data.EndPosition, cancellationToken);
+            return ParseEventLogItemData(Data, EndPosition, cancellationToken);
         }
 
-        private T ParseEventLogItemData(string eventLogItemData, long endPosition, CancellationToken cancellationToken = default)
+        private T ParseEventLogItemData(StringBuilder eventLogItemData, long endPosition, CancellationToken cancellationToken = default)
         {
-            var parsedData = BracketsFileParser.Parse(eventLogItemData);
+            var parsedData = BracketsFileParser.ParseBlock(eventLogItemData);
 
             var eventLogItem = new T
             {
                 DateTime = DateTime.ParseExact((string)parsedData[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture),
                 TransactionStatus = GetTransactionPresentation((string)parsedData[1]),
                 FileName = LgpFileName,
-                EndPosition = endPosition
+                EndPosition = endPosition,
+                LgfEndPosition = _lgfReader.GetPosition()
             };
 
             var (Value, Uuid) = _lgfReader.GetReferencedObjectValue(ObjectType.Users, (int)parsedData[3], cancellationToken);
@@ -410,7 +389,9 @@ namespace OneSTools.EventLog
 
                 _lgpFileWatcher?.Dispose();
                 _lgpFileWatcher = null;
-                
+
+                _lgfReader = null;
+
                 disposedValue = true;
             }
         }
