@@ -4,14 +4,15 @@
 ## Справочная информация в данный момент устаревшая, будет обновлена при следующем релизе. Инструменты сильно доработаны, пофиксено множество багов. Но рук не хватает на документацию)
 
 ## Roadmap:
-1. Вынести классы экспортёров в отдельные Nuget пакеты.
-2. Реализовать менеджер экспортёров с автоматическим подключением к экспорту логов новых баз
+1. Реализовать менеджер экспортёров с автоматическим подключением к экспорту логов новых баз
 
 ## Состав:
 * [OneSTools.EventLog](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog) - Библиотека для чтения журнала регистрации (старый формат, LGF и LGP файлы). Позволяет выполнять как разовое чтение данных, так и запуск в "live" режиме</br>
 * [OneSTools.EventLog.Exporter.Core](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Core) - Библиотека-ядро для инструментов экспорта журнала регистрации, на основе которой можно создавать приложения для экспорта в новые СУБД.</br>
-* [OneSTools.EventLog.Exporter.ClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ClickHouse) - Инструмент для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/)</br>
-* [OneSTools.EventLog.Exporter.ElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ElasticSearch) - Инструмент для экспорта журнала регистрации в [ElasticSearch](https://www.elastic.co/)</br>
+* [OneSTools.EventLog.Exporter.ClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ClickHouse) - Базовый пакет, реализующий интерфейс IEventLogStorage для экспорта журнала регистрации 1С в [ClickHouse](https://clickhouse.tech/)</br>
+* [EventLogExporterClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/EventLogExporterClickHouse) - Служба для экспорта жрунала регистрации в [ClickHouse](https://clickhouse.tech/)</br>
+* [OneSTools.EventLog.Exporter.ElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ElasticSearch) - Базовый пакет, реализующий интерфейс IEventLogStorage для экспорта журнала регистрации 1С в [ElasticSearch](https://www.elastic.co/)</br>
+* [EventLogExporterElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/EventLogExporterElasticSearch) - Служба для экспорта жрунала регистрации в [ElasticSearch](https://www.elastic.co/)</br>
 
 ## Get started:
 
@@ -20,12 +21,14 @@
 ```json
 "Exporter": {
     "LogFolder": "C:\\Users\\akpaev.e.ENTERPRISE\\Desktop\\1Cv8Log",
-    "Portion": 10000
+    "Portion": 10000,
+    "LoadArchive" = false
   }
 ```
 где:</br>
 * LogFolder - путь к каталогу журнала регистрации 1С.</br>
-* Portion - Размер порции, записываемый в БД за одну итерацию.</br>
+* Portion - Размер порции, записываемый в БД за одну итерацию (10000 по умолчанию)</br>
+* LoadArchive - Специальный параметр, предназначенный для первоначальной загрузки архивных данных. При установке параметра в true, отключется "live" режим и не происходит запроса последнего обработанного файла из БД</br>
 
 А так-же есть настройки для конкретной СУБД, примеры которых приведены ниже. Для работы нужно подставить значения для Вашей среды:</br>
 
@@ -38,19 +41,45 @@
 **ElasticSearch:**
 ```json
 "ElasticSearch": {
-    "Host": "http://127.0.0.1",
-    "Port": 9200,
-    "Index": "index-name",
-    "Separation": "H"
-  },
+    "Nodes": [
+      {
+        "Host": "http://192.168.0.95:9200",
+        "AuthenticationType": "0" // 0 - None, 1 - Basic, 2 - ApiKey
+      },
+      {
+        "Host": "http://192.168.0.93:9200",
+        "AuthenticationType": "1",
+        "UserName": "",
+        "Password": ""
+      }
+      {
+        "Host": "http://192.168.0.94:9200",
+        "AuthenticationType": "2",
+        "Id": "",
+        "ApiKey": ""
+      }
+    ],
+    "Index": "upp-main-el",
+    "Separation": "M",
+    "MaximumRetries": 2,
+    "MaxRetryTimeout": 30
+  }
 ```
+Для ElasticSearch реализована
+
 где:</br>
-1. *Index* - префикс названия индекса, конечное название будет определено в зависимости от значения параметра Separation.</br>
-2. *Separation* - метод разделения данных по индексам. Может принимать значения:</br>
+1. *Nodes* - узел, содержащий хосты кластера ElasticSearch, либо один узел при работе с одной нодой. При недоступности текущего узла будет происходить переключение на следующий узел списка. Для узлов доступны 3 типа аутентификации: </br>
+*0* - без аутентификации</br>
+*1* - Basic</br>
+*2* - ApiKey</br>
+2. *Index* - префикс названия индекса, конечное название будет определено в зависимости от значения параметра Separation.</br>
+3. *Separation* - метод разделения данных по индексам. Может принимать значения:</br>
 *H* (Hour) - делить индексы по часам. Пример конечного названия индекса: index-name-el-2020010113</br>
 *D* (Day) - делить индексы по дням. Пример конечного названия индекса: index-name-el-20200101</br>
 *M* (Month) - делить индексы по месяцам. Пример конечного названия индекса: index-name-el-202001</br>
 При указании любого другого (либо не указании вовсе) значения, разделения индекса не будет и конечное название индекса будет выглядеть так: index-name-el-all</br>
+4. *MaximumRetries* - количество попыток переподключения к очередному узлу
+5. *MaxRetryTimeout* - таймаут попытки подключения
 
 **Полный файл конфигурации на примере ClickHouse:**
 ```json
