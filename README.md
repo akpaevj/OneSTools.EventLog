@@ -20,7 +20,7 @@
 "Exporter": {
     "LogFolder": "C:\\Users\\akpaev.e.ENTERPRISE\\Desktop\\1Cv8Log",
     "Portion": 10000,
-    "LoadArchive" = false
+    "LoadArchive": false
   }
 ```
 где:</br>
@@ -42,7 +42,7 @@
     "Nodes": [
       {
         "Host": "http://192.168.0.95:9200",
-        "AuthenticationType": "0" // 0 - None, 1 - Basic, 2 - ApiKey
+        "AuthenticationType": "0"
       },
       {
         "Host": "http://192.168.0.93:9200",
