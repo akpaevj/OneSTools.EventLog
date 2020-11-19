@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using NodaTime;
+using System.Threading;
 
 namespace OneSTools.EventLog
 {
@@ -10,5 +11,6 @@ namespace OneSTools.EventLog
         public long StartPosition { get; set; } = 0;
         public long LgpStartPosition { get; set; } = 0;
         public int ReadingTimeout { get; set; } = Timeout.Infinite;
+        public DateTimeZone TimeZone { get; set; } = DateTimeZoneProviders.Tzdb.GetSystemDefault();
     }
 }

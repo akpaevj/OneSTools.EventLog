@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Resources;
+using NodaTime;
 
 namespace OneSTools.EventLog
 {
@@ -23,13 +24,15 @@ namespace OneSTools.EventLog
         private long _lastPosition;
         private FileSystemWatcher _lgpFileWatcher;
         private bool disposedValue;
+        private readonly DateTimeZone _timeZone;
 
         public string LgpPath { get; private set; }
         public string LgpFileName => Path.GetFileName(LgpPath);
 
-        public LgpReader(string lgpPath, LgfReader lgfReader)
+        public LgpReader(string lgpPath, DateTimeZone timeZone, LgfReader lgfReader)
         {
             LgpPath = lgpPath;
+            _timeZone = timeZone;
             _lgfReader = lgfReader;
         }
 
@@ -148,12 +151,18 @@ namespace OneSTools.EventLog
 
             var eventLogItem = new T
             {
-                DateTime = DateTime.ParseExact((string)parsedData[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture),
+                DateTime = _timeZone.ToUtc(DateTime.ParseExact((string)parsedData[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture)),
                 TransactionStatus = GetTransactionPresentation((string)parsedData[1]),
                 FileName = LgpFileName,
                 EndPosition = endPosition,
                 LgfEndPosition = _lgfReader.GetPosition()
             };
+
+            var transactionData = parsedData[2];
+            eventLogItem.TransactionNumber = Convert.ToInt64((string)transactionData[1], 16);
+
+            var transactionDate = new DateTime().AddSeconds(Convert.ToInt64((string)transactionData[0], 16) / 10000);
+            eventLogItem.TransactionDateTime = transactionDate == DateTime.MinValue ? transactionDate : _timeZone.ToUtc(transactionDate);
 
             var (Value, Uuid) = _lgfReader.GetReferencedObjectValue(ObjectType.Users, (int)parsedData[3], cancellationToken);
             eventLogItem.UserUuid = Uuid;

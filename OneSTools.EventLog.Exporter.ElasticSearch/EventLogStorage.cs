@@ -11,6 +11,7 @@ using Nest;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 
 namespace OneSTools.EventLog.Exporter.ElasticSearch
 {
@@ -75,6 +76,16 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
 
         private async Task CreateIndexTemplateAsync(CancellationToken cancellationToken = default)
         {
+            var indexTemplateName = "oneslogs";
+
+            var getItResponse = await _client.LowLevel.DoRequestAsync<StringResponse>(HttpMethod.GET, $"_index_template/{indexTemplateName}", cancellationToken);
+
+            // if it exists then skip creating
+            if (!getItResponse.Success)
+                throw getItResponse.OriginalException;
+            else if (getItResponse.HttpStatusCode != 404)
+                return;
+
             var cmd =
                 @"{
                     ""index_patterns"": ""*-el-*"",
@@ -84,7 +95,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                         },
                         ""mappings"": {
                             ""properties"": {
-                                ""dateTime"": { ""type"": ""date"" },
+                                ""dateTime"": { ""type"": ""date"" }, 
                                 ""severity"": { ""type"": ""keyword"" },
                                 ""server"": { ""type"": ""keyword"" },
                                 ""fileName"": { ""type"": ""keyword"" },
@@ -111,7 +122,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                     }
                 }";
 
-            var response = await _client.LowLevel.DoRequestAsync<StringResponse>(HttpMethod.PUT, $"_index_template/oneslogs", cancellationToken, PostData.String(cmd));
+            var response = await _client.LowLevel.DoRequestAsync<StringResponse>(HttpMethod.PUT, $"_index_template/{indexTemplateName}", cancellationToken, PostData.String(cmd));
 
             if (!response.Success)
                 throw response.OriginalException;
@@ -285,7 +296,19 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                     }
                 }
                 else
-                    _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | {item.Entities.Count} items were being written to {item.IndexName}");
+                {
+                    if (responseItems.Errors)
+                    {
+                        foreach (var itemWithError in responseItems.ItemsWithErrors)
+                        {
+                            _logger.LogError($"Failed to index document {itemWithError.Id} in {item.IndexName}: {itemWithError.Error}");
+                        }
+
+                        throw new Exception($"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
+                    }
+                    else
+                        _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | {item.Entities.Count} items were being written to {item.IndexName}");
+                }
             }
         }
 

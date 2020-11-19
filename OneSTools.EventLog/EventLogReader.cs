@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -14,9 +15,7 @@ namespace OneSTools.EventLog
     public class EventLogReader<T> : IDisposable where T : class, IEventLogItem, new()
     {
         private ManualResetEvent _lgpChangedCreated;
-        private readonly string _logFolder;
-        private readonly int _readingTimeout;
-        private readonly bool _liveMode;
+        private EventLogReaderSetings _settings;
         private LgfReader _lgfReader;
         private LgpReader<T> _lgpReader;
         private FileSystemWatcher _lgpFilesWatcher;
@@ -29,17 +28,16 @@ namespace OneSTools.EventLog
 
         public EventLogReader(EventLogReaderSetings settings)
         {
-            _logFolder = settings.LogFolder;
-            _readingTimeout = settings.ReadingTimeout;
-            _liveMode = settings.LiveMode;
-            _lgfReader = new LgfReader(Path.Combine(_logFolder, "1Cv8.lgf"));
+            _settings = settings;
+
+            _lgfReader = new LgfReader(Path.Combine(_settings.LogFolder, "1Cv8.lgf"));
             _lgfReader.SetPosition(settings.LgpStartPosition);
 
             if (settings.LgpFileName != string.Empty)
             {
-                var file = Path.Combine(_logFolder, settings.LgpFileName);
+                var file = Path.Combine(_settings.LogFolder, settings.LgpFileName);
 
-                _lgpReader = new LgpReader<T>(file, _lgfReader);
+                _lgpReader = new LgpReader<T>(file, settings.TimeZone, _lgfReader);
                 _lgpReader.SetPosition(settings.StartPosition);
             }
         }
@@ -54,7 +52,7 @@ namespace OneSTools.EventLog
             if (_lgpReader == null)
                 SetNextLgpReader();
 
-            if (_liveMode && _lgpFilesWatcher == null)
+            if (_settings.LiveMode && _lgpFilesWatcher == null)
                 StartLgpFilesWatcher();
 
             T item = null;
@@ -80,15 +78,15 @@ namespace OneSTools.EventLog
                 {
                     var newReader = SetNextLgpReader();
 
-                    if (_liveMode)
+                    if (_settings.LiveMode)
                     {
                         if (!newReader)
                         {
                             _lgpChangedCreated.Reset();
 
-                            var waitHandle = WaitHandle.WaitAny(new WaitHandle[] { _lgpChangedCreated, cancellationToken.WaitHandle }, _readingTimeout);
+                            var waitHandle = WaitHandle.WaitAny(new WaitHandle[] { _lgpChangedCreated, cancellationToken.WaitHandle }, _settings.ReadingTimeout);
 
-                            if (_readingTimeout != Timeout.Infinite && waitHandle == WaitHandle.WaitTimeout)
+                            if (_settings.ReadingTimeout != Timeout.Infinite && waitHandle == WaitHandle.WaitTimeout)
                                 throw new EventLogReaderTimeoutException();
 
                             _lgpChangedCreated.Reset();
@@ -116,7 +114,7 @@ namespace OneSTools.EventLog
 
             var filesDateTime = new List<(string, DateTime)>();
 
-            var files = Directory.GetFiles(_logFolder, "*.lgp");
+            var files = Directory.GetFiles(_settings.LogFolder, "*.lgp");
 
             foreach (var file in files)
             {
@@ -140,7 +138,7 @@ namespace OneSTools.EventLog
                 _lgpReader?.Dispose();
                 _lgpReader = null;
 
-                _lgpReader = new LgpReader<T>(nextFile.Item1, _lgfReader);
+                _lgpReader = new LgpReader<T>(nextFile.Item1, _settings.TimeZone, _lgfReader);
 
                 return true;
             }
@@ -150,7 +148,7 @@ namespace OneSTools.EventLog
         {
             _lgpChangedCreated = new ManualResetEvent(false);
 
-            _lgpFilesWatcher = new FileSystemWatcher(_logFolder, "*.lgp")
+            _lgpFilesWatcher = new FileSystemWatcher(_settings.LogFolder, "*.lgp")
             {
                 NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
             };
