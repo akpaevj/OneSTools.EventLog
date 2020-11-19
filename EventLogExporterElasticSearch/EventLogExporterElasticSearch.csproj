@@ -29,4 +29,6 @@
   <ItemGroup>
     <ProjectReference Include="..\OneSTools.EventLog.Exporter.ElasticSearch\OneSTools.EventLog.Exporter.ElasticSearch.csproj" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

@@ -55,7 +55,8 @@ namespace EventLogExportersManager
 
                 var exporterLogger = _serviceProvider.GetService<ILogger<EventLogExporter<EventLogItem>>>();
                 var portion = configuration.GetValue("Exporter:Portion", EventLogExporter<EventLogItem>.DEFAULT_PORTION);
-                var exporter = new EventLogExporter<EventLogItem>(exporterLogger, exporterStorage, logFolder, portion);
+                var timeZone = configuration.GetValue("Exporter:TimeZone", "");
+                var exporter = new EventLogExporter<EventLogItem>(exporterLogger, exporterStorage, logFolder, portion, timeZone);
 
                 var cts = new CancellationTokenSource();
 

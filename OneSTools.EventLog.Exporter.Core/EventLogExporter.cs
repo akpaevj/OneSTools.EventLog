@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NodaTime;
 
 namespace OneSTools.EventLog.Exporter.Core
 {
@@ -18,13 +19,14 @@ namespace OneSTools.EventLog.Exporter.Core
         private string _logFolder;
         private int _portion;
         private bool _loadArchive;
+        private DateTimeZone _timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
         private string _currentLgpFile;
         private EventLogReader<T> _eventLogReader;
         private ActionBlock<T[]> _writeBlock;
         private BatchBlock<T> _batchBlock;
         private bool disposedValue;
 
-        public EventLogExporter(ILogger<EventLogExporter<T>> logger, IEventLogStorage<T> storage, string logFolder, int portion, bool loadArchive = false)
+        public EventLogExporter(ILogger<EventLogExporter<T>> logger, IEventLogStorage<T> storage, string logFolder, int portion, string timeZone, bool loadArchive = false)
         {
             _logger = logger;
             _storage = storage;
@@ -37,6 +39,16 @@ namespace OneSTools.EventLog.Exporter.Core
                 throw new Exception($"Event log folder ({_logFolder}) doesn't exist");
 
             _portion = portion;
+
+            if (!string.IsNullOrWhiteSpace(timeZone))
+            {
+                var zone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(timeZone);
+                if (zone is null)
+                    throw new Exception($"\"{timeZone}\" is unknown time zone");
+
+                _timeZone = zone;
+            }
+
             _loadArchive = loadArchive;
         }
 
@@ -45,6 +57,7 @@ namespace OneSTools.EventLog.Exporter.Core
             storage,
             configuration.GetValue("Exporter:LogFolder", ""),
             configuration.GetValue("Exporter:Portion", DEFAULT_PORTION),
+            configuration.GetValue("Exporter:TimeZone", ""),
             configuration.GetValue("Exporter:LoadArchive", false)
             )
         {
@@ -98,6 +111,8 @@ namespace OneSTools.EventLog.Exporter.Core
                             _currentLgpFile = _eventLogReader.LgpFileName;
                         }
                     }
+                    else if (!settings.LiveMode)
+                        forceSending = true;
 
                     if (forceSending)
                         _batchBlock.TriggerBatch();
@@ -112,16 +127,20 @@ namespace OneSTools.EventLog.Exporter.Core
 
         private void InitializeDataflow(CancellationToken cancellationToken = default)
         {
-            _writeBlock = new ActionBlock<T[]>(c => _storage.WriteEventLogDataAsync(c.ToList(), cancellationToken), new ExecutionDataflowBlockOptions()
+            var writeBlockSettings = new ExecutionDataflowBlockOptions()
             {
                 CancellationToken = cancellationToken,
                 BoundedCapacity = 2
-            });
-            _batchBlock = new BatchBlock<T>(_portion, new GroupingDataflowBlockOptions()
+            };
+
+            var batchBlockSettings = new GroupingDataflowBlockOptions()
             {
                 CancellationToken = cancellationToken,
                 BoundedCapacity = _portion * 2
-            });
+            };
+
+            _writeBlock = new ActionBlock<T[]>(c => _storage.WriteEventLogDataAsync(c.ToList(), cancellationToken), writeBlockSettings);
+            _batchBlock = new BatchBlock<T>(_portion, batchBlockSettings);
 
             _batchBlock.LinkTo(_writeBlock, new DataflowLinkOptions() { PropagateCompletion = true });
         }
@@ -132,7 +151,8 @@ namespace OneSTools.EventLog.Exporter.Core
             {
                 LogFolder = _logFolder,
                 LiveMode = true,
-                ReadingTimeout = 1000
+                ReadingTimeout = 1000,
+                TimeZone = _timeZone
             };
 
             if (!_loadArchive)
