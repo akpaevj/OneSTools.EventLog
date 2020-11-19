@@ -8,9 +8,9 @@
 * [OneSTools.EventLog](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog) - Библиотека для чтения журнала регистрации (старый формат, LGF и LGP файлы). Позволяет выполнять как разовое чтение данных, так и запуск в "live" режиме</br>
 * [OneSTools.EventLog.Exporter.Core](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Core) - Библиотека-ядро для инструментов экспорта журнала регистрации, на основе которой можно создавать приложения для экспорта в новые СУБД.</br>
 * [OneSTools.EventLog.Exporter.ClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ClickHouse) - Базовый пакет, реализующий интерфейс IEventLogStorage для экспорта журнала регистрации 1С в [ClickHouse](https://clickhouse.tech/)</br>
-* [EventLogExporterClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/EventLogExporterClickHouse) - Служба для экспорта жрунала регистрации в [ClickHouse](https://clickhouse.tech/)</br>
+* [EventLogExporterClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/EventLogExporterClickHouse) - Служба для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/)</br>
 * [OneSTools.EventLog.Exporter.ElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ElasticSearch) - Базовый пакет, реализующий интерфейс IEventLogStorage для экспорта журнала регистрации 1С в [ElasticSearch](https://www.elastic.co/)</br>
-* [EventLogExporterElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/EventLogExporterElasticSearch) - Служба для экспорта жрунала регистрации в [ElasticSearch](https://www.elastic.co/)</br>
+* [EventLogExporterElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/EventLogExporterElasticSearch) - Служба для экспорта журнала регистрации в [ElasticSearch](https://www.elastic.co/)</br>
 
 ## Get started:
 
