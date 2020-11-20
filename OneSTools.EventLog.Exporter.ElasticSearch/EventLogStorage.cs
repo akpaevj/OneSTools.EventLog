@@ -307,7 +307,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                         throw new Exception($"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
                     }
                     else
-                        _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | {item.Entities.Count} items were being written to {item.IndexName}");
+                        _logger.LogDebug($"{item.Entities.Count} items were being written to {item.IndexName}");
                 }
             }
         }

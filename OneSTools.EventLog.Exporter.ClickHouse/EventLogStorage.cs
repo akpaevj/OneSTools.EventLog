@@ -165,7 +165,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 throw ex;
             }
 
-            _logger.LogDebug($"{DateTime.Now:(hh:mm:ss.fffff)} | {entities.Count} items were being written to {_databaseName}");
+            _logger.LogDebug($"{entities.Count} items were being written to {_databaseName}");
         }
 
         public void Dispose()

@@ -5,7 +5,7 @@
     <UserSecretsId>dotnet-EventLogExporterClickHouse-89985400-FFDA-4CCA-9B4E-1C61284595D5</UserSecretsId>
     <Description>Служба для экспорта журнала регистрации 1С в ClickHouse</Description>
     <Authors>Akpaev Evgeny</Authors>
-    <Version>1.0.3</Version>
+    <Version>0.0.2</Version>
     <Copyright>Akpaev Evgeny</Copyright>
   </PropertyGroup>
 

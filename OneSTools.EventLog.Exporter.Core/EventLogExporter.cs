@@ -106,7 +106,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
                         if (!string.IsNullOrEmpty(_eventLogReader.LgpFileName) && _currentLgpFile != _eventLogReader.LgpFileName)
                         {
-                            _logger.LogInformation($"{DateTime.Now:(hh:mm:ss.fffff)} | Reader started reading {_eventLogReader.LgpFileName}");
+                            _logger.LogInformation($"Reader started reading {_eventLogReader.LgpFileName}");
 
                             _currentLgpFile = _eventLogReader.LgpFileName;
                         }

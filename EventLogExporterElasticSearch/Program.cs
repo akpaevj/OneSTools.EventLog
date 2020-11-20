@@ -33,6 +33,8 @@ namespace EventLogExporterElasticSearch
                 .UseSystemd()
                 .ConfigureLogging((hostingContext, logging) =>
                 {
+                    var logPath = Path.Combine(hostingContext.HostingEnvironment.ContentRootPath, "log.txt");
+                    logging.AddFile(logPath);
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                 })
                 .ConfigureServices((hostContext, services) =>
