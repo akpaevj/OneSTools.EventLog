@@ -5,7 +5,7 @@
     <Description>Базовый пакет для экспортера ЖР в ElasticSearch</Description>
     <Authors>Akpaev Evgeny</Authors>
     <Copyright>Akpaev Evgeny</Copyright>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
