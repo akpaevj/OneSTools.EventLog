@@ -96,6 +96,7 @@ namespace OneSTools.EventLog
         private StringBuilder ReadNextItemData(CancellationToken cancellationToken = default)
         {
             StringBuilder data = new StringBuilder();
+            bool start = false;
 
             while (true)
             {
@@ -106,6 +107,13 @@ namespace OneSTools.EventLog
 
                 if (currentLine is null)
                     break;
+
+                // wait for the beginning of the event
+                if (!start && currentLine.Length > 0 && currentLine[0] == '{')
+                    start = true;
+
+                if (!start)
+                    continue;
 
                 data.Append(currentLine);
 

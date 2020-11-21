@@ -101,6 +101,7 @@ namespace OneSTools.EventLog
             StringBuilder data = new StringBuilder();
 
             long endPosition = 0;
+            bool start = false;
 
             while (true)
             {
@@ -119,6 +120,13 @@ namespace OneSTools.EventLog
                 }
                 else
                     _lastPosition = 0;
+
+                // wait for the beginning of the event
+                if (!start && currentLine.Length > 0 && currentLine[0] == '{')
+                    start = true;
+
+                if (!start)
+                    continue;
 
                 data.Append(currentLine);
 
