@@ -119,7 +119,7 @@
     "Nodes": [
       {
         "Host": "http://192.168.0.95:9200",
-        "AuthenticationType": "0" // 0 - None, 1 - Basic, 2 - ApiKey
+        "AuthenticationType": "0"
       }
     ],
     "Index": "upp-main-el",
