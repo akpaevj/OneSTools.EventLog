@@ -7,11 +7,11 @@
 ## Состав:
 |Наименование|Описание|Actions/Nuget|
 |:-----------|:-------|:------------|
-|[OneSTools.EventLog](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog)|Библиотека для чтения журнала регистрации (старый формат, LGF и LGP файлы). Позволяет выполнять как разовое чтение данных, так и запуск в "live" режиме||
+|[OneSTools.EventLog](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog)|Библиотека для чтения журнала регистрации (старый формат, LGF и LGP файлы). Позволяет выполнять как разовое чтение данных, так и запуск в "live" режиме|![.NET 5](https://github.com/akpaevj/OneSTools.EventLog/workflows/.NET%205/badge.svg)|
 |[OneSTools.EventLog.Exporter.Core](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Core)|Библиотека-ядро для инструментов экспорта журнала регистрации, на основе которой можно создавать приложения для экспорта в новые СУБД||
 |[OneSTools.EventLog.Exporter.ClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ClickHouse)|Базовый пакет, реализующий интерфейс IEventLogStorage для экспорта журнала регистрации 1С в [ClickHouse](https://clickhouse.tech/)||
 |[OneSTools.EventLog.Exporter.ElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ElasticSearch)|Базовый пакет, реализующий интерфейс IEventLogStorage для экспорта журнала регистрации 1С в [ElasticSearch](https://www.elastic.co/)||
-|[EventLogExporter](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter)|Служба для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/) и [ElasticSearch](https://www.elastic.co/)|![.NET 5](https://github.com/akpaevj/OneSTools.EventLog/workflows/.NET%205/badge.svg)|
+|[EventLogExporter](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter)|Служба для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/) и [ElasticSearch](https://www.elastic.co/)||
 
 ## Get started:
 
