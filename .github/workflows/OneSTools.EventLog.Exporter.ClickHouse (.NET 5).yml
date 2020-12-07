@@ -1,4 +1,4 @@
-name: OneSTools.EventLog.Exporter.ClickHouse (.NET 5)
+name: .NET 5
 
 on:
   push:
