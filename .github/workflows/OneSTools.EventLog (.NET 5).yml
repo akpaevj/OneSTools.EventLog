@@ -1,4 +1,4 @@
-name: OneSTools.EventLog (.NET 5)
+name: .NET 5
 
 on:
   push:
