@@ -1,4 +1,4 @@
-name: .NET 5
+name: EventLog .NET 5
 
 on:
   push:
