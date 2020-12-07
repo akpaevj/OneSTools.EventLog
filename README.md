@@ -8,31 +8,42 @@
 * [OneSTools.EventLog](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog) - Библиотека для чтения журнала регистрации (старый формат, LGF и LGP файлы). Позволяет выполнять как разовое чтение данных, так и запуск в "live" режиме</br>
 * [OneSTools.EventLog.Exporter.Core](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Core) - Библиотека-ядро для инструментов экспорта журнала регистрации, на основе которой можно создавать приложения для экспорта в новые СУБД.</br>
 * [OneSTools.EventLog.Exporter.ClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ClickHouse) - Базовый пакет, реализующий интерфейс IEventLogStorage для экспорта журнала регистрации 1С в [ClickHouse](https://clickhouse.tech/)</br>
-* [EventLogExporterClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/EventLogExporterClickHouse) - Служба для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/)</br>
 * [OneSTools.EventLog.Exporter.ElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ElasticSearch) - Базовый пакет, реализующий интерфейс IEventLogStorage для экспорта журнала регистрации 1С в [ElasticSearch](https://www.elastic.co/)</br>
-* [EventLogExporterElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/EventLogExporterElasticSearch) - Служба для экспорта журнала регистрации в [ElasticSearch](https://www.elastic.co/)</br>
+* [EventLogExporter](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter) - Служба для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/) и [ElasticSearch](https://www.elastic.co/)</br>
 
 ## Get started:
 
 ### Конфигурация:
-В файле конфигурации (appsettings.json) у приложений есть общая часть, не зависящая от СУБД:
+Файл конфигурации (appsettings.json) разбит на несколько секций, каждая из которых отвечают за функциональность определенной части приложения.
+
+**Exporter:**
+В этой секции размещены общие параметры экспортера, не зависящие от СУБД.
 ```json
 "Exporter": {
+    "StorageType": 2,
     "LogFolder": "C:\\Users\\akpaev.e.ENTERPRISE\\Desktop\\1Cv8Log",
     "Portion": 10000,
-    "LoadArchive": false,
-    "TimeZone": "Europe/Moscow"
+    "TimeZone": "Europe/Moscow",
+    "WritingMaxDegreeOfParallelism": 8,
+    "CollectedFactor": 8,
+    "ReadingTimeout": 1,
+    "LoadArchive": false
   }
 ```
 где:</br>
-* LogFolder - путь к каталогу журнала регистрации 1С.</br>
-* Portion - Размер порции, записываемый в БД за одну итерацию (10000 по умолчанию)</br>
-* LoadArchive - Специальный параметр, предназначенный для первоначальной загрузки архивных данных. При установке параметра в true, отключается "live" режим и не выполняется запрос последнего обработанного файла из БД</br>
-* TimeZone - часовой пояс, в котором записан журнал регистрации. По умолчанию - часовой пояс системы
-
-А так-же есть настройки для конкретной СУБД, примеры которых приведены ниже. Для работы нужно подставить значения для Вашей среды:</br>
+1. *StorageType* - тип хранилища жрунала регистрации. Может принимать значения:</br>
+*1* - Clickhouse</br>
+*2* - ElasticSearch</br>
+2. *LogFolder* - путь к каталогу журнала регистрации 1С.</br>
+3. *Portion* - Размер порции, записываемый в БД за одну итерацию (10000 по умолчанию)</br>
+4. *TimeZone* - часовой пояс (в формате IANA Time Zone Database), в котором записан журнал регистрации. По умолчанию - часовой пояс системы</br>
+5. *WritingMaxDegreeOfParallelism* - количество потоков записи в СУБД. Т.к. в ClickHouse не поддерживаются одновременные BULK операции, то параметр имеет смысл только для ElasticSearch. По умолчанию - 1.</br>
+6. *CollectedFactor* - коэффициент количества элементов, которые могут быть помещены в очередь записи. Предельное количество элементов равно Portion * CollectedFactor. По умолчанию - 2.
+7. *ReadingTimeout* - таймаут сброса данных при достижении конца файла (в секундах). По умолчанию - 1 сек.
+8. *LoadArchive* - Специальный параметр, предназначенный для первоначальной загрузки архивных данных. При установке параметра в true, отключается "live" режим и не выполняется запрос последнего обработанного файла из БД</br>
 
 **ClickHouse:**
+Заполнение секции требуется, если в секции *Exporter* у параметра *StorageType* указано значение 1.
 ```json
 "ConnectionStrings": {
     "Default": "Host=localhost;Port=8123;Username=default;password=;Database=database_name;"
@@ -81,22 +92,40 @@
 
 Так-же при первом подключении к узлу приложение проверяет наличие шаблона индекса (Index template) с именем "oneslogs" и при отсутствии - создает. Если шаблон уже создан, то его перезапись происходить не будет, так как предполагается возможная ручная модификация первично созданного шаблона.
 
-**Полный файл конфигурации на примере ClickHouse:**
+**Пример файла кофигурации, содержащий секции для всех поддерживаемых СУБД:**
 ```json
 {
   "Logging": {
     "LogLevel": {
-      "Default": "Information",
+      "Default": "Debug",
       "Microsoft": "Warning",
       "Microsoft.Hosting.Lifetime": "Information"
     }
   },
-  "ConnectionStrings": {
-    "Default": "Host=localhost;Port=8123;Username=default;password=;Database=database_name;"
-  },
   "Exporter": {
-    "LogFolder": "C:\\Program Files\\1cv8\\srvinfo\\reg_1541\\d0d55cdc-d47d-431f-8612-210d67093d14\\1Cv8Log",
-    "Portion": 10000
+    "StorageType": 2,
+    "LogFolder": "C:\\Users\\akpaev.e.ENTERPRISE\\Desktop\\1Cv8Log",
+    "Portion": 10000,
+    "TimeZone": "Europe/Moscow",
+    "WritingMaxDegreeOfParallelism": 1,
+    "CollectedFactor": 2,
+    "ReadingTimeout": 1,
+    "LoadArchive": false
+  },
+  "ClickHouse": {
+    "ConnectionString": "Host=192.168.0.93;Port=8123;Database=upp_main_el;Username=default;password=;"
+  },
+  "ElasticSearch": {
+    "Nodes": [
+      {
+        "Host": "http://192.168.0.95:9200",
+        "AuthenticationType": "0" // 0 - None, 1 - Basic, 2 - ApiKey
+      }
+    ],
+    "Index": "upp-main-el",
+    "Separation": "M",
+    "MaximumRetries": 2,
+    "MaxRetryTimeout": 30
   }
 }
 ```
@@ -109,20 +138,20 @@
 **Windows:**</br>
 Поместить файлы приложения в каталог и выполнить в консоли команду:
 ```
-sc create EventLogExporterClickHouse binPath= "C:\elexporterch\EventLogExporterClickHouse.exe"
+sc create EventLogExporter binPath= "C:\elexporter\EventLogExporter.exe"
 ```
 и запустить службу командой:
 ```
-sc start EventLogExporterClickHouse
+sc start EventLogExporter
 ```
 **Linux: (на примере Ubuntu 20.04.1 LTS)**:</br>
-*В этом примере файлы приложения были помещены в каталог /opt/EventLogExporterClickHouse*</br>
-В /etc/systemd/system создать файл eventlogexporterclickhouse.service с содержимым:
+*В этом примере файлы приложения были помещены в каталог /opt/EventLogExporter*</br>
+В /etc/systemd/system создать файл eventlogexporter.service с содержимым:
 ```
 [Service]
 Type=notify
-WorkingDirectory=/opt/EventLogExporterClickHouse
-ExecStart=/usr/bin/dotnet /opt/EventLogExporterClickHouse/EventLogExporterClickHouse.dll
+WorkingDirectory=/opt/EventLogExporter
+ExecStart=/usr/bin/dotnet /opt/EventLogExporter/EventLogExporter.dll
 
 [Install]
 WantedBy=multi-user.target
@@ -133,7 +162,7 @@ systemctl daemon-reload
 ```
 и запустить службу:
 ```
-systemctl start eventlogexporterclickhouse.service
+systemctl start eventlogexporter.service
 ```
 
 ### Результаты тестирования:
