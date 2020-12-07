@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace OneSTools.EventLog.Exporter.Core
 {
-    public class EventLogExporterService<T> : BackgroundService where T : class, IEventLogItem, new()
+    public class EventLogExporterService : BackgroundService
     {
-        ILogger<EventLogExporterService<T>> _logger;
-        private readonly IEventLogExporter<T> _exporter;
+        readonly ILogger<EventLogExporterService> _logger;
+        private readonly EventLogExporter _exporter;
         private bool disposedValue;
 
-        public EventLogExporterService(ILogger<EventLogExporterService<T>> logger, IEventLogExporter<T> exporter)
+        public EventLogExporterService(ILogger<EventLogExporterService> logger, EventLogExporter exporter)
         {
             _logger = logger;
             _exporter = exporter;
@@ -28,7 +28,7 @@ namespace OneSTools.EventLog.Exporter.Core
             {
                 await _exporter.StartAsync(stoppingToken);
             }
-            catch (TaskCanceledException ex) { }
+            catch (TaskCanceledException) { }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex, "Failed to execute EventLogExporter");

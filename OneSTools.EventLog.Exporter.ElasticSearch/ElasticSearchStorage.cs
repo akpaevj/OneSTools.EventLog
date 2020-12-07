@@ -15,12 +15,12 @@ using System.Globalization;
 
 namespace OneSTools.EventLog.Exporter.ElasticSearch
 {
-    public class EventLogStorage<T> : IEventLogStorage<T>, IDisposable where T : class, IEventLogItem, new()
+    public class ElasticSearchStorage : IEventLogStorage, IDisposable
     {
         public static int DEFAULT_MAXIMUM_RETRIES = 2;
         public static int DEFAULT_MAX_RETRY_TIMEOUT_SEC = 30;
 
-        private readonly ILogger<EventLogStorage<T>> _logger;
+        private readonly ILogger<ElasticSearchStorage> _logger;
         private readonly List<ElasticSearchNode> _nodes;
         private ElasticSearchNode _currentNode;
         private readonly string _eventLogItemsIndex;
@@ -29,34 +29,22 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
         private readonly string _separation;
         private ElasticClient _client;
 
-        public EventLogStorage(ILogger<EventLogStorage<T>> logger, List<ElasticSearchNode> nodes, string index, string separation, int maximumRetries, TimeSpan maxRetryTimeout)
+        public ElasticSearchStorage(ILogger<ElasticSearchStorage> logger, IConfiguration configuration)
         {
             _logger = logger;
 
-            _nodes = nodes;
+            _nodes = configuration.GetSection("ElasticSearch:Nodes").Get<List<ElasticSearchNode>>();
 
             if (_nodes.Count == 0)
                 throw new Exception("ElasticSearch hosts is not specified");
 
-            _eventLogItemsIndex = index;
+            _eventLogItemsIndex = configuration.GetValue("ElasticSearch:Index", "");
             if (_eventLogItemsIndex == string.Empty)
                 throw new Exception("ElasticSearch index name is not specified");
 
-            _separation = separation;
-            _maximumRetries = maximumRetries;
-            _maxRetryTimeout = maxRetryTimeout;
-        }
-
-        public EventLogStorage(ILogger<EventLogStorage<T>> logger, IConfiguration configuration) : this(
-            logger,
-            configuration.GetSection("ElasticSearch:Nodes").Get<List<ElasticSearchNode>>(),
-            configuration.GetValue("ElasticSearch:Index", ""),
-            configuration.GetValue("ElasticSearch:Separation", "H"),
-            configuration.GetValue("ElasticSearch:MaximumRetries", DEFAULT_MAXIMUM_RETRIES),
-            TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", DEFAULT_MAX_RETRY_TIMEOUT_SEC))
-            )
-        {
-
+            _separation = configuration.GetValue("ElasticSearch:Separation", "H");
+            _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries", DEFAULT_MAXIMUM_RETRIES);
+            _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", DEFAULT_MAX_RETRY_TIMEOUT_SEC));
         }
 
         private async Task ConnectAsync(CancellationToken cancellationToken = default)
@@ -95,10 +83,13 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                         },
                         ""mappings"": {
                             ""properties"": {
+                                ""fileName"": { ""type"": ""keyword"" },
+                                ""endPosition"": { ""type"": ""long"" },
+                                ""lgfEndPosition"": { ""type"": ""long"" },
+                                ""Id"": { ""type"": ""long"" },
                                 ""dateTime"": { ""type"": ""date"" }, 
                                 ""severity"": { ""type"": ""keyword"" },
                                 ""server"": { ""type"": ""keyword"" },
-                                ""fileName"": { ""type"": ""keyword"" },
                                 ""metadata"": { ""type"": ""keyword"" },
                                 ""data"": { ""type"": ""text"" },
                                 ""transactionDateTime"": { ""type"": ""date"" },
@@ -109,7 +100,6 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                                 ""addPort"": { ""type"": ""integer"" },
                                 ""computer"": { ""type"": ""keyword"" },
                                 ""application"": { ""type"": ""keyword"" },
-                                ""endPosition"": { ""type"": ""long"" },
                                 ""userUuid"": { ""type"": ""keyword"" },
                                 ""comment"": { ""type"": ""text"" },
                                 ""connection"": { ""type"": ""long"" },
@@ -178,17 +168,17 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
             return response.IsValid;
         }
 
-        public async Task<(string FileName, long EndPosition, long LgfEndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
+        public async Task<EventLogPosition> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
         {
             if (_client is null)
                 await ConnectAsync(cancellationToken);
 
             while (true)
             {
-                var response = await _client.SearchAsync<T>(sd => sd
+                var response = await _client.SearchAsync<EventLogItem>(sd => sd
                         .Index($"{_eventLogItemsIndex}-*")
                         .Sort(ss =>
-                            ss.Descending(c => c.DateTime))
+                            ss.Descending(c => c.Id))
                         .Size(1)
                     , cancellationToken);
 
@@ -197,17 +187,9 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                     var item = response.Documents.FirstOrDefault();
 
                     if (item is null)
-                    {
-                        _logger.LogInformation($"There's no log items in the database ({_eventLogItemsIndex}), first found log file will be read from 0 position");
-
-                        return ("", 0, 0);
-                    }
+                        return null;
                     else
-                    {
-                        _logger.LogInformation($"File {item.FileName} will be read from {item.EndPosition} position, LGF file will be read from {item.LgfEndPosition} position ({_eventLogItemsIndex})");
-
-                        return (item.FileName, item.EndPosition, item.LgfEndPosition);
-                    }
+                        return new EventLogPosition(item.FileName, item.EndPosition, item.LgfEndPosition, item.Id);
                 }
                 else
                 {
@@ -227,25 +209,25 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
             }
         }
 
-        private List<(string IndexName, List<T> Entities)> GetGroupedData(List<T> entities)
+        private List<(string IndexName, List<EventLogItem> Entities)> GetGroupedData(List<EventLogItem> entities)
         {
-            var data = new List<(string IndexName, List<T> Entities)>();
+            var data = new List<(string IndexName, List<EventLogItem> Entities)>();
 
             switch (_separation)
             {
                 case "H":
                     var groups = entities.GroupBy(c => c.DateTime.ToString("yyyyMMddhh")).OrderBy(c => c.Key);
-                    foreach (IGrouping<string, T> item in groups)
+                    foreach (IGrouping<string, EventLogItem> item in groups)
                         data.Add(($"{_eventLogItemsIndex}-{item.Key}", item.ToList()));
                     break;
                 case "D":
                     groups = entities.GroupBy(c => c.DateTime.ToString("yyyyMMdd")).OrderBy(c => c.Key);
-                    foreach (IGrouping<string, T> item in groups)
+                    foreach (IGrouping<string, EventLogItem> item in groups)
                         data.Add(($"{_eventLogItemsIndex}-{item.Key}", item.ToList()));
                     break;
                 case "M":
                     groups = entities.GroupBy(c => c.DateTime.ToString("yyyyMM")).OrderBy(c => c.Key);
-                    foreach (IGrouping<string, T> item in groups)
+                    foreach (IGrouping<string, EventLogItem> item in groups)
                         data.Add(($"{_eventLogItemsIndex}-{item.Key}", item.ToList()));
                     break;
                 default:
@@ -256,7 +238,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
             return data;
         }
 
-        public async Task WriteEventLogDataAsync(List<T> entities, CancellationToken cancellationToken = default)
+        public async Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
         {
             if (_client is null)
                 await ConnectAsync(cancellationToken);

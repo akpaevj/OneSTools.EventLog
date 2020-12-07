@@ -16,19 +16,19 @@ using OneSTools.EventLog.Exporter.Core;
 
 namespace OneSTools.EventLog.Exporter.ClickHouse
 {
-    public class EventLogStorage<T> : IEventLogStorage<T>, IDisposable where T : class, IEventLogItem, new()
+    public class ClickHouseStorage : IEventLogStorage, IDisposable
     {
         private const string TABLE_NAME = "EventLogItems";
-        private readonly ILogger<EventLogStorage<T>> _logger;
+        private readonly ILogger<ClickHouseStorage> _logger;
         private readonly string _connectionString;
         private string _databaseName;
         private ClickHouseConnection _connection;
 
-        public EventLogStorage(ILogger<EventLogStorage<T>> logger, string connectionString)
+        public ClickHouseStorage(ILogger<ClickHouseStorage> logger, IConfiguration configuration)
         {
             _logger = logger;
 
-            _connectionString = connectionString;
+            _connectionString = configuration.GetValue("ClickHouse:ConnectionString", "");
             if (_connectionString == string.Empty)
                 throw new Exception("Connection string is not specified");
 
@@ -37,11 +37,6 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
 
             if (string.IsNullOrWhiteSpace(_databaseName))
                 throw new Exception("Database name is not specified");
-        }
-
-        public EventLogStorage(ILogger<EventLogStorage<T>> logger, IConfiguration configuration) : this(logger, configuration.GetConnectionString("Default"))
-        {
-
         }
 
         private async Task CreateConnectionAsync(CancellationToken cancellationToken = default)
@@ -71,6 +66,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                     FileName LowCardinality(String),
                     EndPosition Int64 Codec(DoubleDelta, LZ4),
                     LgfEndPosition Int64 Codec(DoubleDelta, LZ4),
+                    Id Int64 Codec(DoubleDelta, LZ4),
                     DateTime DateTime('UTC') Codec(Delta, LZ4),
                     TransactionStatus LowCardinality(String),
                     TransactionDate DateTime('UTC') Codec(Delta, LZ4),
@@ -102,11 +98,11 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             await cmd.ExecuteNonQueryAsync(cancellationToken);
         }
 
-        public async Task<(string FileName, long EndPosition, long LgfEndPosition)> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
+        public async Task<EventLogPosition> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
         {
             await CreateConnectionAsync(cancellationToken);
 
-            var commandText = $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition FROM {TABLE_NAME} ORDER BY DateTime DESC, EndPosition DESC";
+            var commandText = $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition, Id FROM {TABLE_NAME} ORDER BY Id DESC";
 
             using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
@@ -114,12 +110,12 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             using var reader = await cmd.ExecuteReaderAsync(cancellationToken);
 
             if (await reader.ReadAsync())
-                return (reader.GetString(0), reader.GetInt64(1), reader.GetInt64(2));
+                return new EventLogPosition(reader.GetString(0), reader.GetInt64(1), reader.GetInt64(2), reader.GetInt64(3));
             else
-                return ("", 0, 0);
+                return null;
         }
 
-        public async Task WriteEventLogDataAsync(List<T> entities, CancellationToken cancellationToken = default)
+        public async Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
         {
             await CreateConnectionAsync();
 
@@ -133,6 +129,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 item.FileName ?? "",
                 item.EndPosition,
                 item.LgfEndPosition,
+                item.Id,
                 item.DateTime,
                 item.TransactionStatus ?? "",
                 item.TransactionDateTime == DateTime.MinValue ? new DateTime(1970, 1, 1) : item.TransactionDateTime,

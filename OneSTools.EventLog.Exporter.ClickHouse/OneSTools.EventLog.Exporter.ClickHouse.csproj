@@ -6,7 +6,7 @@
     <RootNamespace>OneSTools.EventLog.Exporter.ClickHouse</RootNamespace>
     <Authors>Akpaev Evgeny</Authors>
     <Description>Базовый пакет для экспортера ЖР в ClickHouse</Description>
-    <Version>0.0.3</Version>
+    <Version>0.0.4</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClickHouse.Client" Version="2.2.1.285" />
+    <PackageReference Include="ClickHouse.Client" Version="2.3.0.326" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
   </ItemGroup>

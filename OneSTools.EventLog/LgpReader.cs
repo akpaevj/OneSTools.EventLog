@@ -16,12 +16,11 @@ using NodaTime;
 
 namespace OneSTools.EventLog
 {
-    internal class LgpReader<T> : IDisposable where T : class, IEventLogItem, new()
+    internal class LgpReader: IDisposable
     {
         private LgfReader _lgfReader;
         private FileStream fileStream;
-        private StreamReader streamReader;
-        private long _lastPosition;
+        private BracketsListReader bracketsReader;
         private FileSystemWatcher _lgpFileWatcher;
         private bool disposedValue;
         private readonly DateTimeZone _timeZone;
@@ -36,10 +35,10 @@ namespace OneSTools.EventLog
             _lgfReader = lgfReader;
         }
 
-        public T ReadNextEventLogItem(CancellationToken cancellationToken = default)
+        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken = default)
         {
             if (disposedValue)
-                throw new ObjectDisposedException(nameof(LgpReader<T>));
+                throw new ObjectDisposedException(nameof(LgpReader));
 
             InitializeStreams();
 
@@ -50,14 +49,7 @@ namespace OneSTools.EventLog
         {
             InitializeStreams();
 
-            streamReader.SetPosition(position);
-        }
-
-        public long GetPosition()
-        {
-            InitializeStreams();
-
-            return streamReader.GetPosition();
+            bracketsReader.Position = position;
         }
 
         private void InitializeStreams()
@@ -75,16 +67,7 @@ namespace OneSTools.EventLog
                 _lgpFileWatcher.EnableRaisingEvents = true;
 
                 fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-                streamReader = new StreamReader(fileStream);
-
-                // skip header
-                while (true)
-                {
-                    streamReader.ReadLine();
-
-                    if (streamReader.Peek() == '{')
-                        break;
-                }
+                bracketsReader = new BracketsListReader(fileStream);
             }
         }
 
@@ -98,52 +81,12 @@ namespace OneSTools.EventLog
 
         private (StringBuilder Data, long EndPosition) ReadNextEventLogItemData(CancellationToken cancellationToken = default)
         {
-            StringBuilder data = new StringBuilder();
+            StringBuilder data = bracketsReader.NextNodeAsStringBuilder();
 
-            long endPosition = 0;
-            bool start = false;
-
-            while (true)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    break;
-
-                if (_lastPosition != 0)
-                    SetPosition(_lastPosition);
-
-                var currentLine = streamReader.ReadLine();
-
-                if (currentLine is null)
-                {
-                    _lastPosition = GetPosition();
-                    break;
-                }
-                else
-                    _lastPosition = 0;
-
-                // wait for the beginning of the event
-                if (!start && currentLine.Length > 0 && currentLine[0] == '{')
-                    start = true;
-
-                if (!start)
-                    continue;
-
-                data.Append(currentLine);
-
-                var blockEndIndex = BracketsFileParser.GetNodeEndIndex(data, 0);
-
-                if (blockEndIndex != -1)
-                {
-                    endPosition = GetPosition();
-                    data.Remove(blockEndIndex + 1, data.Length - 1 - blockEndIndex);
-                    break;
-                }
-            }
-
-            return (data, endPosition);
+            return (data, bracketsReader.Position);
         }
 
-        private T ReadEventLogItemData(CancellationToken cancellationToken = default)
+        private EventLogItem ReadEventLogItemData(CancellationToken cancellationToken = default)
         {
             (StringBuilder Data, long EndPosition) = ReadNextEventLogItemData(cancellationToken);
 
@@ -153,11 +96,11 @@ namespace OneSTools.EventLog
             return ParseEventLogItemData(Data, EndPosition, cancellationToken);
         }
 
-        private T ParseEventLogItemData(StringBuilder eventLogItemData, long endPosition, CancellationToken cancellationToken = default)
+        private EventLogItem ParseEventLogItemData(StringBuilder eventLogItemData, long endPosition, CancellationToken cancellationToken = default)
         {
-            var parsedData = BracketsFileParser.ParseBlock(eventLogItemData);
+            var parsedData = BracketsParser.ParseBlock(eventLogItemData);
 
-            var eventLogItem = new T
+            var eventLogItem = new EventLogItem
             {
                 DateTime = _timeZone.ToUtc(DateTime.ParseExact((string)parsedData[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture)),
                 TransactionStatus = GetTransactionPresentation((string)parsedData[1]),
@@ -212,7 +155,7 @@ namespace OneSTools.EventLog
             return eventLogItem;
         }
 
-        private string GetData(BracketsFileNode node)
+        private string GetData(BracketsNode node)
         {
             var dataType = (string)node[0];
 
@@ -400,8 +343,8 @@ namespace OneSTools.EventLog
                     // TODO: освободить управляемое состояние (управляемые объекты)
                 }
 
-                streamReader?.Dispose();
-                streamReader = null;
+                bracketsReader?.Dispose();
+                bracketsReader = null;
                 fileStream = null;
 
                 _lgpFileWatcher?.Dispose();

@@ -12,12 +12,12 @@ namespace OneSTools.EventLog
     /// <summary>
     ///  Presents methods for reading 1C event log
     /// </summary>    
-    public class EventLogReader<T> : IDisposable where T : class, IEventLogItem, new()
+    public class EventLogReader: IDisposable
     {
         private ManualResetEvent _lgpChangedCreated;
-        private EventLogReaderSetings _settings;
+        private readonly EventLogReaderSetings _settings;
         private LgfReader _lgfReader;
-        private LgpReader<T> _lgpReader;
+        private LgpReader _lgpReader;
         private FileSystemWatcher _lgpFilesWatcher;
         private bool disposedValue;
 
@@ -37,7 +37,7 @@ namespace OneSTools.EventLog
             {
                 var file = Path.Combine(_settings.LogFolder, settings.LgpFileName);
 
-                _lgpReader = new LgpReader<T>(file, settings.TimeZone, _lgfReader);
+                _lgpReader = new LgpReader(file, settings.TimeZone, _lgfReader);
                 _lgpReader.SetPosition(settings.StartPosition);
             }
         }
@@ -47,7 +47,7 @@ namespace OneSTools.EventLog
         /// </summary>
         /// <param name="cancellationToken">Token for interrupting of the reader</param>
         /// <returns></returns>
-        public T ReadNextEventLogItem(CancellationToken cancellationToken = default)
+        public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken = default)
         {
             if (_lgpReader == null)
                 SetNextLgpReader();
@@ -55,7 +55,7 @@ namespace OneSTools.EventLog
             if (_settings.LiveMode && _lgpFilesWatcher == null)
                 StartLgpFilesWatcher();
 
-            T item = null;
+            EventLogItem item = null;
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -99,7 +99,12 @@ namespace OneSTools.EventLog
                     }
                 }
                 else
+                {
+                    _settings.ItemId++;
+                    item.Id = _settings.ItemId;
+
                     break;
+                }
             }
 
             return item;
@@ -138,7 +143,7 @@ namespace OneSTools.EventLog
                 _lgpReader?.Dispose();
                 _lgpReader = null;
 
-                _lgpReader = new LgpReader<T>(nextFile.Item1, _settings.TimeZone, _lgfReader);
+                _lgpReader = new LgpReader(nextFile.Item1, _settings.TimeZone, _lgfReader);
 
                 return true;
             }
@@ -152,20 +157,14 @@ namespace OneSTools.EventLog
             {
                 NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
             };
-            _lgpFilesWatcher.Changed += LgpFilesWatcher_Changed;
-            _lgpFilesWatcher.Created += LgpFilesWatcher_Created;
+            _lgpFilesWatcher.Changed += LgpFilesWatcher_Event;
+            _lgpFilesWatcher.Created += LgpFilesWatcher_Event;
             _lgpFilesWatcher.EnableRaisingEvents = true;
         }
 
-        private void LgpFilesWatcher_Created(object sender, FileSystemEventArgs e)
+        private void LgpFilesWatcher_Event(object sender, FileSystemEventArgs e)
         {
-            if (e.ChangeType == WatcherChangeTypes.Created)
-                _lgpChangedCreated.Set();
-        }
-
-        private void LgpFilesWatcher_Changed(object sender, FileSystemEventArgs e)
-        {
-            if (e.ChangeType == WatcherChangeTypes.Changed)
+            if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Changed)
                 _lgpChangedCreated.Set();
         }
 

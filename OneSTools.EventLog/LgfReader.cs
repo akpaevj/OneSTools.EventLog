@@ -12,7 +12,7 @@ namespace OneSTools.EventLog
     internal class LgfReader : IDisposable
     {
         private FileStream fileStream;
-        private StreamReader streamReader;
+        private BracketsListReader bracketsReader;
 
         public string LgfPath { get; private set; }
         /// <summary>
@@ -37,10 +37,9 @@ namespace OneSTools.EventLog
 
             bool stop = false;
 
-            while (!stop && !streamReader.EndOfStream && !cancellationToken.IsCancellationRequested)
+            while (!stop && !bracketsReader.EndOfStream && !cancellationToken.IsCancellationRequested)
             {
-                var itemStrBuilder = ReadNextItemData(cancellationToken);
-                var itemData = BracketsFileParser.ParseBlock(itemStrBuilder);
+                var itemData = bracketsReader.NextNode();
 
                 var ot = (ObjectType)(int)itemData[0];
 
@@ -93,42 +92,6 @@ namespace OneSTools.EventLog
             }
         }
 
-        private StringBuilder ReadNextItemData(CancellationToken cancellationToken = default)
-        {
-            StringBuilder data = new StringBuilder();
-            bool start = false;
-
-            while (true)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    break;
-
-                var currentLine = streamReader.ReadLine();
-
-                if (currentLine is null)
-                    break;
-
-                // wait for the beginning of the event
-                if (!start && currentLine.Length > 0 && currentLine[0] == '{')
-                    start = true;
-
-                if (!start)
-                    continue;
-
-                data.Append(currentLine);
-
-                var blockEndIndex = BracketsFileParser.GetNodeEndIndex(data, 0);
-
-                if (blockEndIndex != -1)
-                {
-                    data.Remove(blockEndIndex + 1, data.Length - 1 - blockEndIndex);
-                    break;
-                }
-            }
-
-            return data;
-        }
-
         public string GetObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken = default)
         {
             if (number == 0)
@@ -163,22 +126,13 @@ namespace OneSTools.EventLog
 
         private void InitializeStreams()
         {
-            if (!File.Exists(LgfPath))
-                throw new Exception("Cannot find \"1Cv8.lgf\"");
-
             if (fileStream is null)
             {
+                if (!File.Exists(LgfPath))
+                    throw new Exception("Cannot find \"1Cv8.lgf\"");
+
                 fileStream = new FileStream(LgfPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-                streamReader = new StreamReader(fileStream);
-
-                // skip header
-                while (true)
-                {
-                    streamReader.ReadLine();
-
-                    if (streamReader.Peek() == '{')
-                        break;
-                }
+                bracketsReader = new BracketsListReader(fileStream);
             }
         }
 
@@ -191,7 +145,7 @@ namespace OneSTools.EventLog
         {
             InitializeStreams();
 
-            return streamReader.GetPosition();
+            return bracketsReader.Position;
         }
 
         protected virtual void Dispose(bool disposing)
@@ -204,8 +158,8 @@ namespace OneSTools.EventLog
                     _referencedObjects = null;
                 }
 
-                streamReader?.Dispose();
-                streamReader = null;
+                bracketsReader?.Dispose();
+                bracketsReader = null;
                 fileStream?.Dispose();
                 fileStream = null;
 

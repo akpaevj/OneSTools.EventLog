@@ -1,13 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>dotnet-EventLogExporterElasticSearch-E480DCDC-5542-443A-A879-763D915661EB</UserSecretsId>
     <Authors>Akpaev Evgeny</Authors>
     <Copyright>Akpaev Evgeny</Copyright>
     <PackageProjectUrl></PackageProjectUrl>
-    <Description>Служба для экспорта журнала регистрации 1С в ElasticSearch</Description>
-    <Version>0.0.3</Version>
+    <Description>Служба для экспорта журнала регистрации 1С в ClickHouse и ElasticSearch</Description>
+    <Version>0.0.4</Version>
+    <AssemblyName>EventLogExporter</AssemblyName>
+    <RootNamespace>OneSTools.EventLog.Exporter</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -16,8 +18,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OneSTools.EventLog.Exporter.ClickHouse\OneSTools.EventLog.Exporter.ClickHouse.csproj" />
     <ProjectReference Include="..\OneSTools.EventLog.Exporter.ElasticSearch\OneSTools.EventLog.Exporter.ElasticSearch.csproj" />
   </ItemGroup>
 

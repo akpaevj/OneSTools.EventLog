@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -10,35 +11,44 @@ using NodaTime;
 
 namespace OneSTools.EventLog.Exporter.Core
 {
-    public class EventLogExporter<T> : IEventLogExporter<T> where T : class, IEventLogItem, new()
+    public class EventLogExporter
     {
-        public static int DEFAULT_PORTION = 10000;
+        private readonly ILogger<EventLogExporter> _logger;
+        private readonly IEventLogStorage _storage;
 
-        private readonly ILogger<EventLogExporter<T>> _logger;
-        private readonly IEventLogStorage<T> _storage;
-        private string _logFolder;
-        private int _portion;
-        private bool _loadArchive;
-        private DateTimeZone _timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+        // Exporter settings
+        private readonly string _logFolder;
+        private readonly int _portion;
+        private readonly DateTimeZone _timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+        private readonly int _writingMaxdop;
+        private readonly int _collectedFactor;
+        private readonly bool _loadArchive;
+        private readonly int _readingTimeout;
+
         private string _currentLgpFile;
-        private EventLogReader<T> _eventLogReader;
-        private ActionBlock<T[]> _writeBlock;
-        private BatchBlock<T> _batchBlock;
+
+        // Dataflow blocks
+        private EventLogReader _eventLogReader;
+        private ActionBlock<EventLogItem[]> _writeBlock;
+        private BatchBlock<EventLogItem> _batchBlock;
+
         private bool disposedValue;
 
-        public EventLogExporter(ILogger<EventLogExporter<T>> logger, IEventLogStorage<T> storage, string logFolder, int portion, string timeZone, bool loadArchive = false)
+        public EventLogExporter(ILogger<EventLogExporter> logger, IConfiguration configuration, IEventLogStorage storage)
         {
             _logger = logger;
             _storage = storage;
 
-            _logFolder = logFolder;
+            _logFolder = configuration.GetValue("Exporter:LogFolder", "");
             if (_logFolder == string.Empty)
                 throw new Exception("Event log folder is not specified");
 
             if (!Directory.Exists(_logFolder))
                 throw new Exception($"Event log folder ({_logFolder}) doesn't exist");
 
-            _portion = portion;
+            _portion = configuration.GetValue("Exporter:Portion", 10000);
+
+            var timeZone = configuration.GetValue("Exporter:TimeZone", "");
 
             if (!string.IsNullOrWhiteSpace(timeZone))
             {
@@ -49,19 +59,17 @@ namespace OneSTools.EventLog.Exporter.Core
                 _timeZone = zone;
             }
 
-            _loadArchive = loadArchive;
-        }
+            _writingMaxdop = configuration.GetValue("Exporter:WritingMaxDegreeOfParallelism", 1);
+            if (_writingMaxdop <= 0)
+                throw new Exception($"WritingMaxDegreeOfParallelism cannot be equal to or less than 0");
 
-        public EventLogExporter(ILogger<EventLogExporter<T>> logger, IConfiguration configuration, IEventLogStorage<T> storage) : this(
-            logger,
-            storage,
-            configuration.GetValue("Exporter:LogFolder", ""),
-            configuration.GetValue("Exporter:Portion", DEFAULT_PORTION),
-            configuration.GetValue("Exporter:TimeZone", ""),
-            configuration.GetValue("Exporter:LoadArchive", false)
-            )
-        {
+            _collectedFactor = configuration.GetValue("Exporter:CollectedFactor", 2);
+            if (_collectedFactor <= 0)
+                throw new Exception($"CollectedFactor cannot be equal to or less than 0");
 
+            _loadArchive = configuration.GetValue("Exporter:LoadArchive", false);
+
+            _readingTimeout = configuration.GetValue("Exporter:ReadingTimeout", 1);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
@@ -78,13 +86,13 @@ namespace OneSTools.EventLog.Exporter.Core
             try
             {
                 var settings = await GetReaderSettingsAsync(cancellationToken);
-                _eventLogReader = new EventLogReader<T>(settings);
+                _eventLogReader = new EventLogReader(settings);
 
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     bool forceSending = false;
 
-                    T item = default;
+                    EventLogItem item = null;
 
                     try
                     {
@@ -130,17 +138,18 @@ namespace OneSTools.EventLog.Exporter.Core
             var writeBlockSettings = new ExecutionDataflowBlockOptions()
             {
                 CancellationToken = cancellationToken,
-                BoundedCapacity = 2
+                BoundedCapacity = _collectedFactor,
+                MaxDegreeOfParallelism = _writingMaxdop
             };
 
             var batchBlockSettings = new GroupingDataflowBlockOptions()
             {
                 CancellationToken = cancellationToken,
-                BoundedCapacity = _portion * 2
+                BoundedCapacity = _portion * _collectedFactor
             };
 
-            _writeBlock = new ActionBlock<T[]>(c => _storage.WriteEventLogDataAsync(c.ToList(), cancellationToken), writeBlockSettings);
-            _batchBlock = new BatchBlock<T>(_portion, batchBlockSettings);
+            _writeBlock = new ActionBlock<EventLogItem[]>(c => _storage.WriteEventLogDataAsync(c.ToList(), cancellationToken), writeBlockSettings);
+            _batchBlock = new BatchBlock<EventLogItem>(_portion, batchBlockSettings);
 
             _batchBlock.LinkTo(_writeBlock, new DataflowLinkOptions() { PropagateCompletion = true });
         }
@@ -151,35 +160,44 @@ namespace OneSTools.EventLog.Exporter.Core
             {
                 LogFolder = _logFolder,
                 LiveMode = true,
-                ReadingTimeout = 1000,
+                ReadingTimeout = _readingTimeout * 1000,
                 TimeZone = _timeZone
             };
 
             if (!_loadArchive)
             {
-                (string FileName, long EndPosition, long LgfEndPosition) = await _storage.ReadEventLogPositionAsync(cancellationToken);
+                var position = await _storage.ReadEventLogPositionAsync(cancellationToken);
 
-                if (FileName != string.Empty)
+                if (position != null)
                 {
-                    var lgpFilePath = Path.Combine(_logFolder, FileName);
+                    var lgpFilePath = Path.Combine(_logFolder, position.FileName);
 
                     if (!File.Exists(lgpFilePath))
                         _logger.LogWarning($"Lgp file ({lgpFilePath}) doesn't exist. The reading will be started from the first found file");
                     else
                     {
-                        eventLogReaderSettings.LgpFileName = FileName;
-                        eventLogReaderSettings.StartPosition = EndPosition;
-                        eventLogReaderSettings.LgpStartPosition = LgfEndPosition;
+                        eventLogReaderSettings.LgpFileName = position.FileName;
+                        eventLogReaderSettings.StartPosition = position.EndPosition;
+                        eventLogReaderSettings.LgpStartPosition = position.LgfEndPosition;
+                        eventLogReaderSettings.ItemId = position.Id;
+
+                        _logger.LogInformation($"File {position.FileName} will be read from {position.EndPosition} position, LGF file will be read from {position.LgfEndPosition} position");
                     }
                 }
+                else
+                    _logger.LogInformation($"There're no log items in the database, first found log file will be read from 0 position");
             }
             else
+            {
+                _logger.LogWarning($"LoadArchive parameter is true. Live mode will not be used");
+
                 eventLogReaderSettings.LiveMode = false;
+            }
 
             return eventLogReaderSettings;
         }
 
-        private async Task SendAsync(ITargetBlock<T> nextBlock, T item, CancellationToken stoppingToken = default)
+        private async Task SendAsync(ITargetBlock<EventLogItem> nextBlock, EventLogItem item, CancellationToken stoppingToken = default)
         {
             while (!stoppingToken.IsCancellationRequested && !nextBlock.Completion.IsFaulted)
             {
