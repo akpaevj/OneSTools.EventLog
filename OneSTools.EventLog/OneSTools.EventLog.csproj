@@ -36,11 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\onestools_icon_nuget.png">
+    <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="..\LICENSE">
+    <None Include="..\Nuget\onestools_icon_nuget.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
