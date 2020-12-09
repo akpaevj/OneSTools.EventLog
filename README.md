@@ -45,7 +45,6 @@
 8. *LoadArchive* - Специальный параметр, предназначенный для первоначальной загрузки архивных данных. При установке параметра в true, отключается "live" режим и не выполняется запрос последнего обработанного файла из БД</br>
 
 **ClickHouse:**
-Заполнение секции требуется, если в секции *Exporter* у параметра *StorageType* указано значение 1.
 ```json
 "ConnectionStrings": {
     "Default": "Host=localhost;Port=8123;Username=default;password=;Database=database_name;"
