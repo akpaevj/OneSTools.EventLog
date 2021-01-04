@@ -44,7 +44,7 @@ try
 }
 catch (EventLogReaderTimeoutException)
 {
-  // timeout occurred
+  // timeout occurred, it must catch it if "LiveMode" is enabled 
 }
 catch (Exception ex)
 {
