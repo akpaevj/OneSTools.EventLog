@@ -31,14 +31,14 @@ namespace OneSTools.EventLog
             _settings = settings;
 
             _lgfReader = new LgfReader(Path.Combine(_settings.LogFolder, "1Cv8.lgf"));
-            _lgfReader.SetPosition(settings.LgpStartPosition);
+            _lgfReader.SetPosition(settings.LgfStartPosition);
 
             if (settings.LgpFileName != string.Empty)
             {
                 var file = Path.Combine(_settings.LogFolder, settings.LgpFileName);
 
                 _lgpReader = new LgpReader(file, settings.TimeZone, _lgfReader);
-                _lgpReader.SetPosition(settings.StartPosition);
+                _lgpReader.SetPosition(settings.LgpStartPosition);
             }
         }
 

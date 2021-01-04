@@ -177,8 +177,8 @@ namespace OneSTools.EventLog.Exporter.Core
                     else
                     {
                         eventLogReaderSettings.LgpFileName = position.FileName;
-                        eventLogReaderSettings.StartPosition = position.EndPosition;
-                        eventLogReaderSettings.LgpStartPosition = position.LgfEndPosition;
+                        eventLogReaderSettings.LgpStartPosition = position.EndPosition;
+                        eventLogReaderSettings.LgfStartPosition = position.LgfEndPosition;
                         eventLogReaderSettings.ItemId = position.Id;
 
                         _logger.LogInformation($"File {position.FileName} will be read from {position.EndPosition} position, LGF file will be read from {position.LgfEndPosition} position");
