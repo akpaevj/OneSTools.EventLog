@@ -43,7 +43,7 @@ try
 }
 catch (EventLogReaderTimeoutException)
 {
-  // timeout occured
+  // timeout occurred
 }
 catch (Exception ex)
 {
