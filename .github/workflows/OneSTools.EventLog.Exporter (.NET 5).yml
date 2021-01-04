@@ -1,4 +1,4 @@
-name: .NET 5
+name: EventLogExporter .NET 5
 
 on:
   push:
@@ -18,11 +18,11 @@ jobs:
       with:
         dotnet-version: 5.0.100
     - name: Install dependencies
-      working-directory: ./OneSTools.EventLog
+      working-directory: ./OneSTools.EventLog.Exporter
       run: dotnet restore
     - name: Build
-      working-directory: ./OneSTools.EventLog
+      working-directory: ./OneSTools.EventLog.Exporter
       run: dotnet build --configuration Release --no-restore
     - name: Test
-      working-directory: ./OneSTools.EventLog
+      working-directory: ./OneSTools.EventLog.Exporter
       run: dotnet test --no-restore --verbosity normal
