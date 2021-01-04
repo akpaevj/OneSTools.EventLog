@@ -29,7 +29,7 @@ var eventLogReader = new EventLogReader(settings);
 
 try
 {
-  // or wait for a cancellation token's cancel request
+  // or wait for a cancellationToken cancel request
   while (true)
   {
     var item = eventLogReader.ReadNextEventLogItem();
