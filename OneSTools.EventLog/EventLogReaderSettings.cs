@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace OneSTools.EventLog
 {
-    public class EventLogReaderSetings
+    public class EventLogReaderSettings
     {
         public string LogFolder { get; set; } = "";
         public bool LiveMode { get; set; } = true;

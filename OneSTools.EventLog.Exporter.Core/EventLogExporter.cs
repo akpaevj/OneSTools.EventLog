@@ -154,9 +154,9 @@ namespace OneSTools.EventLog.Exporter.Core
             _batchBlock.LinkTo(_writeBlock, new DataflowLinkOptions() { PropagateCompletion = true });
         }
 
-        private async Task<EventLogReaderSetings> GetReaderSettingsAsync(CancellationToken cancellationToken = default)
+        private async Task<EventLogReaderSettings> GetReaderSettingsAsync(CancellationToken cancellationToken = default)
         {
-            var eventLogReaderSettings = new EventLogReaderSetings
+            var eventLogReaderSettings = new EventLogReaderSettings
             {
                 LogFolder = _logFolder,
                 LiveMode = true,

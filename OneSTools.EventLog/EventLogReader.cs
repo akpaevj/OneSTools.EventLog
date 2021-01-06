@@ -15,7 +15,7 @@ namespace OneSTools.EventLog
     public class EventLogReader: IDisposable
     {
         private ManualResetEvent _lgpChangedCreated;
-        private readonly EventLogReaderSetings _settings;
+        private readonly EventLogReaderSettings _settings;
         private LgfReader _lgfReader;
         private LgpReader _lgpReader;
         private FileSystemWatcher _lgpFilesWatcher;
@@ -26,7 +26,7 @@ namespace OneSTools.EventLog
         /// </summary>
         public string LgpFileName => _lgpReader.LgpFileName;
 
-        public EventLogReader(EventLogReaderSetings settings)
+        public EventLogReader(EventLogReaderSettings settings)
         {
             _settings = settings;
 
