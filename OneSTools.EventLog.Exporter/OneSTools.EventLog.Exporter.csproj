@@ -7,7 +7,7 @@
     <Copyright>Akpaev Evgeny</Copyright>
     <PackageProjectUrl></PackageProjectUrl>
     <Description>Служба для экспорта журнала регистрации 1С в ClickHouse и ElasticSearch</Description>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <AssemblyName>EventLogExporter</AssemblyName>
     <RootNamespace>OneSTools.EventLog.Exporter</RootNamespace>
   </PropertyGroup>
@@ -15,11 +15,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
+    <OutputPath>..\Build\Release</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Build\Debug</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

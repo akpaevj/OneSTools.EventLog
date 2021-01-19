@@ -29,7 +29,6 @@ namespace OneSTools.EventLog.Exporter.Manager
                 })
                 .ConfigureServices((_, services) =>
                 {
-                    services.AddSingleton<EventLogExporter>();
                     services.AddHostedService<ExportersManager>();
                 });
     }

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ClickHouse.Client.ADO;
 using ClickHouse.Client.Copy;
-using System.Threading;
-using System.Threading.Tasks;
-using ClickHouse.Client.ADO;
-using ClickHouse.Client.Utility;
-using System.Linq;
-using System.Data;
-using ClickHouse.Client.ADO.Readers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Text.RegularExpressions;
-using OneSTools.EventLog.Exporter.Core;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OneSTools.EventLog.Exporter.Core.ClickHouse
 {
