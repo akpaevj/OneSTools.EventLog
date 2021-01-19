@@ -126,6 +126,19 @@
       "Microsoft.Hosting.Lifetime": "Information"
     }
   },
+  "Manager": {
+    "ClstFolder": "\\\\s01\\c$\\Program Files\\1cv8\\srvinfo\\reg_1541",
+    "Templates": [
+      {
+        "Mask": "upp.*dev",
+        "Template": "dev-[IBNAME]-el"
+      },
+      {
+        "Mask": "upp.*",
+        "Template": "[IBNAME]-el"
+      }
+    ]
+  },
   "Exporter": {
     "StorageType": 2,
     "LogFolder": "C:\\Users\\akpaev.e.ENTERPRISE\\Desktop\\1Cv8Log",
