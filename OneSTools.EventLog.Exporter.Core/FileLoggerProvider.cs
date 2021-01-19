@@ -4,7 +4,7 @@ namespace OneSTools.EventLog.Exporter.Core
 {
     public class FileLoggerProvider : ILoggerProvider
     {
-        private string _path;
+        private readonly string _path;
 
         public FileLoggerProvider(string path)
             => _path = path;

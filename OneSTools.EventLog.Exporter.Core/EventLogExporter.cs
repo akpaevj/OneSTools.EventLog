@@ -11,6 +11,17 @@ using NodaTime;
 
 namespace OneSTools.EventLog.Exporter.Core
 {
+    public class EventLogExporterSettings
+    {
+        public string LogFolder { get; set; } = "";
+        public int Portion { get; set; } = 10000;
+        public DateTimeZone TimeZone { get; set; } = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+        public int WritingMaxDop { get; set; } = 1;
+        public int CollectedFactor { get; set; } = 2;
+        public int ReadingTimeout { get; set; } = 1;
+        public bool LoadArchive { get; set; } = false;
+    }
+
     public class EventLogExporter
     {
         private readonly ILogger<EventLogExporter> _logger;
@@ -34,19 +45,33 @@ namespace OneSTools.EventLog.Exporter.Core
 
         private bool disposedValue;
 
+        public EventLogExporter(EventLogExporterSettings settings, IEventLogStorage storage, ILogger<EventLogExporter> logger = null)
+        {
+            _logger = logger;
+            _storage = storage;
+
+            _logFolder = settings.LogFolder;
+            _portion = settings.Portion;
+            _writingMaxdop = settings.WritingMaxDop;
+            _collectedFactor = settings.CollectedFactor;
+            _loadArchive = settings.LoadArchive;
+            _timeZone = settings.TimeZone;
+            _readingTimeout = settings.ReadingTimeout;
+
+            CheckSettings();
+        }
+
         public EventLogExporter(ILogger<EventLogExporter> logger, IConfiguration configuration, IEventLogStorage storage)
         {
             _logger = logger;
             _storage = storage;
 
             _logFolder = configuration.GetValue("Exporter:LogFolder", "");
-            if (_logFolder == string.Empty)
-                throw new Exception("Event log folder is not specified");
-
-            if (!Directory.Exists(_logFolder))
-                throw new Exception($"Event log folder ({_logFolder}) doesn't exist");
-
             _portion = configuration.GetValue("Exporter:Portion", 10000);
+            _writingMaxdop = configuration.GetValue("Exporter:WritingMaxDegreeOfParallelism", 1);
+            _collectedFactor = configuration.GetValue("Exporter:CollectedFactor", 2);
+            _loadArchive = configuration.GetValue("Exporter:LoadArchive", false);
+            _readingTimeout = configuration.GetValue("Exporter:ReadingTimeout", 1);
 
             var timeZone = configuration.GetValue("Exporter:TimeZone", "");
 
@@ -59,27 +84,32 @@ namespace OneSTools.EventLog.Exporter.Core
                 _timeZone = zone;
             }
 
-            _writingMaxdop = configuration.GetValue("Exporter:WritingMaxDegreeOfParallelism", 1);
+            CheckSettings();
+        }
+
+        private void CheckSettings()
+        {
+            if (_logFolder == string.Empty)
+                throw new Exception("Event log folder is not specified");
+
+            if (!Directory.Exists(_logFolder))
+                throw new Exception($"Event log folder ({_logFolder}) doesn't exist");
+
             if (_writingMaxdop <= 0)
                 throw new Exception($"WritingMaxDegreeOfParallelism cannot be equal to or less than 0");
 
-            _collectedFactor = configuration.GetValue("Exporter:CollectedFactor", 2);
             if (_collectedFactor <= 0)
                 throw new Exception($"CollectedFactor cannot be equal to or less than 0");
-
-            _loadArchive = configuration.GetValue("Exporter:LoadArchive", false);
-
-            _readingTimeout = configuration.GetValue("Exporter:ReadingTimeout", 1);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            _logger.LogInformation($"Log folder: {_logFolder}");
+            _logger?.LogInformation($"Log folder: {_logFolder}");
 
             if (_loadArchive)
-                _logger.LogWarning($"\"Load archive\" mode enabled");
+                _logger?.LogWarning($"\"Load archive\" mode enabled");
 
-            _logger.LogInformation($"Portion per request: {_portion}");
+            _logger?.LogInformation($"Portion per request: {_portion}");
 
             InitializeDataflow(cancellationToken);
 
@@ -114,7 +144,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
                         if (!string.IsNullOrEmpty(_eventLogReader.LgpFileName) && _currentLgpFile != _eventLogReader.LgpFileName)
                         {
-                            _logger.LogInformation($"Reader started reading {_eventLogReader.LgpFileName}");
+                            _logger?.LogInformation($"Reader started reading {_eventLogReader.LgpFileName}");
 
                             _currentLgpFile = _eventLogReader.LgpFileName;
                         }
@@ -173,7 +203,7 @@ namespace OneSTools.EventLog.Exporter.Core
                     var lgpFilePath = Path.Combine(_logFolder, position.FileName);
 
                     if (!File.Exists(lgpFilePath))
-                        _logger.LogWarning($"Lgp file ({lgpFilePath}) doesn't exist. The reading will be started from the first found file");
+                        _logger?.LogWarning($"Lgp file ({lgpFilePath}) doesn't exist. The reading will be started from the first found file");
                     else
                     {
                         eventLogReaderSettings.LgpFileName = position.FileName;
@@ -181,15 +211,15 @@ namespace OneSTools.EventLog.Exporter.Core
                         eventLogReaderSettings.LgfStartPosition = position.LgfEndPosition;
                         eventLogReaderSettings.ItemId = position.Id;
 
-                        _logger.LogInformation($"File {position.FileName} will be read from {position.EndPosition} position, LGF file will be read from {position.LgfEndPosition} position");
+                        _logger?.LogInformation($"File {position.FileName} will be read from {position.EndPosition} position, LGF file will be read from {position.LgfEndPosition} position");
                     }
                 }
                 else
-                    _logger.LogInformation($"There're no log items in the database, first found log file will be read from 0 position");
+                    _logger?.LogInformation($"There're no log items in the database, first found log file will be read from 0 position");
             }
             else
             {
-                _logger.LogWarning($"LoadArchive parameter is true. Live mode will not be used");
+                _logger?.LogWarning($"LoadArchive parameter is true. Live mode will not be used");
 
                 eventLogReaderSettings.LiveMode = false;
             }

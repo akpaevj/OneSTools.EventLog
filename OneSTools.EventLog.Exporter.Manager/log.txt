@@ -1,0 +1,58 @@
+2021-01-04 16:17:57.927 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\ac44b33e-112a-49ec-b6e1-856ee8c2e8f0\1Cv8Log
+2021-01-04 16:17:57.927 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_main" infobase is started
+2021-01-04 16:17:57.968 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-04 16:17:58.001 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_dev_akpaev" infobase is started
+2021-01-04 16:17:58.009 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\aa9c9b34-7ad6-4651-bfb4-035d4f82c3d6\1Cv8Log
+2021-01-04 16:17:58.020 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log of "upp_dev_kraev" infobase is in "new" format, it won't be handled
+2021-01-04 16:17:58.029 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-04 16:17:58.046 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_dev_demchenko" infobase is started
+2021-01-04 16:17:58.057 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\f672220b-55c6-4bb7-a78b-f430515cedf5\1Cv8Log
+2021-01-04 16:17:58.084 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_copy" infobase is started
+2021-01-04 16:17:58.084 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-04 16:17:58.087 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\c7a3059c-71b4-40b7-baac-81833dbdbd49\1Cv8Log
+2021-01-04 16:17:58.104 | Information | Microsoft.Hosting.Lifetime[0]
+	Application started. Press Ctrl+C to shut down.
+2021-01-04 16:17:58.122 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-04 16:17:58.135 | Information | Microsoft.Hosting.Lifetime[0]
+	Hosting environment: Development
+2021-01-04 16:17:58.157 | Information | Microsoft.Hosting.Lifetime[0]
+	Content root path: C:\Users\akpaev.e.ENTERPRISE\source\repos\OneSTools.EventLog\OneSTools.EventLog.Exporter.Manager
+2021-01-04 16:17:58.408 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (upp_dev_akpaev-el)
+2021-01-04 16:17:58.415 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (upp_main-el)
+2021-01-04 16:17:58.412 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (upp_dev_demchenko-el)
+2021-01-04 16:17:58.418 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (upp_copy-el)
+2021-01-04 16:17:58.854 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (upp_dev_akpaev-el)
+2021-01-04 16:17:58.855 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (upp_main-el)
+2021-01-04 16:17:58.858 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (upp_dev_demchenko-el)
+2021-01-04 16:17:58.862 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (upp_copy-el)
+2021-01-04 16:17:59.599 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	File 20210111000000.lgp will be read from 4867 position, LGF file will be read from 4658 position
+2021-01-04 16:17:59.602 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	File 20210111000000.lgp will be read from 8413 position, LGF file will be read from 226 position
+2021-01-04 16:17:59.604 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	File 20210111000000.lgp will be read from 100874 position, LGF file will be read from 262 position
+2021-01-04 16:17:59.607 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	File 20210111000000.lgp will be read from 2782790 position, LGF file will be read from 35342 position
+2021-01-04 16:18:05.444 | Information | Microsoft.Hosting.Lifetime[0]
+	Application is shutting down...

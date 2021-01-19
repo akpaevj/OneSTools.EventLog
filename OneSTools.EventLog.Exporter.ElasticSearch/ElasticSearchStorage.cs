@@ -21,7 +21,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
         public static int DEFAULT_MAX_RETRY_TIMEOUT_SEC = 30;
 
         private readonly ILogger<ElasticSearchStorage> _logger;
-        private readonly List<ElasticSearchNode> _nodes;
+        private readonly List<ElasticSearchNode> _nodes = new List<ElasticSearchNode>();
         private ElasticSearchNode _currentNode;
         private readonly string _eventLogItemsIndex;
         private readonly int _maximumRetries;
@@ -29,22 +29,39 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
         private readonly string _separation;
         private ElasticClient _client;
 
+        public ElasticSearchStorage(ElasticSearchStorageSettings settings, ILogger<ElasticSearchStorage> logger = null)
+        {
+            _logger = logger;
+
+            _nodes.AddRange(settings.Nodes);
+            _eventLogItemsIndex = settings.Index;
+            _separation = settings.Separation;
+            _maximumRetries = settings.MaximumRetries;
+            _maxRetryTimeout = settings.MaxRetryTimeout;
+
+            CheckSettings();
+        }
+
         public ElasticSearchStorage(ILogger<ElasticSearchStorage> logger, IConfiguration configuration)
         {
             _logger = logger;
 
             _nodes = configuration.GetSection("ElasticSearch:Nodes").Get<List<ElasticSearchNode>>();
-
-            if (_nodes.Count == 0)
-                throw new Exception("ElasticSearch hosts is not specified");
-
             _eventLogItemsIndex = configuration.GetValue("ElasticSearch:Index", "");
-            if (_eventLogItemsIndex == string.Empty)
-                throw new Exception("ElasticSearch index name is not specified");
-
             _separation = configuration.GetValue("ElasticSearch:Separation", "H");
             _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries", DEFAULT_MAXIMUM_RETRIES);
             _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", DEFAULT_MAX_RETRY_TIMEOUT_SEC));
+
+            CheckSettings();
+        }
+
+        private void CheckSettings()
+        {
+            if (_nodes.Count == 0)
+                throw new Exception("ElasticSearch hosts is not specified");
+
+            if (_eventLogItemsIndex == string.Empty)
+                throw new Exception("ElasticSearch index name is not specified");
         }
 
         private async Task ConnectAsync(CancellationToken cancellationToken = default)
@@ -153,16 +170,16 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
 
             _client = new ElasticClient(settings);
 
-            _logger.LogInformation($"Trying to connect to {uri} ({_eventLogItemsIndex})");
+            _logger?.LogInformation($"Trying to connect to {uri} ({_eventLogItemsIndex})");
 
             var response = await _client.PingAsync(pd => pd, cancellationToken);
 
             if (!(response.OriginalException is TaskCanceledException))
             {
                 if (!response.IsValid)
-                    _logger.LogWarning($"Failed to connect to {uri} ({_eventLogItemsIndex}): {response.OriginalException.Message}");
+                    _logger?.LogWarning($"Failed to connect to {uri} ({_eventLogItemsIndex}): {response.OriginalException.Message}");
                 else
-                    _logger.LogInformation($"Successfully connected to {uri} ({_eventLogItemsIndex})");
+                    _logger?.LogInformation($"Successfully connected to {uri} ({_eventLogItemsIndex})");
             }
 
             return response.IsValid;
@@ -196,7 +213,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                     if (response.OriginalException is TaskCanceledException)
                         throw response.OriginalException;
 
-                    _logger.LogError($"Failed to get last file's position ({_eventLogItemsIndex}): {response.OriginalException.Message}");
+                    _logger?.LogError($"Failed to get last file's position ({_eventLogItemsIndex}): {response.OriginalException.Message}");
 
                     var currentNodeHost = _currentNode.Host;
 
@@ -262,15 +279,13 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                     if (responseItems.Errors)
                     {
                         foreach (var itemWithError in responseItems.ItemsWithErrors)
-                        {
-                            _logger.LogError($"Failed to index document {itemWithError.Id} in {item.IndexName}: {itemWithError.Error}");
-                        }
+                            _logger?.LogError($"Failed to index document {itemWithError.Id} in {item.IndexName}: {itemWithError.Error}");
 
                         throw new Exception($"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
                     }
                     else
                     {
-                        _logger.LogError($"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
+                        _logger?.LogError($"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
 
                         await ConnectAsync(cancellationToken);
 
@@ -282,14 +297,12 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
                     if (responseItems.Errors)
                     {
                         foreach (var itemWithError in responseItems.ItemsWithErrors)
-                        {
-                            _logger.LogError($"Failed to index document {itemWithError.Id} in {item.IndexName}: {itemWithError.Error}");
-                        }
+                            _logger?.LogError($"Failed to index document {itemWithError.Id} in {item.IndexName}: {itemWithError.Error}");
 
                         throw new Exception($"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
                     }
                     else
-                        _logger.LogDebug($"{item.Entities.Count} items were being written to {item.IndexName}");
+                        _logger?.LogDebug($"{item.Entities.Count} items were being written to {item.IndexName}");
                 }
             }
         }

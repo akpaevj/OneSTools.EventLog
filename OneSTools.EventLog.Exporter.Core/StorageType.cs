@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OneSTools.EventLog.Exporter
+namespace OneSTools.EventLog.Exporter.Core
 {
     public enum StorageType
     {

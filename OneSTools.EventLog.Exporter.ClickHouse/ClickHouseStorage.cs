@@ -20,15 +20,28 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
     {
         private const string TABLE_NAME = "EventLogItems";
         private readonly ILogger<ClickHouseStorage> _logger;
-        private readonly string _connectionString;
+        private string _connectionString;
         private string _databaseName;
         private ClickHouseConnection _connection;
+
+        public ClickHouseStorage(string connectionsString, ILogger<ClickHouseStorage> logger = null)
+        {
+            _logger = logger;
+            _connectionString = connectionsString;
+
+            Init();
+        }
 
         public ClickHouseStorage(ILogger<ClickHouseStorage> logger, IConfiguration configuration)
         {
             _logger = logger;
-
             _connectionString = configuration.GetValue("ClickHouse:ConnectionString", "");
+
+            Init();
+        }
+
+        private void Init()
+        {
             if (_connectionString == string.Empty)
                 throw new Exception("Connection string is not specified");
 
@@ -158,11 +171,11 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to write data to {_databaseName}");
+                _logger?.LogError(ex, $"Failed to write data to {_databaseName}");
                 throw ex;
             }
 
-            _logger.LogDebug($"{entities.Count} items were being written to {_databaseName}");
+            _logger?.LogDebug($"{entities.Count} items were being written to {_databaseName}");
         }
 
         public void Dispose()

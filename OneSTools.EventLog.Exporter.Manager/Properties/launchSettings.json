@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "OneSTools.EventLog.Exporter.Manager": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
