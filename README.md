@@ -9,13 +9,28 @@
 |[OneSTools.EventLog.Exporter.ClickHouse](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ClickHouse)|Базовый пакет, реализующий интерфейс IEventLogStorage для экспорта журнала регистрации 1С в [ClickHouse](https://clickhouse.tech/)||
 |[OneSTools.EventLog.Exporter.ElasticSearch](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.ElasticSearch)|Базовый пакет, реализующий интерфейс IEventLogStorage для экспорта журнала регистрации 1С в [ElasticSearch](https://www.elastic.co/)||
 |[EventLogExporter](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter)|Служба для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/) и [ElasticSearch](https://www.elastic.co/)|![EventLogExporter .NET 5](https://github.com/akpaevj/OneSTools.EventLog/workflows/EventLogExporter%20.NET%205/badge.svg)|
+|[EventLogExportersManager](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Manager)|Менеджер служб экспорта||
 
 ## Get started:
 
 ### Конфигурация:
 Файл конфигурации (appsettings.json) разбит на несколько секций, каждая из которых отвечает за функциональность определенной части приложения.
 
-**Exporter:**
+**Manager:**  
+Секция настроек менеджера служб экспорта.  
+```json
+"Manager": {
+    "ClstFolder": "\\\\s01\\c$\\Program Files\\1cv8\\srvinfo\\reg_1541",
+    "InfoBasePattern": "upp.*"
+  }
+```
+где:  
+*ClstFolder* - Каталог центрального рабочего сервера (reg_*)  
+*InfoBasePattern* - Маска наименований информационных баз, экспорт которых необходимо выполнять, остальные базы будут отброшены.  
+
+**При спользовании менеджера служб изменяются настройки для СУБД. При использовании ClickHouse из строки подключения нужно удалить параметр database, менеджер автоматически создаст базу данных для каждой экспортирумеой информационной базы с именем [IBNAME]-el. При использовании ElasticSearch имя индекса будет определено таким же способом, поэтому заполнять параметр Index не нужно**
+
+**Exporter:**  
 В этой секции размещены общие параметры экспортера, не зависящие от СУБД.
 ```json
 "Exporter": {
@@ -29,8 +44,8 @@
     "LoadArchive": false
   }
 ```
-где:</br>
-1. *StorageType* - тип хранилища журнала регистрации. Может принимать значения:</br>
+где:  
+1. *StorageType* - тип хранилища журнала регистрации. Может принимать значения:  
 *1* - Clickhouse</br>
 *2* - ElasticSearch</br>
 2. *LogFolder* - путь к каталогу журнала регистрации 1С.</br>
