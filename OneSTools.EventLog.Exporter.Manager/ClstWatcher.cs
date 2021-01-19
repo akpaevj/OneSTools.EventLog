@@ -1,11 +1,10 @@
-﻿using System;
+﻿using OneSTools.BracketsFile;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using OneSTools.BracketsFile;
 
 namespace OneSTools.EventLog.Exporter.Manager
 {
@@ -14,7 +13,7 @@ namespace OneSTools.EventLog.Exporter.Manager
         private readonly string _folder;
         private readonly string _path;
         private readonly List<TemplateItem> _templates;
-        private Dictionary<string, (string, string)> _infoBases = new();
+        private Dictionary<string, (string, string)> _infoBases;
         private FileSystemWatcher _clstWatcher;
 
         public delegate void InfoBaseAddedHandler(object sender, ClstEventArgs args);

@@ -6,10 +6,7 @@ using OneSTools.EventLog.Exporter.ClickHouse;
 using OneSTools.EventLog.Exporter.Core;
 using OneSTools.EventLog.Exporter.ElasticSearch;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OneSTools.EventLog.Exporter.Manager
 {
@@ -43,7 +40,7 @@ namespace OneSTools.EventLog.Exporter.Manager
                             services.AddTransient<IEventLogStorage, ElasticSearchStorage>();
                             break;
                         case StorageType.None:
-                            throw new Exception($"You must set StorageType parameter before starting the exporter");
+                            throw new Exception("You must set StorageType parameter before starting the exporter");
                         default:
                             throw new Exception($"{storageType} is not available value of StorageType enum");
                     }

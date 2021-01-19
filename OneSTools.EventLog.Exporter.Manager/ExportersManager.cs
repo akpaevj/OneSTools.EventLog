@@ -1,16 +1,15 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NodaTime;
+using OneSTools.EventLog.Exporter.ClickHouse;
+using OneSTools.EventLog.Exporter.Core;
+using OneSTools.EventLog.Exporter.ElasticSearch;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using OneSTools.EventLog.Exporter.Core;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
-using NodaTime;
-using OneSTools.EventLog.Exporter.ElasticSearch;
-using OneSTools.EventLog.Exporter.ClickHouse;
 
 namespace OneSTools.EventLog.Exporter.Manager
 {
@@ -18,7 +17,7 @@ namespace OneSTools.EventLog.Exporter.Manager
     {
         private readonly ILogger<ExportersManager> _logger;
         private readonly IServiceProvider _serviceProvider;
-        private readonly Dictionary<string, CancellationTokenSource> _runExporters = new Dictionary<string, CancellationTokenSource>();
+        private readonly Dictionary<string, CancellationTokenSource> _runExporters = new();
         private ClstWatcher _clstWatcher;
         // Common settings
         private readonly StorageType _storageType;
@@ -30,7 +29,7 @@ namespace OneSTools.EventLog.Exporter.Manager
         private readonly int _collectedFactor;
         private readonly bool _loadArchive;
         private readonly int _readingTimeout;
-        // Clickhouse
+        // ClickHouse
         private readonly string _connectionString;
         // ELK
         private readonly List<ElasticSearchNode> _nodes;
@@ -56,11 +55,7 @@ namespace OneSTools.EventLog.Exporter.Manager
 
             if (!string.IsNullOrWhiteSpace(timeZone))
             {
-                var zone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(timeZone);
-                if (zone is null)
-                    throw new Exception($"\"{timeZone}\" is unknown time zone");
-
-                _timeZone = zone;
+                _timeZone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(timeZone) ?? throw new Exception($"\"{timeZone}\" is unknown time zone");
             }
 
             CheckSettings();
@@ -83,7 +78,7 @@ namespace OneSTools.EventLog.Exporter.Manager
         private void CheckSettings()
         {
             if (_storageType == StorageType.None)
-                throw new Exception($"StorageType parameter is not specified");
+                throw new Exception("StorageType parameter is not specified");
 
             if (string.IsNullOrEmpty(_clstFolder))
                 throw new Exception("\"ClstFolder\" property is not specified");
@@ -92,10 +87,10 @@ namespace OneSTools.EventLog.Exporter.Manager
                 throw new Exception($"Clst folder ({_clstFolder}) doesn't exist");
 
             if (_writingMaxDop <= 0)
-                throw new Exception($"WritingMaxDegreeOfParallelism cannot be equal to or less than 0");
+                throw new Exception("WritingMaxDegreeOfParallelism cannot be equal to or less than 0");
 
             if (_collectedFactor <= 0)
-                throw new Exception($"CollectedFactor cannot be equal to or less than 0");
+                throw new Exception("CollectedFactor cannot be equal to or less than 0");
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -117,7 +112,7 @@ namespace OneSTools.EventLog.Exporter.Manager
             _clstWatcher.InfoBasesAdded += ClstWatcher_InfoBasesAdded;
             _clstWatcher.InfoBasesDeleted += ClstWatcher_InfoBasesDeleted;
 
-            await Task.Factory.StartNew(stoppingToken.WaitHandle.WaitOne);
+            await Task.Factory.StartNew(stoppingToken.WaitHandle.WaitOne, stoppingToken);
         }
 
         private void ClstWatcher_InfoBasesDeleted(object sender, ClstEventArgs args)

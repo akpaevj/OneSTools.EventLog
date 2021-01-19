@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace OneSTools.EventLog.Exporter.Manager
+﻿namespace OneSTools.EventLog.Exporter.Manager
 {
     public class ClstEventArgs
     {
