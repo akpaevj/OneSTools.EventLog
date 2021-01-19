@@ -6,13 +6,13 @@ using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Logging.EventLog;
 using OneSTools.EventLog;
 using OneSTools.EventLog.Exporter.Core;
-using OneSTools.EventLog.Exporter.ElasticSearch;
+using OneSTools.EventLog.Exporter.Core.ElasticSearch;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using OneSTools.EventLog.Exporter.ClickHouse;
+using OneSTools.EventLog.Exporter.Core.ClickHouse;
 using System.Threading.Tasks;
 
 namespace OneSTools.EventLog.Exporter

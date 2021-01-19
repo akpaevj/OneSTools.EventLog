@@ -29,8 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OneSTools.EventLog.Exporter.ClickHouse\OneSTools.EventLog.Exporter.ClickHouse.csproj" />
-    <ProjectReference Include="..\OneSTools.EventLog.Exporter.ElasticSearch\OneSTools.EventLog.Exporter.ElasticSearch.csproj" />
+    <ProjectReference Include="..\OneSTools.EventLog.Exporter.Core\OneSTools.EventLog.Exporter.Core.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

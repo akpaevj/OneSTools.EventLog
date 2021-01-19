@@ -1,14 +1,11 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using OneSTools.EventLog;
 using OneSTools.EventLog.Exporter.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OneSTools.EventLog.Exporter.Core
+namespace OneSTools.EventLog.Exporter
 {
     public class EventLogExporterService : BackgroundService
     {

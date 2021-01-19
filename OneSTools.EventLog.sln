@@ -10,13 +10,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSTools.EventLog.Exporter
 		{0A35F7ED-8BF9-464B-BF77-2015E8EBA815} = {0A35F7ED-8BF9-464B-BF77-2015E8EBA815}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSTools.EventLog.Exporter.ClickHouse", "OneSTools.EventLog.Exporter.ClickHouse\OneSTools.EventLog.Exporter.ClickHouse.csproj", "{C32720AE-77F6-48C9-B04E-D7978A5BAF71}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSTools.EventLog.Exporter", "OneSTools.EventLog.Exporter\OneSTools.EventLog.Exporter.csproj", "{3268B883-CF2B-44A3-8C20-73A633B1831C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSTools.EventLog.Exporter.ElasticSearch", "OneSTools.EventLog.Exporter.ElasticSearch\OneSTools.EventLog.Exporter.ElasticSearch.csproj", "{F7140E50-3EC7-4AA7-9774-52101E47CA51}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneSTools.EventLog.Exporter.Manager", "OneSTools.EventLog.Exporter.Manager\OneSTools.EventLog.Exporter.Manager.csproj", "{853EB61D-AF7C-4105-A917-7B6195DB4843}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSTools.EventLog.Exporter.Manager", "OneSTools.EventLog.Exporter.Manager\OneSTools.EventLog.Exporter.Manager.csproj", "{853EB61D-AF7C-4105-A917-7B6195DB4843}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,18 +28,10 @@ Global
 		{52D856AB-3545-43E2-AA6A-9EF2105A3049}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52D856AB-3545-43E2-AA6A-9EF2105A3049}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52D856AB-3545-43E2-AA6A-9EF2105A3049}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C32720AE-77F6-48C9-B04E-D7978A5BAF71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C32720AE-77F6-48C9-B04E-D7978A5BAF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C32720AE-77F6-48C9-B04E-D7978A5BAF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C32720AE-77F6-48C9-B04E-D7978A5BAF71}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3268B883-CF2B-44A3-8C20-73A633B1831C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3268B883-CF2B-44A3-8C20-73A633B1831C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3268B883-CF2B-44A3-8C20-73A633B1831C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3268B883-CF2B-44A3-8C20-73A633B1831C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7140E50-3EC7-4AA7-9774-52101E47CA51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7140E50-3EC7-4AA7-9774-52101E47CA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7140E50-3EC7-4AA7-9774-52101E47CA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7140E50-3EC7-4AA7-9774-52101E47CA51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{853EB61D-AF7C-4105-A917-7B6195DB4843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{853EB61D-AF7C-4105-A917-7B6195DB4843}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{853EB61D-AF7C-4105-A917-7B6195DB4843}.Release|Any CPU.ActiveCfg = Release|Any CPU

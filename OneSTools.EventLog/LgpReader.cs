@@ -79,7 +79,7 @@ namespace OneSTools.EventLog
             }
         }
 
-        private (StringBuilder Data, long EndPosition) ReadNextEventLogItemData(CancellationToken cancellationToken = default)
+        private (StringBuilder Data, long EndPosition) ReadNextEventLogItemData()
         {
             StringBuilder data = _bracketsReader.NextNodeAsStringBuilder();
 
@@ -88,7 +88,7 @@ namespace OneSTools.EventLog
 
         private EventLogItem ReadEventLogItemData(CancellationToken cancellationToken = default)
         {
-            (StringBuilder data, long endPosition) = ReadNextEventLogItemData(cancellationToken);
+            (StringBuilder data, long endPosition) = ReadNextEventLogItemData();
 
             if (data.Length == 0)
                 return null;

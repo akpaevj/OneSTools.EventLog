@@ -2,9 +2,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NodaTime;
-using OneSTools.EventLog.Exporter.ClickHouse;
+using OneSTools.EventLog.Exporter.Core.ClickHouse;
 using OneSTools.EventLog.Exporter.Core;
-using OneSTools.EventLog.Exporter.ElasticSearch;
+using OneSTools.EventLog.Exporter.Core.ElasticSearch;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,7 +31,7 @@ namespace OneSTools.EventLog.Exporter.Manager
         private readonly int _readingTimeout;
         // ClickHouse
         private readonly string _connectionString;
-        // ELK
+        // ElasticSearch
         private readonly List<ElasticSearchNode> _nodes;
         private readonly string _separation;
         private readonly int _maximumRetries;
@@ -77,9 +77,6 @@ namespace OneSTools.EventLog.Exporter.Manager
 
         private void CheckSettings()
         {
-            if (_storageType == StorageType.None)
-                throw new Exception("StorageType parameter is not specified");
-
             if (string.IsNullOrEmpty(_clstFolder))
                 throw new Exception("\"ClstFolder\" property is not specified");
 
@@ -186,30 +183,35 @@ namespace OneSTools.EventLog.Exporter.Manager
 
         private IEventLogStorage GetStorage(string dataBaseName)
         {
-            if (_storageType == StorageType.ClickHouse)
+            switch (_storageType)
             {
-                var logger = (ILogger<ClickHouseStorage>)_serviceProvider.GetService(typeof(ILogger<ClickHouseStorage>));
-                var connectionString = $"{_connectionString}Database={dataBaseName};";
-
-                return new ClickHouseStorage(connectionString, logger);
-            }
-            else if (_storageType == StorageType.ElasticSearch)
-            {
-                var logger = (ILogger<ElasticSearchStorage>)_serviceProvider.GetService(typeof(ILogger<ElasticSearchStorage>));
-
-                var settings = new ElasticSearchStorageSettings
+                case StorageType.ClickHouse:
                 {
-                    Index = dataBaseName,
-                    Separation = _separation,
-                    MaximumRetries = _maximumRetries,
-                    MaxRetryTimeout = _maxRetryTimeout
-                };
-                settings.Nodes.AddRange(_nodes);
+                    var logger = (ILogger<ClickHouseStorage>)_serviceProvider.GetService(typeof(ILogger<ClickHouseStorage>));
+                    var connectionString = $"{_connectionString}Database={dataBaseName};";
 
-                return new ElasticSearchStorage(settings, logger);
+                    return new ClickHouseStorage(connectionString, logger);
+                }
+                case StorageType.ElasticSearch:
+                {
+                    var logger = (ILogger<ElasticSearchStorage>)_serviceProvider.GetService(typeof(ILogger<ElasticSearchStorage>));
+
+                    var settings = new ElasticSearchStorageSettings
+                    {
+                        Index = dataBaseName,
+                        Separation = _separation,
+                        MaximumRetries = _maximumRetries,
+                        MaxRetryTimeout = _maxRetryTimeout
+                    };
+                    settings.Nodes.AddRange(_nodes);
+
+                    return new ElasticSearchStorage(settings, logger);
+                }
+                case StorageType.None:
+                    throw new Exception("StorageType parameter is not specified");
+                default:
+                    throw new Exception("Try to get a storage for unknown StorageType value");
             }
-            else
-                throw new Exception("Try to get a storage for unknown StorageType value");
         }
     }
 }
