@@ -31,7 +31,7 @@ namespace OneSTools.EventLog.Exporter.Core
         private readonly string _logFolder;
         private readonly int _portion;
         private readonly DateTimeZone _timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
-        private readonly int _writingMaxdop;
+        private readonly int _writingMaxDop;
         private readonly int _collectedFactor;
         private readonly bool _loadArchive;
         private readonly int _readingTimeout;
@@ -43,7 +43,7 @@ namespace OneSTools.EventLog.Exporter.Core
         private ActionBlock<EventLogItem[]> _writeBlock;
         private BatchBlock<EventLogItem> _batchBlock;
 
-        private bool disposedValue;
+        private bool _disposedValue;
 
         public EventLogExporter(EventLogExporterSettings settings, IEventLogStorage storage, ILogger<EventLogExporter> logger = null)
         {
@@ -52,7 +52,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
             _logFolder = settings.LogFolder;
             _portion = settings.Portion;
-            _writingMaxdop = settings.WritingMaxDop;
+            _writingMaxDop = settings.WritingMaxDop;
             _collectedFactor = settings.CollectedFactor;
             _loadArchive = settings.LoadArchive;
             _timeZone = settings.TimeZone;
@@ -68,7 +68,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
             _logFolder = configuration.GetValue("Exporter:LogFolder", "");
             _portion = configuration.GetValue("Exporter:Portion", 10000);
-            _writingMaxdop = configuration.GetValue("Exporter:WritingMaxDegreeOfParallelism", 1);
+            _writingMaxDop = configuration.GetValue("Exporter:WritingMaxDegreeOfParallelism", 1);
             _collectedFactor = configuration.GetValue("Exporter:CollectedFactor", 2);
             _loadArchive = configuration.GetValue("Exporter:LoadArchive", false);
             _readingTimeout = configuration.GetValue("Exporter:ReadingTimeout", 1);
@@ -78,10 +78,8 @@ namespace OneSTools.EventLog.Exporter.Core
             if (!string.IsNullOrWhiteSpace(timeZone))
             {
                 var zone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(timeZone);
-                if (zone is null)
-                    throw new Exception($"\"{timeZone}\" is unknown time zone");
 
-                _timeZone = zone;
+                _timeZone = zone ?? throw new Exception($"\"{timeZone}\" is unknown time zone");
             }
 
             CheckSettings();
@@ -95,7 +93,7 @@ namespace OneSTools.EventLog.Exporter.Core
             if (!Directory.Exists(_logFolder))
                 throw new Exception($"Event log folder ({_logFolder}) doesn't exist");
 
-            if (_writingMaxdop <= 0)
+            if (_writingMaxDop <= 0)
                 throw new Exception($"WritingMaxDegreeOfParallelism cannot be equal to or less than 0");
 
             if (_collectedFactor <= 0)
@@ -132,15 +130,15 @@ namespace OneSTools.EventLog.Exporter.Core
                     {
                         forceSending = true;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         _batchBlock.Complete();
-                        throw ex;
+                        throw;
                     }
 
                     if (item != null)
                     {
-                        await SendAsync(_batchBlock, item);
+                        await SendAsync(_batchBlock, item, cancellationToken);
 
                         if (!string.IsNullOrEmpty(_eventLogReader.LgpFileName) && _currentLgpFile != _eventLogReader.LgpFileName)
                         {
@@ -157,10 +155,6 @@ namespace OneSTools.EventLog.Exporter.Core
                 }
             }
             catch (TaskCanceledException) { }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
         private void InitializeDataflow(CancellationToken cancellationToken = default)
@@ -169,7 +163,7 @@ namespace OneSTools.EventLog.Exporter.Core
             {
                 CancellationToken = cancellationToken,
                 BoundedCapacity = _collectedFactor,
-                MaxDegreeOfParallelism = _writingMaxdop
+                MaxDegreeOfParallelism = _writingMaxDop
             };
 
             var batchBlockSettings = new GroupingDataflowBlockOptions()
@@ -231,14 +225,14 @@ namespace OneSTools.EventLog.Exporter.Core
         {
             while (!stoppingToken.IsCancellationRequested && !nextBlock.Completion.IsFaulted)
             {
-                if (await nextBlock.SendAsync(item))
+                if (await nextBlock.SendAsync(item, stoppingToken))
                     break;
             }
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
@@ -247,7 +241,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
                 _eventLogReader?.Dispose();
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 

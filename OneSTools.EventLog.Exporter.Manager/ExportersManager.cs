@@ -70,8 +70,8 @@ namespace OneSTools.EventLog.Exporter.Manager
             {
                 _nodes = configuration.GetSection("ElasticSearch:Nodes").Get<List<ElasticSearchNode>>();
                 _separation = configuration.GetValue("ElasticSearch:Separation", "H");
-                _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries", ElasticSearchStorage.DEFAULT_MAXIMUM_RETRIES);
-                _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", ElasticSearchStorage.DEFAULT_MAX_RETRY_TIMEOUT_SEC));
+                _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries", ElasticSearchStorage.DefaultMaximumRetries);
+                _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", ElasticSearchStorage.DefaultMaxRetryTimeoutSec));
             }
         }
 

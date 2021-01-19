@@ -19,7 +19,7 @@ namespace OneSTools.EventLog
         private LgfReader _lgfReader;
         private LgpReader _lgpReader;
         private FileSystemWatcher _lgpFilesWatcher;
-        private bool disposedValue;
+        private bool _disposedValue;
 
         /// <summary>
         /// Current reader's "lgp" file name
@@ -68,10 +68,6 @@ namespace OneSTools.EventLog
                     item = null;
                     _lgpReader = null;
                     break;
-                }
-                catch(Exception ex)
-                {
-                    throw ex;
                 }
 
                 if (item == null)
@@ -170,7 +166,7 @@ namespace OneSTools.EventLog
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
@@ -186,7 +182,7 @@ namespace OneSTools.EventLog
                 _lgpReader?.Dispose();
                 _lgpReader = null;
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 

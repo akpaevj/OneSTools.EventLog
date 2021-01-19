@@ -16,9 +16,9 @@ using OneSTools.EventLog.Exporter.Core;
 
 namespace OneSTools.EventLog.Exporter.ClickHouse
 {
-    public class ClickHouseStorage : IEventLogStorage, IDisposable
+    public class ClickHouseStorage : IEventLogStorage
     {
-        private const string TABLE_NAME = "EventLogItems";
+        private const string TableName = "EventLogItems";
         private readonly ILogger<ClickHouseStorage> _logger;
         private string _connectionString;
         private string _databaseName;
@@ -67,14 +67,14 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
         {
             var commandDbText = $@"CREATE DATABASE IF NOT EXISTS {_databaseName}";
 
-            using var cmdDb = _connection.CreateCommand();
+            await using var cmdDb = _connection.CreateCommand();
             cmdDb.CommandText = commandDbText;
             await cmdDb.ExecuteNonQueryAsync(cancellationToken);
 
             await _connection.ChangeDatabaseAsync(_databaseName, cancellationToken);
 
             var commandText =
-                $@"CREATE TABLE IF NOT EXISTS {TABLE_NAME}
+                $@"CREATE TABLE IF NOT EXISTS {TableName}
                 (
                     FileName LowCardinality(String),
                     EndPosition Int64 Codec(DoubleDelta, LZ4),
@@ -106,7 +106,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
                 ORDER BY (DateTime, EndPosition)
                 SETTINGS index_granularity = 8192;";
 
-            using var cmd = _connection.CreateCommand();
+            await using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
             await cmd.ExecuteNonQueryAsync(cancellationToken);
         }
@@ -115,14 +115,14 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
         {
             await CreateConnectionAsync(cancellationToken);
 
-            var commandText = $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition, Id FROM {TABLE_NAME} ORDER BY Id DESC";
+            var commandText = $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition, Id FROM {TableName} ORDER BY Id DESC";
 
-            using var cmd = _connection.CreateCommand();
+            await using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
 
-            using var reader = await cmd.ExecuteReaderAsync(cancellationToken);
+            await using var reader = await cmd.ExecuteReaderAsync(cancellationToken);
 
-            if (await reader.ReadAsync())
+            if (await reader.ReadAsync(cancellationToken))
                 return new EventLogPosition(reader.GetString(0), reader.GetInt64(1), reader.GetInt64(2), reader.GetInt64(3));
             else
                 return null;
@@ -130,11 +130,11 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
 
         public async Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
         {
-            await CreateConnectionAsync();
+            await CreateConnectionAsync(cancellationToken);
 
             using var copy = new ClickHouseBulkCopy(_connection)
             {
-                DestinationTableName = TABLE_NAME,
+                DestinationTableName = TableName,
                 BatchSize = entities.Count
             };
 
@@ -172,7 +172,7 @@ namespace OneSTools.EventLog.Exporter.ClickHouse
             catch (Exception ex)
             {
                 _logger?.LogError(ex, $"Failed to write data to {_databaseName}");
-                throw ex;
+                throw;
             }
 
             _logger?.LogDebug($"{entities.Count} items were being written to {_databaseName}");

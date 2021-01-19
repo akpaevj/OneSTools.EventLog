@@ -2,7 +2,7 @@
 
 namespace OneSTools.EventLog.Exporter.Core
 {
-    public static class ILoggerBuilderExtensions
+    public static class LoggerBuilderExtensions
     {
         public static ILoggingBuilder AddFile(this ILoggingBuilder loggingBuilder, string path)
         {

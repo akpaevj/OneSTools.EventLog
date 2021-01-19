@@ -5,7 +5,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
 {
     public class ElasticSearchNode
     {
-        public string Host { get; set; }
+        public string Host { get; }
         public AuthenticationType AuthenticationType { get; set; }
         public string Id { get; set; }
         public string ApiKey { get; set; }

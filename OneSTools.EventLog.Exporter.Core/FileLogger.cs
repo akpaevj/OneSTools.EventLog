@@ -8,14 +8,14 @@ namespace OneSTools.EventLog.Exporter.Core
 {
     public class FileLogger : ILogger
     {
-        private static object _locker = new object();
-        private string _path;
-        private string _categoryName;
+        private static readonly object Locker = new object();
+        private readonly string _path;
+        private readonly string _categoryName;
 
-        public FileLogger(string path, string categotyName)
+        public FileLogger(string path, string categoryName)
         {
             _path = path;
-            _categoryName = categotyName;
+            _categoryName = categoryName;
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -30,7 +30,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
             var message = $"{DateTime.Now:yyyy-MM-hh HH:mm:ss.fff} | {levelName} | {_categoryName}[{eventId.Id}]\n\t{ formatter(state, exception)}";
 
-            lock (_locker)
+            lock (Locker)
                 File.AppendAllText(_path, message + Environment.NewLine);
         }
     }

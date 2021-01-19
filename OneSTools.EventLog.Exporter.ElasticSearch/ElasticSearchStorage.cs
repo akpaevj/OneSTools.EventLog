@@ -15,10 +15,10 @@ using System.Globalization;
 
 namespace OneSTools.EventLog.Exporter.ElasticSearch
 {
-    public class ElasticSearchStorage : IEventLogStorage, IDisposable
+    public class ElasticSearchStorage : IEventLogStorage
     {
-        public static int DEFAULT_MAXIMUM_RETRIES = 2;
-        public static int DEFAULT_MAX_RETRY_TIMEOUT_SEC = 30;
+        public static int DefaultMaximumRetries = 2;
+        public static int DefaultMaxRetryTimeoutSec = 30;
 
         private readonly ILogger<ElasticSearchStorage> _logger;
         private readonly List<ElasticSearchNode> _nodes = new List<ElasticSearchNode>();
@@ -49,8 +49,8 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
             _nodes = configuration.GetSection("ElasticSearch:Nodes").Get<List<ElasticSearchNode>>();
             _eventLogItemsIndex = configuration.GetValue("ElasticSearch:Index", "");
             _separation = configuration.GetValue("ElasticSearch:Separation", "H");
-            _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries", DEFAULT_MAXIMUM_RETRIES);
-            _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", DEFAULT_MAX_RETRY_TIMEOUT_SEC));
+            _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries", DefaultMaximumRetries);
+            _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", DefaultMaxRetryTimeoutSec));
 
             CheckSettings();
         }
@@ -143,10 +143,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
             {
                 var currentIndex = _nodes.IndexOf(_currentNode);
 
-                if (currentIndex == _nodes.Count - 1)
-                    _currentNode = _nodes[0];
-                else
-                    _currentNode = _nodes[currentIndex + 1];
+                _currentNode = currentIndex == _nodes.Count - 1 ? _nodes[0] : _nodes[currentIndex + 1];
             }
 
             var uri = new Uri(_currentNode.Host);
@@ -221,7 +218,7 @@ namespace OneSTools.EventLog.Exporter.ElasticSearch
 
                     // If it's the same node then wait while MaxRetryTimeout occurs, otherwise it'll be a too often request's loop
                     if (_currentNode.Host.Equals(currentNodeHost))
-                        await Task.Delay(_maxRetryTimeout);
+                        await Task.Delay(_maxRetryTimeout, cancellationToken);
                 }
             }
         }

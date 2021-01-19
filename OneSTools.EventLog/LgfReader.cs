@@ -11,20 +11,20 @@ namespace OneSTools.EventLog
 {
     internal class LgfReader : IDisposable
     {
-        private FileStream fileStream;
-        private BracketsListReader bracketsReader;
+        private FileStream _fileStream;
+        private BracketsListReader _bracketsReader;
 
-        public string LgfPath { get; private set; }
+        public string LgfPath { get; }
         /// <summary>
         /// Key tuple - first value is an object type, second value is an object number in the array
         /// </summary>
-        public Dictionary<(ObjectType, int), string> _objects = new Dictionary<(ObjectType, int), string>();
+        private Dictionary<(ObjectType, int), string> _objects = new Dictionary<(ObjectType, int), string>();
         /// <summary>
         /// Key tuple - first value is an object type, second value is an object number in the array
         /// Value tuple - first value is an object value, second value is a guid of the object value
         /// </summary>
-        public Dictionary<(ObjectType, int), (string, string)> _referencedObjects = new Dictionary<(ObjectType, int), (string, string)>();
-        private bool disposedValue;
+        private Dictionary<(ObjectType, int), (string, string)> _referencedObjects = new Dictionary<(ObjectType, int), (string, string)>();
+        private bool _disposedValue;
 
         public LgfReader(string lgfPath)
         {
@@ -37,9 +37,9 @@ namespace OneSTools.EventLog
 
             bool stop = false;
 
-            while (!stop && !bracketsReader.EndOfStream && !cancellationToken.IsCancellationRequested)
+            while (!stop && !_bracketsReader.EndOfStream && !cancellationToken.IsCancellationRequested)
             {
-                var itemData = bracketsReader.NextNode();
+                var itemData = _bracketsReader.NextNode();
 
                 var ot = (ObjectType)(int)itemData[0];
 
@@ -126,13 +126,13 @@ namespace OneSTools.EventLog
 
         private void InitializeStreams()
         {
-            if (fileStream is null)
+            if (_fileStream is null)
             {
                 if (!File.Exists(LgfPath))
                     throw new Exception("Cannot find \"1Cv8.lgf\"");
 
-                fileStream = new FileStream(LgfPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-                bracketsReader = new BracketsListReader(fileStream);
+                _fileStream = new FileStream(LgfPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                _bracketsReader = new BracketsListReader(_fileStream);
             }
         }
 
@@ -145,12 +145,12 @@ namespace OneSTools.EventLog
         {
             InitializeStreams();
 
-            return bracketsReader.Position;
+            return _bracketsReader.Position;
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
@@ -158,12 +158,12 @@ namespace OneSTools.EventLog
                     _referencedObjects = null;
                 }
 
-                bracketsReader?.Dispose();
-                bracketsReader = null;
-                fileStream?.Dispose();
-                fileStream = null;
+                _bracketsReader?.Dispose();
+                _bracketsReader = null;
+                _fileStream?.Dispose();
+                _fileStream = null;
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 
@@ -174,7 +174,6 @@ namespace OneSTools.EventLog
 
         public void Dispose()
         {
-            // Не изменяйте этот код. Разместите код очистки в методе "Dispose(bool disposing)".
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }

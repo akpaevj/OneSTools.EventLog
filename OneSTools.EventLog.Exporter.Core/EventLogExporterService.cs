@@ -12,9 +12,9 @@ namespace OneSTools.EventLog.Exporter.Core
 {
     public class EventLogExporterService : BackgroundService
     {
-        readonly ILogger<EventLogExporterService> _logger;
+        private readonly ILogger<EventLogExporterService> _logger;
         private readonly EventLogExporter _exporter;
-        private bool disposedValue;
+        private bool _disposedValue;
 
         public EventLogExporterService(ILogger<EventLogExporterService> logger, EventLogExporter exporter)
         {
@@ -37,7 +37,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
@@ -46,7 +46,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
                 _exporter?.Dispose();
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 

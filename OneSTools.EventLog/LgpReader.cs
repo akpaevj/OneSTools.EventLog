@@ -19,13 +19,13 @@ namespace OneSTools.EventLog
     internal class LgpReader: IDisposable
     {
         private LgfReader _lgfReader;
-        private FileStream fileStream;
-        private BracketsListReader bracketsReader;
+        private FileStream _fileStream;
+        private BracketsListReader _bracketsReader;
         private FileSystemWatcher _lgpFileWatcher;
-        private bool disposedValue;
+        private bool _disposedValue;
         private readonly DateTimeZone _timeZone;
 
-        public string LgpPath { get; private set; }
+        public string LgpPath { get; }
         public string LgpFileName => Path.GetFileName(LgpPath);
 
         public LgpReader(string lgpPath, DateTimeZone timeZone, LgfReader lgfReader)
@@ -37,7 +37,7 @@ namespace OneSTools.EventLog
 
         public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken = default)
         {
-            if (disposedValue)
+            if (_disposedValue)
                 throw new ObjectDisposedException(nameof(LgpReader));
 
             InitializeStreams();
@@ -49,25 +49,25 @@ namespace OneSTools.EventLog
         {
             InitializeStreams();
 
-            bracketsReader.Position = position;
+            _bracketsReader.Position = position;
         }
 
         private void InitializeStreams()
         {
-            if (fileStream is null)
+            if (_fileStream is null)
             {
                 if (!File.Exists(LgpPath))
                     throw new Exception($"Cannot find lgp file by path {LgpPath}");
 
-                _lgpFileWatcher = new FileSystemWatcher(Path.GetDirectoryName(LgpPath), "*.lgp")
+                _lgpFileWatcher = new FileSystemWatcher(Path.GetDirectoryName(LgpPath)!, "*.lgp")
                 {
                     NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Attributes
                 };
                 _lgpFileWatcher.Deleted += LgpFileWatcher_Deleted;
                 _lgpFileWatcher.EnableRaisingEvents = true;
 
-                fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-                bracketsReader = new BracketsListReader(fileStream);
+                _fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                _bracketsReader = new BracketsListReader(_fileStream);
             }
         }
 
@@ -81,19 +81,19 @@ namespace OneSTools.EventLog
 
         private (StringBuilder Data, long EndPosition) ReadNextEventLogItemData(CancellationToken cancellationToken = default)
         {
-            StringBuilder data = bracketsReader.NextNodeAsStringBuilder();
+            StringBuilder data = _bracketsReader.NextNodeAsStringBuilder();
 
-            return (data, bracketsReader.Position);
+            return (data, _bracketsReader.Position);
         }
 
         private EventLogItem ReadEventLogItemData(CancellationToken cancellationToken = default)
         {
-            (StringBuilder Data, long EndPosition) = ReadNextEventLogItemData(cancellationToken);
+            (StringBuilder data, long endPosition) = ReadNextEventLogItemData(cancellationToken);
 
-            if (Data.Length == 0)
+            if (data.Length == 0)
                 return null;
 
-            return ParseEventLogItemData(Data, EndPosition, cancellationToken);
+            return ParseEventLogItemData(data, endPosition, cancellationToken);
         }
 
         private EventLogItem ParseEventLogItemData(StringBuilder eventLogItemData, long endPosition, CancellationToken cancellationToken = default)
@@ -102,55 +102,55 @@ namespace OneSTools.EventLog
 
             var eventLogItem = new EventLogItem
             {
-                DateTime = _timeZone.ToUtc(DateTime.ParseExact((string)parsedData[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture)),
-                TransactionStatus = GetTransactionPresentation((string)parsedData[1]),
+                DateTime = _timeZone.ToUtc(DateTime.ParseExact(parsedData[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture)),
+                TransactionStatus = GetTransactionPresentation(parsedData[1]),
                 FileName = LgpFileName,
                 EndPosition = endPosition,
                 LgfEndPosition = _lgfReader.GetPosition()
             };
 
             var transactionData = parsedData[2];
-            eventLogItem.TransactionNumber = Convert.ToInt64((string)transactionData[1], 16);
+            eventLogItem.TransactionNumber = Convert.ToInt64(transactionData[1], 16);
 
-            var transactionDate = new DateTime().AddSeconds(Convert.ToInt64((string)transactionData[0], 16) / 10000);
+            var transactionDate = new DateTime().AddSeconds(Convert.ToInt64(transactionData[0], 16) / 10000);
             eventLogItem.TransactionDateTime = transactionDate == DateTime.MinValue ? transactionDate : _timeZone.ToUtc(transactionDate);
 
-            var (Value, Uuid) = _lgfReader.GetReferencedObjectValue(ObjectType.Users, (int)parsedData[3], cancellationToken);
-            eventLogItem.UserUuid = Uuid;
-            eventLogItem.User = Value;
+            var (value, uuid) = _lgfReader.GetReferencedObjectValue(ObjectType.Users, parsedData[3], cancellationToken);
+            eventLogItem.UserUuid = uuid;
+            eventLogItem.User = value;
 
-            eventLogItem.Computer = _lgfReader.GetObjectValue(ObjectType.Computers, (int)parsedData[4], cancellationToken);
+            eventLogItem.Computer = _lgfReader.GetObjectValue(ObjectType.Computers, parsedData[4], cancellationToken);
 
-            var application = _lgfReader.GetObjectValue(ObjectType.Applications, (int)parsedData[5], cancellationToken);
+            var application = _lgfReader.GetObjectValue(ObjectType.Applications, parsedData[5], cancellationToken);
             eventLogItem.Application = GetApplicationPresentation(application);
 
-            eventLogItem.Connection = (int)parsedData[6];
+            eventLogItem.Connection = parsedData[6];
 
-            var ev = _lgfReader.GetObjectValue(ObjectType.Events, (int)parsedData[7], cancellationToken);
+            var ev = _lgfReader.GetObjectValue(ObjectType.Events, parsedData[7], cancellationToken);
             eventLogItem.Event = GetEventPresentation(ev);
 
             var severity = (string)parsedData[8];
             eventLogItem.Severity = GetSeverityPresentation(severity);
 
-            eventLogItem.Comment = (string)parsedData[9];
+            eventLogItem.Comment = parsedData[9];
 
-            (Value, Uuid) = _lgfReader.GetReferencedObjectValue(ObjectType.Metadata, (int)parsedData[10], cancellationToken);
-            eventLogItem.MetadataUuid = Uuid;
-            eventLogItem.Metadata = Value;
+            (value, uuid) = _lgfReader.GetReferencedObjectValue(ObjectType.Metadata, parsedData[10], cancellationToken);
+            eventLogItem.MetadataUuid = uuid;
+            eventLogItem.Metadata = value;
 
             eventLogItem.Data = GetData(parsedData[11]).Trim();
-            eventLogItem.DataPresentation = (string)parsedData[12];
-            eventLogItem.Server = _lgfReader.GetObjectValue(ObjectType.Servers, (int)parsedData[13], cancellationToken);
+            eventLogItem.DataPresentation = parsedData[12];
+            eventLogItem.Server = _lgfReader.GetObjectValue(ObjectType.Servers, parsedData[13], cancellationToken);
 
-            var mainPort = _lgfReader.GetObjectValue(ObjectType.MainPorts, (int)parsedData[14], cancellationToken);
+            var mainPort = _lgfReader.GetObjectValue(ObjectType.MainPorts, parsedData[14], cancellationToken);
             if (mainPort != "")
                 eventLogItem.MainPort = int.Parse(mainPort);
 
-            var addPort = _lgfReader.GetObjectValue(ObjectType.AddPorts, (int)parsedData[15], cancellationToken);
+            var addPort = _lgfReader.GetObjectValue(ObjectType.AddPorts, parsedData[15], cancellationToken);
             if (addPort != "")
                 eventLogItem.AddPort = int.Parse(addPort);
 
-            eventLogItem.Session = (int)parsedData[16];
+            eventLogItem.Session = parsedData[16];
 
             return eventLogItem;
         }
@@ -336,23 +336,23 @@ namespace OneSTools.EventLog
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
                     // TODO: освободить управляемое состояние (управляемые объекты)
                 }
 
-                bracketsReader?.Dispose();
-                bracketsReader = null;
-                fileStream = null;
+                _bracketsReader?.Dispose();
+                _bracketsReader = null;
+                _fileStream = null;
 
                 _lgpFileWatcher?.Dispose();
                 _lgpFileWatcher = null;
 
                 _lgfReader = null;
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 
