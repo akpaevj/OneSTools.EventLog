@@ -23,10 +23,10 @@ namespace OneSTools.EventLog.Exporter.Manager
         // Common settings
         private readonly StorageType _storageType;
         private readonly string _clstFolder;
-        private readonly string _infobasePattern;
+        private readonly List<TemplateItem> _templates;
         private readonly int _portion;
         private readonly DateTimeZone _timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
-        private readonly int _writingMaxdop;
+        private readonly int _writingMaxDop;
         private readonly int _collectedFactor;
         private readonly bool _loadArchive;
         private readonly int _readingTimeout;
@@ -44,10 +44,10 @@ namespace OneSTools.EventLog.Exporter.Manager
             _serviceProvider = serviceProvider;
 
             _clstFolder = configuration.GetValue("Manager:ClstFolder", "");
-            _infobasePattern = configuration.GetValue("Manager:InfoBasePattern", "");
+            _templates = configuration.GetSection("Manager:Templates").Get<List<TemplateItem>>();
             _storageType = configuration.GetValue("Exporter:StorageType", StorageType.None);
             _portion = configuration.GetValue("Exporter:Portion", 10000);
-            _writingMaxdop = configuration.GetValue("Exporter:WritingMaxDegreeOfParallelism", 1);
+            _writingMaxDop = configuration.GetValue("Exporter:WritingMaxDegreeOfParallelism", 1);
             _collectedFactor = configuration.GetValue("Exporter:CollectedFactor", 2);
             _loadArchive = configuration.GetValue("Exporter:LoadArchive", false);
             _readingTimeout = configuration.GetValue("Exporter:ReadingTimeout", 1);
@@ -91,7 +91,7 @@ namespace OneSTools.EventLog.Exporter.Manager
             if (!Directory.Exists(_clstFolder))
                 throw new Exception($"Clst folder ({_clstFolder}) doesn't exist");
 
-            if (_writingMaxdop <= 0)
+            if (_writingMaxDop <= 0)
                 throw new Exception($"WritingMaxDegreeOfParallelism cannot be equal to or less than 0");
 
             if (_collectedFactor <= 0)
@@ -102,14 +102,17 @@ namespace OneSTools.EventLog.Exporter.Manager
         {
             stoppingToken.Register(() =>
             {
-                foreach (var ib in _runExporters)
-                    ib.Value.Cancel();
+                lock (_runExporters)
+                {
+                    foreach (var ib in _runExporters)
+                        ib.Value.Cancel();
+                }
             });
 
-            _clstWatcher = new ClstWatcher(_clstFolder, _infobasePattern);
+            _clstWatcher = new ClstWatcher(_clstFolder, _templates);
             
-            foreach (var infobase in _clstWatcher.InfoBases)
-                StartExporter(infobase.Key, infobase.Value);
+            foreach (var (key, (name, dataBaseName)) in _clstWatcher.InfoBases)
+                StartExporter(key, name, dataBaseName);
 
             _clstWatcher.InfoBasesAdded += ClstWatcher_InfoBasesAdded;
             _clstWatcher.InfoBasesDeleted += ClstWatcher_InfoBasesDeleted;
@@ -118,12 +121,12 @@ namespace OneSTools.EventLog.Exporter.Manager
         }
 
         private void ClstWatcher_InfoBasesDeleted(object sender, ClstEventArgs args)
-            => StartExporter(args.Id, args.Name);
+            => StartExporter(args.Id, args.Name, args.DataBaseName);
 
         private void ClstWatcher_InfoBasesAdded(object sender, ClstEventArgs args)
             => StopExporter(args.Id, args.Name);
 
-        private void StartExporter(string id, string name)
+        private void StartExporter(string id, string name, string dataBaseName)
         {
             var logFolder = Path.Combine(_clstFolder, id);
             logFolder = Path.Combine(logFolder, "1Cv8Log");
@@ -140,7 +143,7 @@ namespace OneSTools.EventLog.Exporter.Manager
                     {
                         var cts = new CancellationTokenSource();
                         var logger = (ILogger<EventLogExporter>)_serviceProvider.GetService(typeof(ILogger<EventLogExporter>));
-                        var storage = GetStorage(name);
+                        var storage = GetStorage(dataBaseName);
 
                         var settings = new EventLogExporterSettings
                         {
@@ -150,7 +153,7 @@ namespace OneSTools.EventLog.Exporter.Manager
                             Portion = _portion,
                             ReadingTimeout = _readingTimeout,
                             TimeZone = _timeZone,
-                            WritingMaxDop = _writingMaxdop
+                            WritingMaxDop = _writingMaxDop
                         };
 
                         var exporter = new EventLogExporter(settings, storage, logger);
@@ -165,15 +168,15 @@ namespace OneSTools.EventLog.Exporter.Manager
                             {
                                 _logger?.LogCritical(ex, "Failed to execute EventLogExporter");
                             }
-                        });
+                        }, cts.Token);
 
                         _runExporters.Add(id, cts);
 
-                        _logger?.LogInformation($"Event log exporter for \"{name}\" infobase is started");
+                        _logger?.LogInformation($"Event log exporter for \"{name}\" information base to \"{dataBaseName}\" is started");
                     }
             }
             else
-                _logger?.LogInformation($"Event log of \"{name}\" infobase is in \"new\" format, it won't be handled");
+                _logger?.LogInformation($"Event log of \"{name}\" information base is in \"new\" format, it won't be handled");
         }
 
         private void StopExporter(string id, string name)
@@ -182,16 +185,16 @@ namespace OneSTools.EventLog.Exporter.Manager
                 if (_runExporters.TryGetValue(id, out var cts))
                 {
                     cts.Cancel();
-                    _logger?.LogInformation($"Event log exporter for \"{name}\" infobase is stopped");
+                    _logger?.LogInformation($"Event log exporter for \"{name}\" information base is stopped");
                 }
         }
 
-        private IEventLogStorage GetStorage(string ibName)
+        private IEventLogStorage GetStorage(string dataBaseName)
         {
             if (_storageType == StorageType.ClickHouse)
             {
                 var logger = (ILogger<ClickHouseStorage>)_serviceProvider.GetService(typeof(ILogger<ClickHouseStorage>));
-                var connectionString = $"{_connectionString}Database={ibName}-el;";
+                var connectionString = $"{_connectionString}Database={dataBaseName};";
 
                 return new ClickHouseStorage(connectionString, logger);
             }
@@ -201,7 +204,7 @@ namespace OneSTools.EventLog.Exporter.Manager
 
                 var settings = new ElasticSearchStorageSettings
                 {
-                    Index = ibName + "-el",
+                    Index = dataBaseName,
                     Separation = _separation,
                     MaximumRetries = _maximumRetries,
                     MaxRetryTimeout = _maxRetryTimeout

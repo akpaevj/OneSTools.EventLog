@@ -1,0 +1,1298 @@
+2021-01-11 23:26:22.458 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_main" information base to "upp_main-el" is started
+2021-01-11 23:26:22.458 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\ac44b33e-112a-49ec-b6e1-856ee8c2e8f0\1Cv8Log
+2021-01-11 23:26:22.577 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-11 23:26:22.591 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_dev_akpaev" information base to "DEV-upp_dev_akpaev-el" is started
+2021-01-11 23:26:22.626 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\aa9c9b34-7ad6-4651-bfb4-035d4f82c3d6\1Cv8Log
+2021-01-11 23:26:22.660 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log of "upp_dev_kraev" information base is in "new" format, it won't be handled
+2021-01-11 23:26:22.668 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-11 23:26:22.740 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_dev_demchenko" information base to "DEV-upp_dev_demchenko-el" is started
+2021-01-11 23:26:22.756 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\f672220b-55c6-4bb7-a78b-f430515cedf5\1Cv8Log
+2021-01-11 23:26:22.804 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_copy" information base to "upp_copy-el" is started
+2021-01-11 23:26:22.820 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-11 23:26:22.852 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\c7a3059c-71b4-40b7-baac-81833dbdbd49\1Cv8Log
+2021-01-11 23:26:22.891 | Information | Microsoft.Hosting.Lifetime[0]
+	Application started. Press Ctrl+C to shut down.
+2021-01-11 23:26:22.914 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-11 23:26:22.941 | Information | Microsoft.Hosting.Lifetime[0]
+	Hosting environment: Development
+2021-01-11 23:26:22.985 | Information | Microsoft.Hosting.Lifetime[0]
+	Content root path: C:\Users\akpaev.e.ENTERPRISE\source\repos\OneSTools.EventLog\OneSTools.EventLog.Exporter.Manager
+2021-01-11 23:26:23.475 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (DEV-upp_dev_akpaev-el)
+2021-01-11 23:26:23.484 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (DEV-upp_dev_demchenko-el)
+2021-01-11 23:26:23.492 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (upp_copy-el)
+2021-01-11 23:26:23.500 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (upp_main-el)
+2021-01-11 23:26:24.362 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (DEV-upp_dev_akpaev-el)
+2021-01-11 23:26:24.406 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (upp_copy-el)
+2021-01-11 23:26:24.437 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (DEV-upp_dev_demchenko-el)
+2021-01-11 23:26:24.469 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (upp_main-el)
+2021-01-11 23:26:25.957 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	There're no log items in the database, first found log file will be read from 0 position
+2021-01-11 23:26:25.962 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	There're no log items in the database, first found log file will be read from 0 position
+2021-01-11 23:26:26.022 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	File 20210111000000.lgp will be read from 4867 position, LGF file will be read from 4658 position
+2021-01-11 23:26:26.026 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	File 20210111000000.lgp will be read from 2782790 position, LGF file will be read from 35342 position
+2021-01-11 23:26:27.181 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Reader started reading 20210111000000.lgp
+2021-01-11 23:26:27.185 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Reader started reading 20210111000000.lgp
+2021-01-11 23:26:28.646 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 1 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.692 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 2 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.718 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 3 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.739 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 4 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.764 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 5 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.793 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 6 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.822 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 7 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.847 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 8 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.871 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 9 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.893 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 10 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.907 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 1 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:28.917 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 11 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.933 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 2 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:28.955 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 12 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:28.965 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 3 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:28.982 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 13 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.003 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 4 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:29.022 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 14 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.045 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 5 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:29.068 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 15 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.083 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 6 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:29.101 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 16 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.120 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 7 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:29.134 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 17 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.153 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 8 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:29.168 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 18 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.185 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 9 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:29.205 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 19 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.237 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 10 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:29.258 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 20 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.284 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 11 in DEV-upp_dev_akpaev-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_akpaev-el-202101], must be lowercase"
+2021-01-11 23:26:29.300 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 21 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.334 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 22 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.356 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 23 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.376 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 24 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.391 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 25 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.406 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 26 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.424 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 27 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.440 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 28 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.463 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 29 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.491 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 30 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.513 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 31 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.532 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 32 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.551 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 33 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.572 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 34 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.595 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 35 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.617 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 36 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.632 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 37 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.648 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 38 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.663 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 39 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.680 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 40 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.696 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 41 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.720 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 42 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.740 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 43 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.757 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 44 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.774 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 45 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.792 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 46 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.810 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 47 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.827 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 48 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.844 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 49 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.866 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 50 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.892 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 51 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.918 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 52 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.938 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 53 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.957 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 54 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.975 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 55 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:29.989 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 56 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.004 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 57 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.018 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 58 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.033 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 59 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.048 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 60 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.070 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 61 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.089 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 62 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.110 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 63 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.131 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 64 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.154 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 65 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.182 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 66 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.211 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 67 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.226 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 68 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.241 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 69 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.256 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 70 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.272 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 71 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.286 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 72 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.302 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 73 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.320 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 74 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.337 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 75 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.357 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 76 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.373 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 77 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.387 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 78 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.409 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 79 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.430 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 80 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.446 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 81 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.463 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 82 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.483 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 83 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.499 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 84 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.517 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 85 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.535 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 86 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.554 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 87 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.570 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 88 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.588 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 89 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.603 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 90 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.618 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 91 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.633 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 92 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.648 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 93 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.661 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 94 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.675 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 95 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.690 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 96 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.711 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 97 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.727 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 98 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.749 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 99 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.768 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 100 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.790 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 101 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.815 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 102 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.838 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 103 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.857 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 104 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.893 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 105 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.913 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 106 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.926 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 107 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.944 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 108 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:30.969 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 109 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.012 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 110 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.038 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 111 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.062 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 112 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.082 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 113 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.101 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 114 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.124 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 115 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.176 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 116 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.194 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 117 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.216 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 118 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.272 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 119 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.299 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 120 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.321 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 121 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.341 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 122 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.360 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 123 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.379 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 124 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.398 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 125 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.415 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 126 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.436 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 127 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.460 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 128 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.489 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 129 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.514 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 130 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.533 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 131 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.553 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 132 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.570 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 133 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.588 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 134 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.604 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 135 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.621 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 136 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.636 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 137 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.652 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 138 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.672 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 139 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.690 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 140 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.708 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 141 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.728 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 142 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.747 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 143 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.768 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 144 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.785 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 145 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.803 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 146 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.820 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 147 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.834 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 148 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.848 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 149 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.862 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 150 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.876 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 151 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.894 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 152 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.915 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 153 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.934 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 154 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.951 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 155 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.968 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 156 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:31.984 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 157 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.000 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 158 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.017 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 159 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.037 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 160 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.053 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 161 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.073 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 162 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.087 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 163 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.104 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 164 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.121 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 165 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.143 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 166 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.169 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 167 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.186 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 168 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.207 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 169 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.226 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 170 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.249 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 171 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.269 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 172 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.289 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 173 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.305 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 174 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.325 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 175 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.348 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 176 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.367 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 177 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.386 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 178 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.407 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 179 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.424 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 180 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.441 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 181 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.458 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 182 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.474 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 183 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.491 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 184 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.509 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 185 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.524 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 186 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.541 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 187 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.560 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 188 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.576 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 189 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.594 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 190 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.611 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 191 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.628 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 192 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.643 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 193 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.659 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 194 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.677 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 195 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.694 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 196 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.716 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 197 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.736 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 198 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.755 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 199 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.779 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 200 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.798 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 201 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.815 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 202 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.828 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 203 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.845 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 204 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.867 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 205 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.882 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 206 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.911 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 207 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.931 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 208 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.946 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 209 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:32.964 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 210 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.003 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 211 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.043 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 212 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.065 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 213 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.105 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 214 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.122 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 215 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.140 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 216 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.164 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 217 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.186 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 218 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.208 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 219 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.233 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 220 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.265 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 221 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.286 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 222 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.315 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 223 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.338 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 224 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.358 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 225 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.380 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 226 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.398 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 227 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.432 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 228 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.451 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 229 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.475 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 230 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.499 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 231 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.517 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 232 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.541 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 233 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.558 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 234 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.577 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 235 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.594 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 236 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.618 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 237 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.633 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 238 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.651 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 239 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.670 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 240 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.688 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 241 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.703 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 242 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.723 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 243 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.741 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 244 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.763 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 245 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.785 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 246 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.806 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 247 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.824 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 248 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.846 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 249 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.862 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 250 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.879 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 251 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.896 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 252 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.912 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 253 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.929 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 254 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.943 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 255 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.958 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 256 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.976 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 257 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:33.993 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 258 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.015 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 259 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.035 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 260 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.052 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 261 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.068 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 262 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.086 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 263 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.104 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 264 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.123 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 265 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.142 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 266 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.157 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 267 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.174 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 268 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.188 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 269 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.203 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 270 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.218 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 271 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.233 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 272 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.248 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 273 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.261 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 274 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.275 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 275 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.291 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 276 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.313 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 277 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.330 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 278 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.355 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 279 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.372 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 280 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.397 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 281 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.423 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 282 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.444 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 283 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.463 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 284 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.482 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 285 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.500 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 286 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.515 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 287 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.535 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 288 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.550 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 289 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.571 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 290 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.587 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 291 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.604 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 292 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.623 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 293 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.640 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 294 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.657 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 295 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.672 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 296 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.688 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 297 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.704 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 298 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.721 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 299 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.747 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 300 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.770 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 301 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.791 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 302 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.810 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 303 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.830 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 304 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.844 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 305 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.858 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 306 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.880 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 307 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.899 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 308 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.922 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 309 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.936 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 310 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.954 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 311 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:34.975 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 312 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.008 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 313 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.031 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 314 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.051 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 315 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.073 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 316 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.092 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 317 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.138 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 318 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.163 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 319 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.188 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 320 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.206 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 321 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.223 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 322 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.244 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 323 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.266 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 324 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.287 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 325 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.305 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 326 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.331 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 327 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.350 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 328 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.365 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 329 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.381 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 330 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.397 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 331 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.413 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 332 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.431 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 333 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.454 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 334 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.473 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 335 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.491 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 336 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.508 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 337 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.526 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 338 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.548 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 339 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.575 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 340 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.599 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 341 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.625 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 342 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.650 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 343 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.677 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 344 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.691 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 345 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.706 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 346 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.723 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 347 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.738 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 348 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.753 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 349 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.768 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 350 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.783 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 351 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.799 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 352 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.817 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 353 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.832 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 354 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.848 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 355 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.862 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 356 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.879 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 357 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.896 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 358 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.913 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 359 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.928 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 360 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.942 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 361 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.959 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 362 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.974 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 363 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:35.992 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 364 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.010 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 365 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.027 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 366 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.041 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 367 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.061 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 368 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.083 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 369 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.100 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 370 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.121 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 371 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.140 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 372 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.154 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 373 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.172 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 374 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.187 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 375 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.200 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 376 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.216 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 377 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.231 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 378 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.244 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 379 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.259 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 380 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.279 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 381 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.294 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 382 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.311 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 383 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.331 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 384 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.347 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 385 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.365 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 386 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.386 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 387 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.403 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 388 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.420 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 389 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.439 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 390 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.458 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 391 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.476 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 392 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.497 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 393 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.519 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 394 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.537 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 395 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.553 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 396 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.567 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 397 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.582 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 398 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.596 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 399 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.609 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 400 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.623 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 401 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.638 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 402 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.658 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 403 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.673 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 404 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.688 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 405 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.706 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 406 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.726 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 407 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.746 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 408 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.771 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 409 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.792 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 410 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.815 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 411 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.832 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 412 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.846 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 413 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.861 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 414 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.881 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 415 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.897 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 416 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.913 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 417 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.950 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 418 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.972 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 419 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:36.988 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 420 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.009 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 421 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.034 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 422 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.055 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 423 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.079 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 424 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.098 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 425 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.117 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 426 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.131 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 427 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.176 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 428 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.199 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 429 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.222 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 430 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.243 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 431 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.257 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 432 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.287 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 433 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.307 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 434 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.327 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 435 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.343 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 436 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.363 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 437 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.383 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 438 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.407 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 439 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.425 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 440 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.442 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 441 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.464 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 442 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.487 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 443 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.506 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 444 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.523 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 445 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.540 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 446 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.560 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 447 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.578 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 448 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.597 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 449 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.619 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 450 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.648 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 451 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.677 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 452 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.705 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 453 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.727 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 454 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.740 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 455 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.756 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 456 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.770 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 457 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.786 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 458 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.800 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 459 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.817 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 460 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.842 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 461 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.867 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 462 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.887 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 463 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.903 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 464 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.921 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 465 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.939 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 466 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.954 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 467 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.970 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 468 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.984 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 469 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:37.999 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 470 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.013 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 471 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.027 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 472 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.044 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 473 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.065 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 474 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.082 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 475 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.097 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 476 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.116 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 477 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.139 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 478 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.163 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 479 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.183 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 480 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.201 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 481 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.218 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 482 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.234 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 483 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.252 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 484 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.268 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 485 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.286 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 486 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.300 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 487 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.316 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 488 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.330 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 489 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.344 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 490 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.357 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 491 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.377 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 492 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.392 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 493 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.407 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 494 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.421 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 495 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.435 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 496 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.450 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 497 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.464 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 498 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.484 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 499 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.501 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 500 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.516 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 501 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.530 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 502 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.545 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 503 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.559 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 504 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.573 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 505 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.586 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 506 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.602 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 507 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.616 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 508 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.634 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 509 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.656 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 510 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.678 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 511 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.702 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 512 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.725 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 513 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.745 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 514 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.762 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 515 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.789 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 516 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.813 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 517 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.830 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 518 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.850 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 519 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.866 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 520 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.885 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 521 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.904 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 522 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.928 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 523 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.953 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 524 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:38.970 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 525 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.030 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 526 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.052 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 527 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.089 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 528 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.105 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 529 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.123 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 530 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.154 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 531 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.174 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 532 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.202 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 533 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.221 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 534 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.239 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 535 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.263 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 536 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.287 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 537 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.308 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 538 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.323 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 539 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.338 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 540 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.359 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 541 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.382 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 542 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.405 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 543 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.435 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 544 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.456 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 545 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.478 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 546 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.511 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 547 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.534 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 548 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.554 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 549 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.574 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 550 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.590 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 551 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.612 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 552 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.631 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 553 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.652 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 554 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.676 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 555 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.701 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 556 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.720 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 557 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.744 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 558 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.764 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 559 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.783 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 560 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.804 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 561 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.820 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 562 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.838 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 563 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.856 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 564 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.874 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 565 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.889 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 566 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.906 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 567 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.922 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 568 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.940 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 569 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.960 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 570 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.976 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 571 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:39.992 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 572 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:40.009 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 573 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:40.025 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 574 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:40.040 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 575 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:26:40.062 | Error | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Failed to index document 576 in DEV-upp_dev_demchenko-el-202101: Type: invalid_index_name_exception Reason: "Invalid index name [DEV-upp_dev_demchenko-el-202101], must be lowercase"
+2021-01-11 23:27:04.530 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\ac44b33e-112a-49ec-b6e1-856ee8c2e8f0\1Cv8Log
+2021-01-11 23:27:04.530 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_main" information base to "upp_main-el" is started
+2021-01-11 23:27:04.569 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-11 23:27:04.611 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_dev_akpaev" information base to "dev-upp_dev_akpaev-el" is started
+2021-01-11 23:27:04.636 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\aa9c9b34-7ad6-4651-bfb4-035d4f82c3d6\1Cv8Log
+2021-01-11 23:27:04.693 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log of "upp_dev_kraev" information base is in "new" format, it won't be handled
+2021-01-11 23:27:04.704 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-11 23:27:04.731 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_dev_demchenko" information base to "dev-upp_dev_demchenko-el" is started
+2021-01-11 23:27:04.736 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\f672220b-55c6-4bb7-a78b-f430515cedf5\1Cv8Log
+2021-01-11 23:27:04.764 | Information | OneSTools.EventLog.Exporter.Manager.ExportersManager[0]
+	Event log exporter for "upp_copy" information base to "upp_copy-el" is started
+2021-01-11 23:27:04.769 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Log folder: \\s01\c$\Program Files\1cv8\srvinfo\reg_1541\c7a3059c-71b4-40b7-baac-81833dbdbd49\1Cv8Log
+2021-01-11 23:27:04.773 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-11 23:27:04.800 | Information | Microsoft.Hosting.Lifetime[0]
+	Application started. Press Ctrl+C to shut down.
+2021-01-11 23:27:04.807 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Portion per request: 10000
+2021-01-11 23:27:04.844 | Information | Microsoft.Hosting.Lifetime[0]
+	Hosting environment: Development
+2021-01-11 23:27:04.885 | Information | Microsoft.Hosting.Lifetime[0]
+	Content root path: C:\Users\akpaev.e.ENTERPRISE\source\repos\OneSTools.EventLog\OneSTools.EventLog.Exporter.Manager
+2021-01-11 23:27:04.919 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (upp_main-el)
+2021-01-11 23:27:04.927 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (dev-upp_dev_demchenko-el)
+2021-01-11 23:27:04.931 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (dev-upp_dev_akpaev-el)
+2021-01-11 23:27:04.913 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Trying to connect to http://192.168.0.95:9200/ (upp_copy-el)
+2021-01-11 23:27:05.561 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (dev-upp_dev_akpaev-el)
+2021-01-11 23:27:05.568 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (upp_main-el)
+2021-01-11 23:27:05.596 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (dev-upp_dev_demchenko-el)
+2021-01-11 23:27:05.603 | Information | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	Successfully connected to http://192.168.0.95:9200/ (upp_copy-el)
+2021-01-11 23:27:06.575 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	There're no log items in the database, first found log file will be read from 0 position
+2021-01-11 23:27:06.582 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	There're no log items in the database, first found log file will be read from 0 position
+2021-01-11 23:27:06.614 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	File 20210111000000.lgp will be read from 2782790 position, LGF file will be read from 35342 position
+2021-01-11 23:27:06.622 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	File 20210111000000.lgp will be read from 4867 position, LGF file will be read from 4658 position
+2021-01-11 23:27:06.819 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Reader started reading 20210111000000.lgp
+2021-01-11 23:27:06.824 | Information | OneSTools.EventLog.Exporter.Core.EventLogExporter[0]
+	Reader started reading 20210111000000.lgp
+2021-01-11 23:27:08.886 | Debug | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	11 items were being written to dev-upp_dev_akpaev-el-202101
+2021-01-11 23:27:08.892 | Debug | OneSTools.EventLog.Exporter.ElasticSearch.ElasticSearchStorage[0]
+	576 items were being written to dev-upp_dev_demchenko-el-202101
