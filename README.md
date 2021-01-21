@@ -1,5 +1,5 @@
 # Инструменты для чтения и экспорта журнала регистрации 1С
-Репозиторий содержит как библиотеки так и готовые инструменты для чтения и экспорта журнала регистрации 1С в ClickHouse и ElasticSearch. В основе служб экспорта находится pipeline (TPL Dataflow) обработка данных, за счет чего достигается высокая скорость экспорта с возможностью параметризации потребления ресурсов CPU<->RAM.  
+Репозиторий содержит как библиотеки так и готовые инструменты для чтения и экспорта журнала регистрации 1С в ClickHouse и ElasticSearch. В основе служб экспорта находится pipeline (TPL Dataflow) обработка данных, за счет чего достигается высокая скорость экспорта с возможностью параметризации потребления ресурсов CPU<->RAM.
 
 ## Состав:
 |Наименование|Описание|Actions/Nuget|
@@ -7,7 +7,7 @@
 |[OneSTools.EventLog](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog)|Библиотека для чтения журнала регистрации (старый формат, LGF и LGP файлы). Позволяет выполнять как разовое чтение данных, так и запуск в "live" режиме|[![Nuget](https://img.shields.io/nuget/v/OneSTools.EventLog)](https://www.nuget.org/packages/OneSTools.EventLog)  ![EventLog .NET 5](https://github.com/akpaevj/OneSTools.EventLog/workflows/EventLog%20.NET%205/badge.svg)|
 |[OneSTools.EventLog.Exporter.Core](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Core)|Библиотека-ядро для инструментов экспорта журнала регистрации||
 |[EventLogExporter](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter)|Служба для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/) и [ElasticSearch](https://www.elastic.co/)|![EventLogExporter .NET 5](https://github.com/akpaevj/OneSTools.EventLog/workflows/EventLogExporter%20.NET%205/badge.svg)|
-|[EventLogExportersManager](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Manager)|Менеджер служб экспорта||
+|[EventLogExportersManager](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Manager)|служба, выполняющая роль менеджера и наблюдающая каталоги серверов на предмет появления/удаления информационных баз с автоматическим подключением/отключением экспорта их журналов регистраций||
 
 ## Get started:
 
