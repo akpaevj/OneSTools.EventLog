@@ -126,6 +126,19 @@
       "Microsoft.Hosting.Lifetime": "Information"
     }
   },
+  "Manager": {
+    "ClstFolder": "\\\\s01\\c$\\Program Files\\1cv8\\srvinfo\\reg_1541",
+    "Templates": [
+      {
+        "Mask": "upp.*dev",
+        "Template": "dev-[IBNAME]-el"
+      },
+      {
+        "Mask": "upp.*",
+        "Template": "[IBNAME]-el"
+      }
+    ]
+  },
   "Exporter": {
     "StorageType": 2,
     "LogFolder": "C:\\Users\\akpaev.e.ENTERPRISE\\Desktop\\1Cv8Log",
@@ -197,4 +210,4 @@ systemctl start eventlogexporter.service
 |ClickHouse   |10000 |1 мин. 41 сек.  | ~ 60 MiB            |71032        |9.13     |56.66 MiB              |
 |ElasticSearch|5000  |2 мин. 35 сек.  | ~ 100 MiB           |45968        |6.09     |1106.7 MiB             |
 
-ClickHouse использовался as is, но на колонки (в зависимости от типа и состава данных) были выставлены кодеки. Для шаблона индекса ElasticSearch были выставлены параметры number_of_shards = 6, number_of_replicas = 0, index.codec = best_compression и использовалось 4 потока записи.
+ClickHouse использовался as is, но к колонкам (в зависимости от типа и состава данных) применены кодеки. Для шаблона индекса ElasticSearch были выставлены параметры number_of_shards = 6, number_of_replicas = 0, index.codec = best_compression и использовалось 4 потока записи.
