@@ -52,7 +52,7 @@ namespace OneSTools.EventLog.Exporter.Manager
                 {
                     var infoBaseNode = infoBasesNode[i];
 
-                    string id = infoBaseNode[0];
+                    string elPath = Path.Combine(_folder, infoBaseNode[0]);
                     string name = infoBaseNode[5];
 
                     foreach (var template in _templates)
@@ -60,7 +60,7 @@ namespace OneSTools.EventLog.Exporter.Manager
                         if (Regex.IsMatch(name, template.Mask))
                         {
                             var dataBaseName = template.Template.Replace("[IBNAME]", name);
-                            items.Add(id, (name, dataBaseName));
+                            items.Add(elPath, (name, dataBaseName));
 
                             break;
                         }
@@ -76,12 +76,12 @@ namespace OneSTools.EventLog.Exporter.Manager
             var newInfoBases = ReadInfoBases();
 
             var added = newInfoBases.Except(_infoBases);
-            foreach (var (key, value) in added)
-                InfoBasesAdded?.Invoke(this, new ClstEventArgs(key, value.Item1, value.Item2));
+            foreach (var (key, (item1, item2)) in added)
+                InfoBasesAdded?.Invoke(this, new ClstEventArgs(key, item1, item2));
 
             var deleted = _infoBases.Except(newInfoBases);
-            foreach (var (key, value) in deleted)
-                InfoBasesDeleted?.Invoke(this, new ClstEventArgs(key, value.Item1, value.Item2));
+            foreach (var (key, (item1, item2)) in deleted)
+                InfoBasesDeleted?.Invoke(this, new ClstEventArgs(key, item1, item2));
 
             _infoBases = newInfoBases;
         }

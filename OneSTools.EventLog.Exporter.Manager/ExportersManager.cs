@@ -8,6 +8,7 @@ using OneSTools.EventLog.Exporter.Core.ElasticSearch;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,11 +19,10 @@ namespace OneSTools.EventLog.Exporter.Manager
         private readonly ILogger<ExportersManager> _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly Dictionary<string, CancellationTokenSource> _runExporters = new();
-        private ClstWatcher _clstWatcher;
+        private readonly List<ClstWatcher> _clstWatchers = new();
         // Common settings
         private readonly StorageType _storageType;
-        private readonly string _clstFolder;
-        private readonly List<TemplateItem> _templates;
+        private readonly List<ClstFolder> _clstFolders;
         private readonly int _portion;
         private readonly DateTimeZone _timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
         private readonly int _writingMaxDop;
@@ -42,8 +42,7 @@ namespace OneSTools.EventLog.Exporter.Manager
             _logger = logger;
             _serviceProvider = serviceProvider;
 
-            _clstFolder = configuration.GetValue("Manager:ClstFolder", "");
-            _templates = configuration.GetSection("Manager:Templates").Get<List<TemplateItem>>();
+            _clstFolders = configuration.GetSection("Manager:ClstFolders").Get<List<ClstFolder>>();
             _storageType = configuration.GetValue("Exporter:StorageType", StorageType.None);
             _portion = configuration.GetValue("Exporter:Portion", 10000);
             _writingMaxDop = configuration.GetValue("Exporter:WritingMaxDegreeOfParallelism", 1);
@@ -54,34 +53,42 @@ namespace OneSTools.EventLog.Exporter.Manager
             var timeZone = configuration.GetValue("Exporter:TimeZone", "");
 
             if (!string.IsNullOrWhiteSpace(timeZone))
-            {
                 _timeZone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(timeZone) ?? throw new Exception($"\"{timeZone}\" is unknown time zone");
-            }
 
             CheckSettings();
 
-            if (_storageType == StorageType.ClickHouse)
+            switch (_storageType)
             {
-                _connectionString = configuration.GetValue("ClickHouse:ConnectionString", "");
-                if (_connectionString == string.Empty)
-                    throw new Exception("Connection string is not specified");
-            }
-            else if (_storageType == StorageType.ElasticSearch)
-            {
-                _nodes = configuration.GetSection("ElasticSearch:Nodes").Get<List<ElasticSearchNode>>();
-                _separation = configuration.GetValue("ElasticSearch:Separation", "H");
-                _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries", ElasticSearchStorage.DefaultMaximumRetries);
-                _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", ElasticSearchStorage.DefaultMaxRetryTimeoutSec));
+                case StorageType.ClickHouse:
+                {
+                    _connectionString = configuration.GetValue("ClickHouse:ConnectionString", "");
+                    if (_connectionString == string.Empty)
+                        throw new Exception("Connection string is not specified");
+                    break;
+                }
+                case StorageType.ElasticSearch:
+                {
+                    _nodes = configuration.GetSection("ElasticSearch:Nodes").Get<List<ElasticSearchNode>>();
+                    if (_nodes == null)
+                        throw new Exception("ElasticSearch nodes are not specified");
+
+                    _separation = configuration.GetValue("ElasticSearch:Separation", "H");
+                    _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries", ElasticSearchStorage.DefaultMaximumRetries);
+                    _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", ElasticSearchStorage.DefaultMaxRetryTimeoutSec));
+                    break;
+                }
             }
         }
 
         private void CheckSettings()
         {
-            if (string.IsNullOrEmpty(_clstFolder))
-                throw new Exception("\"ClstFolder\" property is not specified");
+            if (_clstFolders == null || _clstFolders.Count == 0)
+                throw new Exception("\"ClstFolders\" is not specified");
 
-            if (!Directory.Exists(_clstFolder))
-                throw new Exception($"Clst folder ({_clstFolder}) doesn't exist");
+            foreach (var clstFolder in _clstFolders.Where(clstFolder => !Directory.Exists(clstFolder.Folder)))
+            {
+                throw new Exception($"Clst folder ({clstFolder.Folder}) doesn't exist");
+            }
 
             if (_writingMaxDop <= 0)
                 throw new Exception("WritingMaxDegreeOfParallelism cannot be equal to or less than 0");
@@ -101,27 +108,31 @@ namespace OneSTools.EventLog.Exporter.Manager
                 }
             });
 
-            _clstWatcher = new ClstWatcher(_clstFolder, _templates);
-            
-            foreach (var (key, (name, dataBaseName)) in _clstWatcher.InfoBases)
-                StartExporter(key, name, dataBaseName);
+            foreach (var clstFolder in _clstFolders)
+            {
+                var clstWatcher = new ClstWatcher(clstFolder.Folder, clstFolder.Templates);
 
-            _clstWatcher.InfoBasesAdded += ClstWatcher_InfoBasesAdded;
-            _clstWatcher.InfoBasesDeleted += ClstWatcher_InfoBasesDeleted;
+                foreach (var (key, (name, dataBaseName)) in clstWatcher.InfoBases)
+                    StartExporter(key, name, dataBaseName);
+
+                clstWatcher.InfoBasesAdded += ClstWatcher_InfoBasesAdded;
+                clstWatcher.InfoBasesDeleted += ClstWatcher_InfoBasesDeleted;
+
+                _clstWatchers.Add(clstWatcher);
+            }
 
             await Task.Factory.StartNew(stoppingToken.WaitHandle.WaitOne, stoppingToken);
         }
 
         private void ClstWatcher_InfoBasesDeleted(object sender, ClstEventArgs args)
-            => StartExporter(args.Id, args.Name, args.DataBaseName);
+            => StartExporter(args.Path, args.Name, args.DataBaseName);
 
         private void ClstWatcher_InfoBasesAdded(object sender, ClstEventArgs args)
-            => StopExporter(args.Id, args.Name);
+            => StopExporter(args.Path, args.Name);
 
-        private void StartExporter(string id, string name, string dataBaseName)
+        private void StartExporter(string path, string name, string dataBaseName)
         {
-            var logFolder = Path.Combine(_clstFolder, id);
-            logFolder = Path.Combine(logFolder, "1Cv8Log");
+            var logFolder = Path.Combine(path, "1Cv8Log");
 
             // Check this is an old event log format
             var lgfPath = Path.Combine(logFolder, "1Cv8.lgf");
@@ -131,7 +142,7 @@ namespace OneSTools.EventLog.Exporter.Manager
             if (needStart)
             {
                 lock (_runExporters)
-                    if (!_runExporters.ContainsKey(id))
+                    if (!_runExporters.ContainsKey(path))
                     {
                         var cts = new CancellationTokenSource();
                         var logger = (ILogger<EventLogExporter>)_serviceProvider.GetService(typeof(ILogger<EventLogExporter>));
@@ -162,7 +173,7 @@ namespace OneSTools.EventLog.Exporter.Manager
                             }
                         }, cts.Token);
 
-                        _runExporters.Add(id, cts);
+                        _runExporters.Add(path, cts);
 
                         _logger?.LogInformation($"Event log exporter for \"{name}\" information base to \"{dataBaseName}\" is started");
                     }
@@ -212,6 +223,16 @@ namespace OneSTools.EventLog.Exporter.Manager
                 default:
                     throw new Exception("Try to get a storage for unknown StorageType value");
             }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            foreach (var clstWatcher in _clstWatchers)
+                clstWatcher?.Dispose();
+
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -2,13 +2,13 @@
 {
     public class ClstEventArgs
     {
-        public string Id { get; }
+        public string Path { get; }
         public string Name { get; }
         public string DataBaseName { get; }
 
-        internal ClstEventArgs(string id, string name, string databaseName)
+        internal ClstEventArgs(string path, string name, string databaseName)
         {
-            Id = id;
+            Path = path;
             Name = name;
             DataBaseName = databaseName;
         }
