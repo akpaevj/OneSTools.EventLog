@@ -18,15 +18,24 @@
 Секция настроек менеджера служб экспорта.  
 ```json
 "Manager": {
-    "ClstFolder": "\\\\s01\\c$\\Program Files\\1cv8\\srvinfo\\reg_1541",
-    "Templates": [
+    "ClstFolders": [
       {
-        "Mask": "upp.*dev",
-        "Template": "dev-[IBNAME]-el"
+        "Folder": "C:\\\\Program Files\\1cv8\\srvinfo\\reg_1541",
+        "Templates": [
+          {
+            "Mask": "upp_main",
+            "Template": "[IBNAME]_el"
+          }
+        ]
       },
       {
-        "Mask": "upp.*",
-        "Template": "[IBNAME]-el"
+        "Folder": "C:\\\\Program Files\\1cv8\\srvinfo\\reg_1542",
+        "Templates": [
+          {
+            "Mask": "bp3_.*",
+            "Template": "[IBNAME]_el"
+          }
+        ]
       }
     ]
   }
@@ -127,15 +136,15 @@
     }
   },
   "Manager": {
-    "ClstFolder": "\\\\s01\\c$\\Program Files\\1cv8\\srvinfo\\reg_1541",
-    "Templates": [
+    "ClstFolders": [
       {
-        "Mask": "upp.*dev",
-        "Template": "dev-[IBNAME]-el"
-      },
-      {
-        "Mask": "upp.*",
-        "Template": "[IBNAME]-el"
+        "Folder": "C:\\\\Program Files\\1cv8\\srvinfo\\reg_1541",
+        "Templates": [
+          {
+            "Mask": "upp_main",
+            "Template": "[IBNAME]_el"
+          }
+        ]
       }
     ]
   },
