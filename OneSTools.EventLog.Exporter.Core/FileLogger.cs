@@ -28,7 +28,7 @@ namespace OneSTools.EventLog.Exporter.Core
         {
             var levelName = Enum.GetName(typeof(LogLevel), logLevel);
 
-            var message = $"{DateTime.Now:yyyy-MM-hh HH:mm:ss.fff} | {levelName} | {_categoryName}[{eventId.Id}]\n\t{ formatter(state, exception)}";
+            var message = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} | {levelName} | {_categoryName}[{eventId.Id}]\n\t{ formatter(state, exception)}";
 
             lock (Locker)
                 File.AppendAllText(_path, message + Environment.NewLine);
