@@ -1,16 +1,16 @@
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using OneSTools.EventLog.Exporter.Core;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using OneSTools.EventLog.Exporter.Core;
 
 namespace OneSTools.EventLog.Exporter
 {
     public class EventLogExporterService : BackgroundService
     {
-        private readonly ILogger<EventLogExporterService> _logger;
         private readonly EventLogExporter _exporter;
+        private readonly ILogger<EventLogExporterService> _logger;
         private bool _disposedValue;
 
         public EventLogExporterService(ILogger<EventLogExporterService> logger, EventLogExporter exporter)
@@ -25,7 +25,9 @@ namespace OneSTools.EventLog.Exporter
             {
                 await _exporter.StartAsync(stoppingToken);
             }
-            catch (TaskCanceledException) { }
+            catch (TaskCanceledException)
+            {
+            }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex, "Failed to execute EventLogExporter");
@@ -38,7 +40,6 @@ namespace OneSTools.EventLog.Exporter
             {
                 if (disposing)
                 {
-
                 }
 
                 _exporter?.Dispose();
@@ -49,12 +50,12 @@ namespace OneSTools.EventLog.Exporter
 
         ~EventLogExporterService()
         {
-            Dispose(disposing: false);
+            Dispose(false);
         }
 
         public override void Dispose()
         {
-            Dispose(disposing: true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
     }

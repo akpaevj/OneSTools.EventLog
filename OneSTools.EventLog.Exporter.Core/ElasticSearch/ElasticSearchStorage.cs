@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using OneSTools.EventLog.Exporter.Core;
-using System.Linq;
-using System.Data;
 using Elasticsearch.Net;
-using Nest;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Globalization;
+using Nest;
 
 namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
 {
@@ -19,15 +14,15 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
     {
         public static int DefaultMaximumRetries = 2;
         public static int DefaultMaxRetryTimeoutSec = 30;
+        private readonly string _eventLogItemsIndex;
 
         private readonly ILogger<ElasticSearchStorage> _logger;
-        private readonly List<ElasticSearchNode> _nodes = new List<ElasticSearchNode>();
-        private ElasticSearchNode _currentNode;
-        private readonly string _eventLogItemsIndex;
         private readonly int _maximumRetries;
         private readonly TimeSpan _maxRetryTimeout;
+        private readonly List<ElasticSearchNode> _nodes = new List<ElasticSearchNode>();
         private readonly string _separation;
         private ElasticClient _client;
+        private ElasticSearchNode _currentNode;
 
         public ElasticSearchStorage(ElasticSearchStorageSettings settings, ILogger<ElasticSearchStorage> logger = null)
         {
@@ -50,9 +45,110 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
             _eventLogItemsIndex = configuration.GetValue("ElasticSearch:Index", "");
             _separation = configuration.GetValue("ElasticSearch:Separation", "H");
             _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries", DefaultMaximumRetries);
-            _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", DefaultMaxRetryTimeoutSec));
+            _maxRetryTimeout =
+                TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout",
+                    DefaultMaxRetryTimeoutSec));
 
             CheckSettings();
+        }
+
+        public async Task<EventLogPosition> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
+        {
+            if (_client is null)
+                await ConnectAsync(cancellationToken);
+
+            while (true)
+            {
+                var response = await _client.SearchAsync<EventLogItem>(sd => sd
+                        .Index($"{_eventLogItemsIndex}-*")
+                        .Sort(ss =>
+                            ss.Descending(c => c.Id))
+                        .Size(1)
+                    , cancellationToken);
+
+                if (response.IsValid)
+                {
+                    var item = response.Documents.FirstOrDefault();
+
+                    if (item is null)
+                        return null;
+                    return new EventLogPosition(item.FileName, item.EndPosition, item.LgfEndPosition, item.Id);
+                }
+
+                if (response.OriginalException is TaskCanceledException)
+                    throw response.OriginalException;
+
+                _logger?.LogError(
+                    $"Failed to get last file's position ({_eventLogItemsIndex}): {response.OriginalException.Message}");
+
+                var currentNodeHost = _currentNode.Host;
+
+                await ConnectAsync(cancellationToken);
+
+                // If it's the same node then wait while MaxRetryTimeout occurs, otherwise it'll be a too often request's loop
+                if (_currentNode.Host.Equals(currentNodeHost))
+                    await Task.Delay(_maxRetryTimeout, cancellationToken);
+            }
+        }
+
+        public async Task WriteEventLogDataAsync(List<EventLogItem> entities,
+            CancellationToken cancellationToken = default)
+        {
+            if (_client is null)
+                await ConnectAsync(cancellationToken);
+
+            var data = GetGroupedData(entities);
+
+            for (var i = 0; i < data.Count; i++)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    return;
+
+                var item = data[i];
+
+                var responseItems = await _client.IndexManyAsync(item.Entities, item.IndexName, cancellationToken);
+
+                if (!responseItems.ApiCall.Success)
+                {
+                    if (responseItems.OriginalException is TaskCanceledException)
+                        throw responseItems.OriginalException;
+
+                    if (responseItems.Errors)
+                    {
+                        foreach (var itemWithError in responseItems.ItemsWithErrors)
+                            _logger?.LogError(
+                                $"Failed to index document {itemWithError.Id} in {item.IndexName}: {itemWithError.Error}");
+
+                        throw new Exception(
+                            $"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
+                    }
+
+                    _logger?.LogError(
+                        $"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
+
+                    await ConnectAsync(cancellationToken);
+
+                    i--;
+                }
+                else
+                {
+                    if (responseItems.Errors)
+                    {
+                        foreach (var itemWithError in responseItems.ItemsWithErrors)
+                            _logger?.LogError(
+                                $"Failed to index document {itemWithError.Id} in {item.IndexName}: {itemWithError.Error}");
+
+                        throw new Exception(
+                            $"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
+                    }
+
+                    _logger?.LogDebug($"{item.Entities.Count} items were being written to {item.IndexName}");
+                }
+            }
+        }
+
+        public void Dispose()
+        {
         }
 
         private void CheckSettings()
@@ -83,12 +179,13 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
         {
             var indexTemplateName = "oneslogs";
 
-            var getItResponse = await _client.LowLevel.DoRequestAsync<StringResponse>(HttpMethod.GET, $"_index_template/{indexTemplateName}", cancellationToken);
+            var getItResponse = await _client.LowLevel.DoRequestAsync<StringResponse>(HttpMethod.GET,
+                $"_index_template/{indexTemplateName}", cancellationToken);
 
             // if it exists then skip creating
             if (!getItResponse.Success)
                 throw getItResponse.OriginalException;
-            else if (getItResponse.HttpStatusCode != 404)
+            if (getItResponse.HttpStatusCode != 404)
                 return;
 
             var cmd =
@@ -129,7 +226,8 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
                     }
                 }";
 
-            var response = await _client.LowLevel.DoRequestAsync<StringResponse>(HttpMethod.PUT, $"_index_template/{indexTemplateName}", cancellationToken, PostData.String(cmd));
+            var response = await _client.LowLevel.DoRequestAsync<StringResponse>(HttpMethod.PUT,
+                $"_index_template/{indexTemplateName}", cancellationToken, PostData.String(cmd));
 
             if (!response.Success)
                 throw response.OriginalException;
@@ -138,7 +236,9 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
         private async Task<bool> SwitchToNextNodeAsync(CancellationToken cancellationToken = default)
         {
             if (_currentNode == null)
+            {
                 _currentNode = _nodes[0];
+            }
             else
             {
                 var currentIndex = _nodes.IndexOf(_currentNode);
@@ -161,8 +261,6 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
                 case AuthenticationType.ApiKey:
                     settings.ApiKeyAuthentication(_currentNode.Id, _currentNode.ApiKey);
                     break;
-                default:
-                    break;
             }
 
             _client = new ElasticClient(settings);
@@ -174,53 +272,13 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
             if (!(response.OriginalException is TaskCanceledException))
             {
                 if (!response.IsValid)
-                    _logger?.LogWarning($"Failed to connect to {uri} ({_eventLogItemsIndex}): {response.OriginalException.Message}");
+                    _logger?.LogWarning(
+                        $"Failed to connect to {uri} ({_eventLogItemsIndex}): {response.OriginalException.Message}");
                 else
                     _logger?.LogInformation($"Successfully connected to {uri} ({_eventLogItemsIndex})");
             }
 
             return response.IsValid;
-        }
-
-        public async Task<EventLogPosition> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
-        {
-            if (_client is null)
-                await ConnectAsync(cancellationToken);
-
-            while (true)
-            {
-                var response = await _client.SearchAsync<EventLogItem>(sd => sd
-                        .Index($"{_eventLogItemsIndex}-*")
-                        .Sort(ss =>
-                            ss.Descending(c => c.Id))
-                        .Size(1)
-                    , cancellationToken);
-
-                if (response.IsValid)
-                {
-                    var item = response.Documents.FirstOrDefault();
-
-                    if (item is null)
-                        return null;
-                    else
-                        return new EventLogPosition(item.FileName, item.EndPosition, item.LgfEndPosition, item.Id);
-                }
-                else
-                {
-                    if (response.OriginalException is TaskCanceledException)
-                        throw response.OriginalException;
-
-                    _logger?.LogError($"Failed to get last file's position ({_eventLogItemsIndex}): {response.OriginalException.Message}");
-
-                    var currentNodeHost = _currentNode.Host;
-
-                    await ConnectAsync(cancellationToken);
-
-                    // If it's the same node then wait while MaxRetryTimeout occurs, otherwise it'll be a too often request's loop
-                    if (_currentNode.Host.Equals(currentNodeHost))
-                        await Task.Delay(_maxRetryTimeout, cancellationToken);
-                }
-            }
         }
 
         private List<(string IndexName, List<EventLogItem> Entities)> GetGroupedData(List<EventLogItem> entities)
@@ -231,17 +289,17 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
             {
                 case "H":
                     var groups = entities.GroupBy(c => c.DateTime.ToString("yyyyMMddhh")).OrderBy(c => c.Key);
-                    foreach (IGrouping<string, EventLogItem> item in groups)
+                    foreach (var item in groups)
                         data.Add(($"{_eventLogItemsIndex}-{item.Key}", item.ToList()));
                     break;
                 case "D":
                     groups = entities.GroupBy(c => c.DateTime.ToString("yyyyMMdd")).OrderBy(c => c.Key);
-                    foreach (IGrouping<string, EventLogItem> item in groups)
+                    foreach (var item in groups)
                         data.Add(($"{_eventLogItemsIndex}-{item.Key}", item.ToList()));
                     break;
                 case "M":
                     groups = entities.GroupBy(c => c.DateTime.ToString("yyyyMM")).OrderBy(c => c.Key);
-                    foreach (IGrouping<string, EventLogItem> item in groups)
+                    foreach (var item in groups)
                         data.Add(($"{_eventLogItemsIndex}-{item.Key}", item.ToList()));
                     break;
                 default:
@@ -250,63 +308,6 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
             }
 
             return data;
-        }
-
-        public async Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default)
-        {
-            if (_client is null)
-                await ConnectAsync(cancellationToken);
-
-            var data = GetGroupedData(entities);
-
-            for (int i = 0; i < data.Count; i++)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    return;
-
-                var item = data[i];
-
-                var responseItems = await _client.IndexManyAsync(item.Entities, item.IndexName, cancellationToken);
-
-                if (!responseItems.ApiCall.Success)
-                {
-                    if (responseItems.OriginalException is TaskCanceledException)
-                        throw responseItems.OriginalException;
-
-                    if (responseItems.Errors)
-                    {
-                        foreach (var itemWithError in responseItems.ItemsWithErrors)
-                            _logger?.LogError($"Failed to index document {itemWithError.Id} in {item.IndexName}: {itemWithError.Error}");
-
-                        throw new Exception($"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
-                    }
-                    else
-                    {
-                        _logger?.LogError($"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
-
-                        await ConnectAsync(cancellationToken);
-
-                        i--;
-                    }
-                }
-                else
-                {
-                    if (responseItems.Errors)
-                    {
-                        foreach (var itemWithError in responseItems.ItemsWithErrors)
-                            _logger?.LogError($"Failed to index document {itemWithError.Id} in {item.IndexName}: {itemWithError.Error}");
-
-                        throw new Exception($"Failed to write items to {item.IndexName}: {responseItems.OriginalException.Message}");
-                    }
-                    else
-                        _logger?.LogDebug($"{item.Entities.Count} items were being written to {item.IndexName}");
-                }
-            }
-        }
-
-        public void Dispose()
-        {
-            
         }
     }
 }

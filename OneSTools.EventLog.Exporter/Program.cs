@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -5,8 +7,6 @@ using Microsoft.Extensions.Logging;
 using OneSTools.EventLog.Exporter.Core;
 using OneSTools.EventLog.Exporter.Core.ClickHouse;
 using OneSTools.EventLog.Exporter.Core.ElasticSearch;
-using System;
-using System.IO;
 
 namespace OneSTools.EventLog.Exporter
 {
@@ -17,8 +17,9 @@ namespace OneSTools.EventLog.Exporter
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 //.ConfigureAppConfiguration(c => {
                 //    c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
                 //    c.AddJsonFile("appsettings.json");
@@ -44,7 +45,7 @@ namespace OneSTools.EventLog.Exporter
                             services.AddSingleton<IEventLogStorage, ElasticSearchStorage>();
                             break;
                         case StorageType.None:
-                            throw new Exception($"You must set StorageType parameter before starting the exporter");
+                            throw new Exception("You must set StorageType parameter before starting the exporter");
                         default:
                             throw new Exception($"{storageType} is not available value of StorageType enum");
                     }
@@ -52,5 +53,6 @@ namespace OneSTools.EventLog.Exporter
                     services.AddSingleton<EventLogExporter>();
                     services.AddHostedService<EventLogExporterService>();
                 });
+        }
     }
 }

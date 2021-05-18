@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -11,41 +10,31 @@ using NodaTime;
 
 namespace OneSTools.EventLog.Exporter.Core
 {
-    public class EventLogExporterSettings
-    {
-        public string LogFolder { get; set; } = "";
-        public int Portion { get; set; } = 10000;
-        public DateTimeZone TimeZone { get; set; } = DateTimeZoneProviders.Tzdb.GetSystemDefault();
-        public int WritingMaxDop { get; set; } = 1;
-        public int CollectedFactor { get; set; } = 2;
-        public int ReadingTimeout { get; set; } = 1;
-        public bool LoadArchive { get; set; } = false;
-    }
-
     public class EventLogExporter
     {
-        private readonly ILogger<EventLogExporter> _logger;
-        private readonly IEventLogStorage _storage;
+        private readonly int _collectedFactor;
+        private readonly bool _loadArchive;
 
         // Exporter settings
         private readonly string _logFolder;
+        private readonly ILogger<EventLogExporter> _logger;
         private readonly int _portion;
+        private readonly int _readingTimeout;
+        private readonly IEventLogStorage _storage;
         private readonly DateTimeZone _timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
         private readonly int _writingMaxDop;
-        private readonly int _collectedFactor;
-        private readonly bool _loadArchive;
-        private readonly int _readingTimeout;
+        private BatchBlock<EventLogItem> _batchBlock;
 
         private string _currentLgpFile;
 
-        // Dataflow blocks
-        private EventLogReader _eventLogReader;
-        private ActionBlock<EventLogItem[]> _writeBlock;
-        private BatchBlock<EventLogItem> _batchBlock;
-
         private bool _disposedValue;
 
-        public EventLogExporter(EventLogExporterSettings settings, IEventLogStorage storage, ILogger<EventLogExporter> logger = null)
+        // DataFlow blocks
+        private EventLogReader _eventLogReader;
+        private ActionBlock<EventLogItem[]> _writeBlock;
+
+        public EventLogExporter(EventLogExporterSettings settings, IEventLogStorage storage,
+            ILogger<EventLogExporter> logger = null)
         {
             _logger = logger;
             _storage = storage;
@@ -61,7 +50,8 @@ namespace OneSTools.EventLog.Exporter.Core
             CheckSettings();
         }
 
-        public EventLogExporter(ILogger<EventLogExporter> logger, IConfiguration configuration, IEventLogStorage storage)
+        public EventLogExporter(ILogger<EventLogExporter> logger, IConfiguration configuration,
+            IEventLogStorage storage)
         {
             _logger = logger;
             _storage = storage;
@@ -94,10 +84,10 @@ namespace OneSTools.EventLog.Exporter.Core
                 throw new Exception($"Event log folder ({_logFolder}) doesn't exist");
 
             if (_writingMaxDop <= 0)
-                throw new Exception($"WritingMaxDegreeOfParallelism cannot be equal to or less than 0");
+                throw new Exception("WritingMaxDegreeOfParallelism cannot be equal to or less than 0");
 
             if (_collectedFactor <= 0)
-                throw new Exception($"CollectedFactor cannot be equal to or less than 0");
+                throw new Exception("CollectedFactor cannot be equal to or less than 0");
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
@@ -105,7 +95,7 @@ namespace OneSTools.EventLog.Exporter.Core
             _logger?.LogInformation($"Log folder: {_logFolder}");
 
             if (_loadArchive)
-                _logger?.LogWarning($"\"Load archive\" mode enabled");
+                _logger?.LogWarning("\"Load archive\" mode enabled");
 
             _logger?.LogInformation($"Portion per request: {_portion}");
 
@@ -118,7 +108,7 @@ namespace OneSTools.EventLog.Exporter.Core
 
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    bool forceSending = false;
+                    var forceSending = false;
 
                     EventLogItem item = null;
 
@@ -140,7 +130,8 @@ namespace OneSTools.EventLog.Exporter.Core
                     {
                         await SendAsync(_batchBlock, item, cancellationToken);
 
-                        if (!string.IsNullOrEmpty(_eventLogReader.LgpFileName) && _currentLgpFile != _eventLogReader.LgpFileName)
+                        if (!string.IsNullOrEmpty(_eventLogReader.LgpFileName) &&
+                            _currentLgpFile != _eventLogReader.LgpFileName)
                         {
                             _logger?.LogInformation($"Reader started reading {_eventLogReader.LgpFileName}");
 
@@ -148,34 +139,40 @@ namespace OneSTools.EventLog.Exporter.Core
                         }
                     }
                     else if (!settings.LiveMode)
+                    {
                         forceSending = true;
+                    }
 
                     if (forceSending)
                         _batchBlock.TriggerBatch();
                 }
             }
-            catch (TaskCanceledException) { }
+            catch (TaskCanceledException)
+            {
+            }
         }
 
         private void InitializeDataflow(CancellationToken cancellationToken = default)
         {
-            var writeBlockSettings = new ExecutionDataflowBlockOptions()
+            var writeBlockSettings = new ExecutionDataflowBlockOptions
             {
                 CancellationToken = cancellationToken,
                 BoundedCapacity = _collectedFactor,
                 MaxDegreeOfParallelism = _writingMaxDop
             };
 
-            var batchBlockSettings = new GroupingDataflowBlockOptions()
+            var batchBlockSettings = new GroupingDataflowBlockOptions
             {
                 CancellationToken = cancellationToken,
                 BoundedCapacity = _portion * _collectedFactor
             };
 
-            _writeBlock = new ActionBlock<EventLogItem[]>(c => _storage.WriteEventLogDataAsync(c.ToList(), cancellationToken), writeBlockSettings);
+            _writeBlock =
+                new ActionBlock<EventLogItem[]>(c => _storage.WriteEventLogDataAsync(c.ToList(), cancellationToken),
+                    writeBlockSettings);
             _batchBlock = new BatchBlock<EventLogItem>(_portion, batchBlockSettings);
 
-            _batchBlock.LinkTo(_writeBlock, new DataflowLinkOptions() { PropagateCompletion = true });
+            _batchBlock.LinkTo(_writeBlock, new DataflowLinkOptions {PropagateCompletion = true});
         }
 
         private async Task<EventLogReaderSettings> GetReaderSettingsAsync(CancellationToken cancellationToken = default)
@@ -197,7 +194,10 @@ namespace OneSTools.EventLog.Exporter.Core
                     var lgpFilePath = Path.Combine(_logFolder, position.FileName);
 
                     if (!File.Exists(lgpFilePath))
-                        _logger?.LogWarning($"Lgp file ({lgpFilePath}) doesn't exist. The reading will be started from the first found file");
+                    {
+                        _logger?.LogWarning(
+                            $"Lgp file ({lgpFilePath}) doesn't exist. The reading will be started from the first found file");
+                    }
                     else
                     {
                         eventLogReaderSettings.LgpFileName = position.FileName;
@@ -205,15 +205,19 @@ namespace OneSTools.EventLog.Exporter.Core
                         eventLogReaderSettings.LgfStartPosition = position.LgfEndPosition;
                         eventLogReaderSettings.ItemId = position.Id;
 
-                        _logger?.LogInformation($"File {position.FileName} will be read from {position.EndPosition} position, LGF file will be read from {position.LgfEndPosition} position");
+                        _logger?.LogInformation(
+                            $"File {position.FileName} will be read from {position.EndPosition} position, LGF file will be read from {position.LgfEndPosition} position");
                     }
                 }
                 else
-                    _logger?.LogInformation($"There're no log items in the database, first found log file will be read from 0 position");
+                {
+                    _logger?.LogInformation(
+                        "There're no log items in the database, first found log file will be read from 0 position");
+                }
             }
             else
             {
-                _logger?.LogWarning($"LoadArchive parameter is true. Live mode will not be used");
+                _logger?.LogWarning("LoadArchive parameter is true. Live mode will not be used");
 
                 eventLogReaderSettings.LiveMode = false;
             }
@@ -221,38 +225,34 @@ namespace OneSTools.EventLog.Exporter.Core
             return eventLogReaderSettings;
         }
 
-        private async Task SendAsync(ITargetBlock<EventLogItem> nextBlock, EventLogItem item, CancellationToken stoppingToken = default)
+        private static async Task SendAsync(ITargetBlock<EventLogItem> nextBlock, EventLogItem item,
+            CancellationToken stoppingToken = default)
         {
             while (!stoppingToken.IsCancellationRequested && !nextBlock.Completion.IsFaulted)
-            {
                 if (await nextBlock.SendAsync(item, stoppingToken))
                     break;
-            }
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposedValue)
-            {
-                if (disposing)
-                {
-                    _storage?.Dispose();
-                }
+            if (_disposedValue)
+                return;
 
-                _eventLogReader?.Dispose();
+            if (disposing) _storage?.Dispose();
 
-                _disposedValue = true;
-            }
+            _eventLogReader?.Dispose();
+
+            _disposedValue = true;
         }
 
         ~EventLogExporter()
         {
-            Dispose(disposing: false);
+            Dispose(false);
         }
 
         public void Dispose()
         {
-            Dispose(disposing: true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
     }

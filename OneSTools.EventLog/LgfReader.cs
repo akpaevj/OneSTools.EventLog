@@ -1,47 +1,54 @@
-﻿using OneSTools.BracketsFile;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using OneSTools.BracketsFile;
 
 namespace OneSTools.EventLog
 {
     internal class LgfReader : IDisposable
     {
-        private FileStream _fileStream;
         private BracketsListReader _bracketsReader;
+        private bool _disposedValue;
+        private FileStream _fileStream;
 
-        public string LgfPath { get; }
         /// <summary>
-        /// Key tuple - first value is an object type, second value is an object number in the array
+        ///     Key tuple - first value is an object type, second value is an object number in the array
         /// </summary>
         private Dictionary<(ObjectType, int), string> _objects = new Dictionary<(ObjectType, int), string>();
+
         /// <summary>
-        /// Key tuple - first value is an object type, second value is an object number in the array
-        /// Value tuple - first value is an object value, second value is a guid of the object value
+        ///     Key tuple - first value is an object type, second value is an object number in the array
+        ///     Value tuple - first value is an object value, second value is a guid of the object value
         /// </summary>
-        private Dictionary<(ObjectType, int), (string, string)> _referencedObjects = new Dictionary<(ObjectType, int), (string, string)>();
-        private bool _disposedValue;
+        private Dictionary<(ObjectType, int), (string, string)> _referencedObjects =
+            new Dictionary<(ObjectType, int), (string, string)>();
 
         public LgfReader(string lgfPath)
         {
             LgfPath = lgfPath;
         }
 
-        private void ReadTill(ObjectType objectType, int number, long position, CancellationToken cancellationToken = default)
+        public string LgfPath { get; }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void ReadTill(ObjectType objectType, int number, long position,
+            CancellationToken cancellationToken = default)
         {
             InitializeStreams();
 
-            bool stop = false;
+            var stop = false;
 
             while (!stop && !_bracketsReader.EndOfStream && !cancellationToken.IsCancellationRequested)
             {
                 var itemData = _bracketsReader.NextNode();
 
-                var ot = (ObjectType)(int)itemData[0];
+                var ot = (ObjectType) (int) itemData[0];
 
                 // Skip unknown object types
                 if (ot >= ObjectType.Unknown)
@@ -51,8 +58,8 @@ namespace OneSTools.EventLog
                 {
                     case ObjectType.Users:
                     case ObjectType.Metadata:
-                        var key = (ot, (int)itemData[3]);
-                        var value = ((string)itemData[2], (string)itemData[1]);
+                        var key = (ot, (int) itemData[3]);
+                        var value = ((string) itemData[2], (string) itemData[1]);
 
                         if (_referencedObjects.ContainsKey(key))
                             _referencedObjects.Remove(key);
@@ -67,11 +74,11 @@ namespace OneSTools.EventLog
 
                         if (ot == objectType && key.Item2 == number)
                             stop = true;
-                            
+
                         break;
                     default:
-                        var key1 = (ot, (int)itemData[2]);
-                        var value1 = (string)itemData[1];
+                        var key1 = (ot, (int) itemData[2]);
+                        var value1 = (string) itemData[1];
 
                         if (_objects.ContainsKey(key1))
                             _objects.Remove(key1);
@@ -99,29 +106,27 @@ namespace OneSTools.EventLog
 
             if (_objects.TryGetValue((objectType, number), out var value))
                 return value;
-            else
-                ReadTill(objectType, number, 0, cancellationToken);
+            ReadTill(objectType, number, 0, cancellationToken);
 
             if (_objects.TryGetValue((objectType, number), out value))
                 return value;
-            else
-                throw new Exception($"Cannot find objectType {objectType} with number {number} in objects collection");
+            throw new Exception($"Cannot find objectType {objectType} with number {number} in objects collection");
         }
 
-        public (string Value, string Uuid) GetReferencedObjectValue(ObjectType objectType, int number, CancellationToken cancellationToken = default)
+        public (string Value, string Uuid) GetReferencedObjectValue(ObjectType objectType, int number,
+            CancellationToken cancellationToken = default)
         {
             if (number == 0)
                 return ("", "");
 
             if (_referencedObjects.TryGetValue((objectType, number), out var value))
                 return value;
-            else
-                ReadTill(objectType, number, 0, cancellationToken);
+            ReadTill(objectType, number, 0, cancellationToken);
 
             if (_referencedObjects.TryGetValue((objectType, number), out value))
                 return value;
-            else
-                throw new Exception($"Cannot find objectType {objectType} with number {number} in referenced objects collection");
+            throw new Exception(
+                $"Cannot find objectType {objectType} with number {number} in referenced objects collection");
         }
 
         private void InitializeStreams()
@@ -131,7 +136,8 @@ namespace OneSTools.EventLog
                 if (!File.Exists(LgfPath))
                     throw new Exception("Cannot find \"1Cv8.lgf\"");
 
-                _fileStream = new FileStream(LgfPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                _fileStream = new FileStream(LgfPath, FileMode.Open, FileAccess.Read,
+                    FileShare.ReadWrite | FileShare.Delete);
                 _bracketsReader = new BracketsListReader(_fileStream);
             }
         }
@@ -169,13 +175,7 @@ namespace OneSTools.EventLog
 
         ~LgfReader()
         {
-            Dispose(disposing: false);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            Dispose(false);
         }
     }
 }

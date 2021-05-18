@@ -1,43 +1,50 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NodaTime;
-using OneSTools.EventLog.Exporter.Core.ClickHouse;
-using OneSTools.EventLog.Exporter.Core;
-using OneSTools.EventLog.Exporter.Core.ElasticSearch;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NodaTime;
+using OneSTools.EventLog.Exporter.Core;
+using OneSTools.EventLog.Exporter.Core.ClickHouse;
+using OneSTools.EventLog.Exporter.Core.ElasticSearch;
 
 namespace OneSTools.EventLog.Exporter.Manager
 {
     public class ExportersManager : BackgroundService
     {
-        private readonly ILogger<ExportersManager> _logger;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly Dictionary<string, CancellationTokenSource> _runExporters = new();
-        private readonly List<ClstWatcher> _clstWatchers = new();
-        // Common settings
-        private readonly StorageType _storageType;
         private readonly List<ClstFolder> _clstFolders;
-        private readonly int _portion;
-        private readonly DateTimeZone _timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
-        private readonly int _writingMaxDop;
+        private readonly List<ClstWatcher> _clstWatchers = new();
+
         private readonly int _collectedFactor;
-        private readonly bool _loadArchive;
-        private readonly int _readingTimeout;
+
         // ClickHouse
         private readonly string _connectionString;
-        // ElasticSearch
-        private readonly List<ElasticSearchNode> _nodes;
-        private readonly string _separation;
+        private readonly bool _loadArchive;
+        private readonly ILogger<ExportersManager> _logger;
         private readonly int _maximumRetries;
+
         private readonly TimeSpan _maxRetryTimeout;
 
-        public ExportersManager(ILogger<ExportersManager> logger, IServiceProvider serviceProvider, IConfiguration configuration)
+        // ElasticSearch
+        private readonly List<ElasticSearchNode> _nodes;
+        private readonly int _portion;
+        private readonly int _readingTimeout;
+        private readonly Dictionary<string, CancellationTokenSource> _runExporters = new();
+        private readonly string _separation;
+
+        private readonly IServiceProvider _serviceProvider;
+
+        // Common settings
+        private readonly StorageType _storageType;
+        private readonly DateTimeZone _timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+        private readonly int _writingMaxDop;
+
+        public ExportersManager(ILogger<ExportersManager> logger, IServiceProvider serviceProvider,
+            IConfiguration configuration)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
@@ -53,7 +60,8 @@ namespace OneSTools.EventLog.Exporter.Manager
             var timeZone = configuration.GetValue("Exporter:TimeZone", "");
 
             if (!string.IsNullOrWhiteSpace(timeZone))
-                _timeZone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(timeZone) ?? throw new Exception($"\"{timeZone}\" is unknown time zone");
+                _timeZone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(timeZone) ??
+                            throw new Exception($"\"{timeZone}\" is unknown time zone");
 
             CheckSettings();
 
@@ -73,8 +81,10 @@ namespace OneSTools.EventLog.Exporter.Manager
                         throw new Exception("ElasticSearch nodes are not specified");
 
                     _separation = configuration.GetValue("ElasticSearch:Separation", "H");
-                    _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries", ElasticSearchStorage.DefaultMaximumRetries);
-                    _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout", ElasticSearchStorage.DefaultMaxRetryTimeoutSec));
+                    _maximumRetries = configuration.GetValue("ElasticSearch:MaximumRetries",
+                        ElasticSearchStorage.DefaultMaximumRetries);
+                    _maxRetryTimeout = TimeSpan.FromSeconds(configuration.GetValue("ElasticSearch:MaxRetryTimeout",
+                        ElasticSearchStorage.DefaultMaxRetryTimeoutSec));
                     break;
                 }
             }
@@ -86,9 +96,7 @@ namespace OneSTools.EventLog.Exporter.Manager
                 throw new Exception("\"ClstFolders\" is not specified");
 
             foreach (var clstFolder in _clstFolders.Where(clstFolder => !Directory.Exists(clstFolder.Folder)))
-            {
                 throw new Exception($"Clst folder ({clstFolder.Folder}) doesn't exist");
-            }
 
             if (_writingMaxDop <= 0)
                 throw new Exception("WritingMaxDegreeOfParallelism cannot be equal to or less than 0");
@@ -125,10 +133,14 @@ namespace OneSTools.EventLog.Exporter.Manager
         }
 
         private void ClstWatcher_InfoBasesDeleted(object sender, ClstEventArgs args)
-            => StartExporter(args.Path, args.Name, args.DataBaseName);
+        {
+            StartExporter(args.Path, args.Name, args.DataBaseName);
+        }
 
         private void ClstWatcher_InfoBasesAdded(object sender, ClstEventArgs args)
-            => StopExporter(args.Path, args.Name);
+        {
+            StopExporter(args.Path, args.Name);
+        }
 
         private void StartExporter(string path, string name, string dataBaseName)
         {
@@ -142,10 +154,12 @@ namespace OneSTools.EventLog.Exporter.Manager
             if (needStart)
             {
                 lock (_runExporters)
+                {
                     if (!_runExporters.ContainsKey(path))
                     {
                         var cts = new CancellationTokenSource();
-                        var logger = (ILogger<EventLogExporter>)_serviceProvider.GetService(typeof(ILogger<EventLogExporter>));
+                        var logger =
+                            (ILogger<EventLogExporter>) _serviceProvider.GetService(typeof(ILogger<EventLogExporter>));
                         var storage = GetStorage(dataBaseName);
 
                         var settings = new EventLogExporterSettings
@@ -161,12 +175,15 @@ namespace OneSTools.EventLog.Exporter.Manager
 
                         var exporter = new EventLogExporter(settings, storage, logger);
 
-                        Task.Factory.StartNew(async () => {
+                        Task.Factory.StartNew(async () =>
+                        {
                             try
                             {
                                 await exporter.StartAsync(cts.Token);
                             }
-                            catch (TaskCanceledException) { }
+                            catch (TaskCanceledException)
+                            {
+                            }
                             catch (Exception ex)
                             {
                                 _logger?.LogCritical(ex, "Failed to execute EventLogExporter");
@@ -175,21 +192,28 @@ namespace OneSTools.EventLog.Exporter.Manager
 
                         _runExporters.Add(path, cts);
 
-                        _logger?.LogInformation($"Event log exporter for \"{name}\" information base to \"{dataBaseName}\" is started");
+                        _logger?.LogInformation(
+                            $"Event log exporter for \"{name}\" information base to \"{dataBaseName}\" is started");
                     }
+                }
             }
             else
-                _logger?.LogInformation($"Event log of \"{name}\" information base is in \"new\" format, it won't be handled");
+            {
+                _logger?.LogInformation(
+                    $"Event log of \"{name}\" information base is in \"new\" format, it won't be handled");
+            }
         }
 
         private void StopExporter(string id, string name)
         {
-            lock(_runExporters)
+            lock (_runExporters)
+            {
                 if (_runExporters.TryGetValue(id, out var cts))
                 {
                     cts.Cancel();
                     _logger?.LogInformation($"Event log exporter for \"{name}\" information base is stopped");
                 }
+            }
         }
 
         private IEventLogStorage GetStorage(string dataBaseName)
@@ -198,14 +222,17 @@ namespace OneSTools.EventLog.Exporter.Manager
             {
                 case StorageType.ClickHouse:
                 {
-                    var logger = (ILogger<ClickHouseStorage>)_serviceProvider.GetService(typeof(ILogger<ClickHouseStorage>));
+                    var logger =
+                        (ILogger<ClickHouseStorage>) _serviceProvider.GetService(typeof(ILogger<ClickHouseStorage>));
                     var connectionString = $"{_connectionString}Database={dataBaseName};";
 
                     return new ClickHouseStorage(connectionString, logger);
                 }
                 case StorageType.ElasticSearch:
                 {
-                    var logger = (ILogger<ElasticSearchStorage>)_serviceProvider.GetService(typeof(ILogger<ElasticSearchStorage>));
+                    var logger =
+                        (ILogger<ElasticSearchStorage>) _serviceProvider.GetService(
+                            typeof(ILogger<ElasticSearchStorage>));
 
                     var settings = new ElasticSearchStorageSettings
                     {

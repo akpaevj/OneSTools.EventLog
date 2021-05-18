@@ -1,28 +1,24 @@
-﻿using OneSTools.BracketsFile;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using OneSTools.BracketsFile;
 
 namespace OneSTools.EventLog.Exporter.Manager
 {
     public class ClstWatcher : IDisposable
     {
+        public delegate void InfoBaseAddedHandler(object sender, ClstEventArgs args);
+
+        public delegate void InfoBaseDeletedHandler(object sender, ClstEventArgs args);
+
         private readonly string _folder;
         private readonly string _path;
         private readonly List<TemplateItem> _templates;
-        private Dictionary<string, (string, string)> _infoBases;
         private FileSystemWatcher _clstWatcher;
-
-        public delegate void InfoBaseAddedHandler(object sender, ClstEventArgs args);
-        public event InfoBaseAddedHandler InfoBasesAdded;
-
-        public delegate void InfoBaseDeletedHandler(object sender, ClstEventArgs args);
-        public event InfoBaseDeletedHandler InfoBasesDeleted;
-
-        public ReadOnlyDictionary<string, (string Name, string DataBaseName)> InfoBases => new(_infoBases);
+        private Dictionary<string, (string, string)> _infoBases;
 
         public ClstWatcher(string folder, List<TemplateItem> templates)
         {
@@ -36,6 +32,17 @@ namespace OneSTools.EventLog.Exporter.Manager
             InitializeWatcher();
         }
 
+        public ReadOnlyDictionary<string, (string Name, string DataBaseName)> InfoBases => new(_infoBases);
+
+        public void Dispose()
+        {
+            _clstWatcher?.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
+        public event InfoBaseAddedHandler InfoBasesAdded;
+        public event InfoBaseDeletedHandler InfoBasesDeleted;
+
         private Dictionary<string, (string Name, string DataBaseName)> ReadInfoBases()
         {
             var items = new Dictionary<string, (string, string)>();
@@ -47,16 +54,14 @@ namespace OneSTools.EventLog.Exporter.Manager
             int count = infoBasesNode[0];
 
             if (count > 0)
-            {
                 for (var i = 1; i <= count; i++)
                 {
                     var infoBaseNode = infoBasesNode[i];
 
-                    string elPath = Path.Combine(_folder, infoBaseNode[0]);
+                    var elPath = Path.Combine(_folder, infoBaseNode[0]);
                     string name = infoBaseNode[5];
 
                     foreach (var template in _templates)
-                    {
                         if (Regex.IsMatch(name, template.Mask))
                         {
                             var dataBaseName = template.Template.Replace("[IBNAME]", name);
@@ -64,9 +69,7 @@ namespace OneSTools.EventLog.Exporter.Manager
 
                             break;
                         }
-                    }
                 }
-            }
 
             return items;
         }
@@ -99,13 +102,9 @@ namespace OneSTools.EventLog.Exporter.Manager
         private void ClstWatcher_Changed(object sender, FileSystemEventArgs e)
         {
             lock (InfoBases)
+            {
                 ReadInfoBasesAndRaiseEvents();
-        }
-
-        public void Dispose()
-        {
-            _clstWatcher?.Dispose();
-            GC.SuppressFinalize(this);
+            }
         }
     }
 }

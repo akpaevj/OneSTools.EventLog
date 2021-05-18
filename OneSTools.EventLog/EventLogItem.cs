@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using System.Transactions;
 
 namespace OneSTools.EventLog
 {
@@ -12,7 +10,7 @@ namespace OneSTools.EventLog
         public virtual long LgfEndPosition { get; set; } = 0;
         public virtual DateTime DateTime { get; set; } = DateTime.MinValue;
         public virtual string TransactionStatus { get; set; } = "";
-        public virtual DateTime TransactionDateTime { get; set; } = new DateTime(1970,1,1);
+        public virtual DateTime TransactionDateTime { get; set; } = new DateTime(1970, 1, 1);
         public virtual long TransactionNumber { get; set; } = 0;
         public virtual string UserUuid { get; set; } = "";
         public virtual string User { get; set; } = "";
