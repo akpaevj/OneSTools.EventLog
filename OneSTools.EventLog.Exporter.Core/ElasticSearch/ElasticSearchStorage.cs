@@ -29,7 +29,7 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
             _logger = logger;
 
             _nodes.AddRange(settings.Nodes);
-            _eventLogItemsIndex = settings.Index;
+            _eventLogItemsIndex = settings.Index.ToLower();
             _separation = settings.Separation;
             _maximumRetries = settings.MaximumRetries;
             _maxRetryTimeout = settings.MaxRetryTimeout;
