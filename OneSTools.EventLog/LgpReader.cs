@@ -97,13 +97,21 @@ namespace OneSTools.EventLog
 
             var eventLogItem = new EventLogItem
             {
-                DateTime = _timeZone.ToUtc(DateTime.ParseExact(parsedData[0], "yyyyMMddHHmmss",
-                    CultureInfo.InvariantCulture)),
                 TransactionStatus = GetTransactionPresentation(parsedData[1]),
                 FileName = LgpFileName,
                 EndPosition = endPosition,
                 LgfEndPosition = _lgfReader.GetPosition()
             };
+
+            try
+            {
+                eventLogItem.DateTime = _timeZone.ToUtc(DateTime.ParseExact(parsedData[0], "yyyyMMddHHmmss",
+                    CultureInfo.InvariantCulture));
+            }
+            catch
+            {
+                eventLogItem.DateTime = DateTime.MinValue;
+            }
 
             var transactionData = parsedData[2];
             eventLogItem.TransactionNumber = Convert.ToInt64(transactionData[1], 16);
