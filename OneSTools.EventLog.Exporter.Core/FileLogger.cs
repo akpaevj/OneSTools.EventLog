@@ -30,9 +30,7 @@ namespace OneSTools.EventLog.Exporter.Core
             Func<TState, Exception, string> formatter)
         {
             var levelName = Enum.GetName(typeof(LogLevel), logLevel);
-
-            var message =
-                $"{DateTime.Now:yyyy-MM-hh HH:mm:ss.fff} | {levelName} | {_categoryName}[{eventId.Id}]\n\t{formatter(state, exception)}";
+            var message = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} | {levelName} | {_categoryName}[{eventId.Id}]\n\t{ formatter(state, exception)}";
 
             lock (Locker)
             {

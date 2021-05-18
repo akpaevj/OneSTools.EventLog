@@ -1,5 +1,5 @@
 # Инструменты для чтения и экспорта журнала регистрации 1С
-Репозиторий содержит как библиотеки так и готовые инструменты для чтения и экспорта журнала регистрации 1С в ClickHouse и ElasticSearch. В основе служб экспорта находится pipeline (TPL Dataflow) обработка данных, за счет чего достигается высокая скорость экспорта с возможностью параметризации потребления ресурсов CPU<->RAM.  
+Репозиторий содержит как библиотеки так и готовые инструменты для чтения и экспорта журнала регистрации 1С в ClickHouse и ElasticSearch. В основе служб экспорта находится pipeline (TPL Dataflow) обработка данных, за счет чего достигается высокая скорость экспорта с возможностью параметризации потребления ресурсов CPU<->RAM.
 
 ## Состав:
 |Наименование|Описание|Actions/Nuget|
@@ -7,7 +7,7 @@
 |[OneSTools.EventLog](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog)|Библиотека для чтения журнала регистрации (старый формат, LGF и LGP файлы). Позволяет выполнять как разовое чтение данных, так и запуск в "live" режиме|[![Nuget](https://img.shields.io/nuget/v/OneSTools.EventLog)](https://www.nuget.org/packages/OneSTools.EventLog)  ![EventLog .NET 5](https://github.com/akpaevj/OneSTools.EventLog/workflows/EventLog%20.NET%205/badge.svg)|
 |[OneSTools.EventLog.Exporter.Core](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Core)|Библиотека-ядро для инструментов экспорта журнала регистрации||
 |[EventLogExporter](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter)|Служба для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/) и [ElasticSearch](https://www.elastic.co/)|![EventLogExporter .NET 5](https://github.com/akpaevj/OneSTools.EventLog/workflows/EventLogExporter%20.NET%205/badge.svg)|
-|[EventLogExportersManager](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Manager)|Менеджер служб экспорта||
+|[EventLogExportersManager](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Manager)|Служба, выполняющая роль менеджера и наблюдающая каталоги серверов на предмет появления/удаления информационных баз с автоматическим подключением/отключением экспорта их журналов регистраций||
 
 ## Get started:
 
@@ -18,26 +18,36 @@
 Секция настроек менеджера служб экспорта.  
 ```json
 "Manager": {
-    "ClstFolder": "\\\\s01\\c$\\Program Files\\1cv8\\srvinfo\\reg_1541",
-    "Templates": [
+    "ClstFolders": [
       {
-        "Mask": "upp.*dev",
-        "Template": "dev-[IBNAME]-el"
+        "Folder": "C:\\\\Program Files\\1cv8\\srvinfo\\reg_1541",
+        "Templates": [
+          {
+            "Mask": "upp_main",
+            "Template": "[IBNAME]_el"
+          }
+        ]
       },
       {
-        "Mask": "upp.*",
-        "Template": "[IBNAME]-el"
+        "Folder": "C:\\\\Program Files\\1cv8\\srvinfo\\reg_1542",
+        "Templates": [
+          {
+            "Mask": "bp3_.*",
+            "Template": "[IBNAME]_el"
+          }
+        ]
       }
     ]
   }
 ```
 где:  
-1. *ClstFolder* - каталог центрального рабочего сервера (reg_*)  
-2. *Templates* - шаблоны обрабатываемых наименований информационных баз и правила наименования баз данных логов  
+1. *ClstFolders* - массив описаний каталогов рабочих серверов (reg_*)  
+2. *Folder* - Путь к каталогу рабочего сервера (reg_*)
+3. *Templates* - шаблоны обрабатываемых наименований информационных баз и правила наименования баз данных логов  
   *Mask* - регулярное выражение, применяемое к имени информационной базы  
   *Template* - шаблон имени базы данных хранения логов журнала. Обязательно должен содержать в себе переменную [IBNAME]  
   
-Информационные базы, которые не попали ни под один из шаблонов будут пропущены, экспорт их журналов выполняться не будет  
+Информационные базы, которые не попали ни под одну из масок будут пропущены, экспорт их журналов выполняться не будет  
 
 **При использовании менеджера изменяются настройки для СУБД. При использовании ClickHouse из строки подключения нужно удалить параметр Database, менеджер автоматически создаст базу данных для каждой экспортируемой информационной базы с именем, которое будет определено в зависимости от выбранного шаблона наименования. При использовании ElasticSearch имя индекса будет определено таким же способом, поэтому параметр Index будет просто проигнорирован**
 
@@ -127,15 +137,15 @@
     }
   },
   "Manager": {
-    "ClstFolder": "\\\\s01\\c$\\Program Files\\1cv8\\srvinfo\\reg_1541",
-    "Templates": [
+    "ClstFolders": [
       {
-        "Mask": "upp.*dev",
-        "Template": "dev-[IBNAME]-el"
-      },
-      {
-        "Mask": "upp.*",
-        "Template": "[IBNAME]-el"
+        "Folder": "C:\\\\Program Files\\1cv8\\srvinfo\\reg_1541",
+        "Templates": [
+          {
+            "Mask": "upp_main",
+            "Template": "[IBNAME]_el"
+          }
+        ]
       }
     ]
   },
