@@ -1,38 +1,36 @@
-﻿using OneSTools.BracketsFile;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Resources;
 using NodaTime;
+using OneSTools.BracketsFile;
 
 namespace OneSTools.EventLog
 {
-    internal class LgpReader: IDisposable
+    internal class LgpReader : IDisposable
     {
-        private LgfReader _lgfReader;
-        private FileStream _fileStream;
-        private BracketsListReader _bracketsReader;
-        private FileSystemWatcher _lgpFileWatcher;
-        private bool _disposedValue;
         private readonly DateTimeZone _timeZone;
-
-        public string LgpPath { get; }
-        public string LgpFileName => Path.GetFileName(LgpPath);
+        private BracketsListReader _bracketsReader;
+        private bool _disposedValue;
+        private FileStream _fileStream;
+        private LgfReader _lgfReader;
+        private FileSystemWatcher _lgpFileWatcher;
 
         public LgpReader(string lgpPath, DateTimeZone timeZone, LgfReader lgfReader)
         {
             LgpPath = lgpPath;
             _timeZone = timeZone;
             _lgfReader = lgfReader;
+        }
+
+        public string LgpPath { get; }
+        public string LgpFileName => Path.GetFileName(LgpPath);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public EventLogItem ReadNextEventLogItem(CancellationToken cancellationToken = default)
@@ -61,48 +59,46 @@ namespace OneSTools.EventLog
 
                 _lgpFileWatcher = new FileSystemWatcher(Path.GetDirectoryName(LgpPath)!, "*.lgp")
                 {
-                    NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Attributes
+                    NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.FileName |
+                                   NotifyFilters.Attributes
                 };
                 _lgpFileWatcher.Deleted += LgpFileWatcher_Deleted;
                 _lgpFileWatcher.EnableRaisingEvents = true;
 
-                _fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                _fileStream = new FileStream(LgpPath, FileMode.Open, FileAccess.Read,
+                    FileShare.ReadWrite | FileShare.Delete);
                 _bracketsReader = new BracketsListReader(_fileStream);
             }
         }
 
         private void LgpFileWatcher_Deleted(object sender, FileSystemEventArgs e)
         {
-            if (e.ChangeType == WatcherChangeTypes.Deleted && LgpPath == e.FullPath)
-            {
-                Dispose();
-            }
+            if (e.ChangeType == WatcherChangeTypes.Deleted && LgpPath == e.FullPath) Dispose();
         }
 
         private (StringBuilder Data, long EndPosition) ReadNextEventLogItemData()
         {
-            StringBuilder data = _bracketsReader.NextNodeAsStringBuilder();
+            var data = _bracketsReader.NextNodeAsStringBuilder();
 
             return (data, _bracketsReader.Position);
         }
 
         private EventLogItem ReadEventLogItemData(CancellationToken cancellationToken = default)
         {
-            (StringBuilder data, long endPosition) = ReadNextEventLogItemData();
+            var (data, endPosition) = ReadNextEventLogItemData();
 
-            if (data.Length == 0)
-                return null;
-
-            return ParseEventLogItemData(data, endPosition, cancellationToken);
+            return data.Length == 0 ? null : ParseEventLogItemData(data, endPosition, cancellationToken);
         }
 
-        private EventLogItem ParseEventLogItemData(StringBuilder eventLogItemData, long endPosition, CancellationToken cancellationToken = default)
+        private EventLogItem ParseEventLogItemData(StringBuilder eventLogItemData, long endPosition,
+            CancellationToken cancellationToken = default)
         {
             var parsedData = BracketsParser.ParseBlock(eventLogItemData);
 
             var eventLogItem = new EventLogItem
             {
-                DateTime = _timeZone.ToUtc(DateTime.ParseExact(parsedData[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture)),
+                DateTime = _timeZone.ToUtc(DateTime.ParseExact(parsedData[0], "yyyyMMddHHmmss",
+                    CultureInfo.InvariantCulture)),
                 TransactionStatus = GetTransactionPresentation(parsedData[1]),
                 FileName = LgpFileName,
                 EndPosition = endPosition,
@@ -113,7 +109,9 @@ namespace OneSTools.EventLog
             eventLogItem.TransactionNumber = Convert.ToInt64(transactionData[1], 16);
 
             var transactionDate = new DateTime().AddSeconds(Convert.ToInt64(transactionData[0], 16) / 10000);
-            eventLogItem.TransactionDateTime = transactionDate == DateTime.MinValue ? transactionDate : _timeZone.ToUtc(transactionDate);
+            eventLogItem.TransactionDateTime = transactionDate == DateTime.MinValue
+                ? transactionDate
+                : _timeZone.ToUtc(transactionDate);
 
             var (value, uuid) = _lgfReader.GetReferencedObjectValue(ObjectType.Users, parsedData[3], cancellationToken);
             eventLogItem.UserUuid = uuid;
@@ -129,7 +127,7 @@ namespace OneSTools.EventLog
             var ev = _lgfReader.GetObjectValue(ObjectType.Events, parsedData[7], cancellationToken);
             eventLogItem.Event = GetEventPresentation(ev);
 
-            var severity = (string)parsedData[8];
+            var severity = (string) parsedData[8];
             eventLogItem.Severity = GetSeverityPresentation(severity);
 
             eventLogItem.Comment = parsedData[9];
@@ -155,22 +153,22 @@ namespace OneSTools.EventLog
             return eventLogItem;
         }
 
-        private string GetData(BracketsNode node)
+        private static string GetData(BracketsNode node)
         {
-            var dataType = (string)node[0];
+            var dataType = (string) node[0];
 
             switch (dataType)
             {
                 case "R": // Reference
-                    return (string)node[1];
+                    return node[1];
                 case "U": // Undefined
                     return "";
                 case "S": // String
-                    return (string)node[1];
+                    return node[1];
                 case "B": // Boolean
-                    return (string)node[1] == "0" ? "false" : "true";
+                    return (string) node[1] == "0" ? "false" : "true";
                 case "P": // Complex data
-                    StringBuilder str = new StringBuilder();
+                    var str = new StringBuilder();
 
                     var subDataNode = node[1];
 
@@ -185,7 +183,7 @@ namespace OneSTools.EventLog
                     var subDataCount = subDataNode.Count - 1;
 
                     if (subDataCount > 0)
-                        for (int i = 1; i <= subDataCount; i++)
+                        for (var i = 1; i <= subDataCount; i++)
                         {
                             var value = GetData(subDataNode[i]);
 
@@ -199,7 +197,7 @@ namespace OneSTools.EventLog
             }
         }
 
-        private string GetTransactionPresentation(string str)
+        private static string GetTransactionPresentation(string str)
         {
             return str switch
             {
@@ -207,11 +205,11 @@ namespace OneSTools.EventLog
                 "C" => "Отменена",
                 "R" => "Не завершена",
                 "N" => "Нет транзакции",
-                _ => "",
+                _ => ""
             };
         }
 
-        private string GetSeverityPresentation(string str)
+        private static string GetSeverityPresentation(string str)
         {
             return str switch
             {
@@ -219,11 +217,11 @@ namespace OneSTools.EventLog
                 "E" => "Ошибка",
                 "W" => "Предупреждение",
                 "N" => "Примечание",
-                _ => "",
+                _ => ""
             };
         }
-        
-        private string GetApplicationPresentation(string str)
+
+        private static string GetApplicationPresentation(string str)
         {
             return str switch
             {
@@ -240,11 +238,11 @@ namespace OneSTools.EventLog
                 "JobScheduler" => "Планировщик заданий",
                 "Debugger" => "Отладчик",
                 "RAS" => "Сервер администрирования",
-                _ => str,
+                _ => str
             };
         }
 
-        private string GetEventPresentation(string str)
+        private static string GetEventPresentation(string str)
         {
             return str switch
             {
@@ -258,7 +256,8 @@ namespace OneSTools.EventLog
                 "_$Data$_.NewVersion" => "Данные.Добавление версии",
                 "_$Data$_.Pos" => "Данные.Проведение",
                 "_$Data$_.PredefinedDataInitialization" => "Данные.Инициализация предопределенных данных",
-                "_$Data$_.PredefinedDataInitializationDataNotFound" => "Данные.Инициализация предопределенных данных.Данные не найдены",
+                "_$Data$_.PredefinedDataInitializationDataNotFound" =>
+                    "Данные.Инициализация предопределенных данных.Данные не найдены",
                 "_$Data$_.SetPredefinedDataInitialization" => "Данные.Установка инициализации предопределенных данных",
                 "_$Data$_.SetStandardODataInterfaceContent" => "Данные.Изменение состава стандартного интерфейса OData",
                 "_$Data$_.TotalsMaxPeriodUpdate" => "Данные.Изменение максимального периода рассчитанных итогов",
@@ -272,11 +271,14 @@ namespace OneSTools.EventLog
                 "_$InfoBase$_.ConfigUpdate" => "Информационная база.Изменение конфигурации",
                 "_$InfoBase$_.DBConfigBackgroundUpdateCancel" => "Информационная база.Отмена фонового обновления",
                 "_$InfoBase$_.DBConfigBackgroundUpdateFinish" => "Информационная база.Завершение фонового обновления",
-                "_$InfoBase$_.DBConfigBackgroundUpdateResume" => "Информационная база.Продолжение (после приостановки) процесса фонового обновления",
+                "_$InfoBase$_.DBConfigBackgroundUpdateResume" =>
+                    "Информационная база.Продолжение (после приостановки) процесса фонового обновления",
                 "_$InfoBase$_.DBConfigBackgroundUpdateStart" => "Информационная база.Запуск фонового обновления",
-                "_$InfoBase$_.DBConfigBackgroundUpdateSuspend" => "Информационная база.Приостановка (пауза) процесса фонового обновления",
+                "_$InfoBase$_.DBConfigBackgroundUpdateSuspend" =>
+                    "Информационная база.Приостановка (пауза) процесса фонового обновления",
                 "_$InfoBase$_.DBConfigExtensionUpdate" => "Информационная база.Изменение расширения конфигурации",
-                "_$InfoBase$_.DBConfigExtensionUpdateError" => "Информационная база.Ошибка изменения расширения конфигурации",
+                "_$InfoBase$_.DBConfigExtensionUpdateError" =>
+                    "Информационная база.Ошибка изменения расширения конфигурации",
                 "_$InfoBase$_.DBConfigUpdate" => "Информационная база.Изменение конфигурации базы данных",
                 "_$InfoBase$_.DBConfigUpdateStart" => "Информационная база.Запуск обновления конфигурации базы данных",
                 "_$InfoBase$_.DumpError" => "Информационная база.Ошибка выгрузки в файл",
@@ -286,21 +288,30 @@ namespace OneSTools.EventLog
                 "_$InfoBase$_.EventLogReduce" => "Информационная база.Сокращение журнала регистрации",
                 "_$InfoBase$_.EventLogReduceError" => "Информационная база.Ошибка сокращения журнала регистрации",
                 "_$InfoBase$_.EventLogSettingsUpdate" => "Информационная база.Изменение параметров журнала регистрации",
-                "_$InfoBase$_.EventLogSettingsUpdateError" => "Информационная база.Ошибка при изменение настроек журнала регистрации",
-                "_$InfoBase$_.InfoBaseAdmParamsUpdate" => "Информационная база.Изменение параметров информационной базы",
-                "_$InfoBase$_.InfoBaseAdmParamsUpdateError" => "Информационная база.Ошибка изменения параметров информационной базы",
-                "_$InfoBase$_.IntegrationServiceActiveUpdate" => "Информационная база.Изменение активности сервиса интеграции",
-                "_$InfoBase$_.IntegrationServiceSettingsUpdate" => "Информационная база.Изменение настроек сервиса интеграции",
+                "_$InfoBase$_.EventLogSettingsUpdateError" =>
+                    "Информационная база.Ошибка при изменение настроек журнала регистрации",
+                "_$InfoBase$_.InfoBaseAdmParamsUpdate" =>
+                    "Информационная база.Изменение параметров информационной базы",
+                "_$InfoBase$_.InfoBaseAdmParamsUpdateError" =>
+                    "Информационная база.Ошибка изменения параметров информационной базы",
+                "_$InfoBase$_.IntegrationServiceActiveUpdate" =>
+                    "Информационная база.Изменение активности сервиса интеграции",
+                "_$InfoBase$_.IntegrationServiceSettingsUpdate" =>
+                    "Информационная база.Изменение настроек сервиса интеграции",
                 "_$InfoBase$_.MasterNodeUpdate" => "Информационная база.Изменение главного узла",
                 "_$InfoBase$_.PredefinedDataUpdate" => "Информационная база.Обновление предопределенных данных",
                 "_$InfoBase$_.RegionalSettingsUpdate" => "Информационная база.Изменение региональных установок",
                 "_$InfoBase$_.RestoreError" => "Информационная база.Ошибка загрузки из файла",
                 "_$InfoBase$_.RestoreFinish" => "Информационная база.Окончание загрузки из файла",
                 "_$InfoBase$_.RestoreStart" => "Информационная база.Начало загрузки из файла",
-                "_$InfoBase$_.SecondFactorAuthTemplateDelete" => "Информационная база.Удаление шаблона вторго фактора аутентификации",
-                "_$InfoBase$_.SecondFactorAuthTemplateNew" => "Информационная база.Добавление шаблона вторго фактора аутентификации",
-                "_$InfoBase$_.SecondFactorAuthTemplateUpdate" => "Информационная база.Изменение шаблона вторго фактора аутентификации",
-                "_$InfoBase$_.SetPredefinedDataUpdate" => "Информационная база.Установить обновление предопределенных данных",
+                "_$InfoBase$_.SecondFactorAuthTemplateDelete" =>
+                    "Информационная база.Удаление шаблона вторго фактора аутентификации",
+                "_$InfoBase$_.SecondFactorAuthTemplateNew" =>
+                    "Информационная база.Добавление шаблона вторго фактора аутентификации",
+                "_$InfoBase$_.SecondFactorAuthTemplateUpdate" =>
+                    "Информационная база.Изменение шаблона вторго фактора аутентификации",
+                "_$InfoBase$_.SetPredefinedDataUpdate" =>
+                    "Информационная база.Установить обновление предопределенных данных",
                 "_$InfoBase$_.TARImportant" => "Тестирование и исправление.Ошибка",
                 "_$InfoBase$_.TARInfo" => "Тестирование и исправление.Сообщение",
                 "_$InfoBase$_.TARMess" => "Тестирование и исправление.Предупреждение",
@@ -336,35 +347,23 @@ namespace OneSTools.EventLog
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: освободить управляемое состояние (управляемые объекты)
-                }
+            if (_disposedValue) return;
 
-                _bracketsReader?.Dispose();
-                _bracketsReader = null;
-                _fileStream = null;
+            _bracketsReader?.Dispose();
+            _bracketsReader = null;
+            _fileStream = null;
 
-                _lgpFileWatcher?.Dispose();
-                _lgpFileWatcher = null;
+            _lgpFileWatcher?.Dispose();
+            _lgpFileWatcher = null;
 
-                _lgfReader = null;
+            _lgfReader = null;
 
-                _disposedValue = true;
-            }
+            _disposedValue = true;
         }
 
         ~LgpReader()
         {
-            Dispose(disposing: false);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            Dispose(false);
         }
     }
 }

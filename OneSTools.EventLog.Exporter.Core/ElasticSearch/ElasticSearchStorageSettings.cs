@@ -9,6 +9,8 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
         public string Index { get; set; } = "";
         public string Separation { get; set; } = "";
         public int MaximumRetries { get; set; } = ElasticSearchStorage.DefaultMaximumRetries;
-        public TimeSpan MaxRetryTimeout { get; set; } = TimeSpan.FromSeconds(ElasticSearchStorage.DefaultMaxRetryTimeoutSec);
+
+        public TimeSpan MaxRetryTimeout { get; set; } =
+            TimeSpan.FromSeconds(ElasticSearchStorage.DefaultMaxRetryTimeoutSec);
     }
 }

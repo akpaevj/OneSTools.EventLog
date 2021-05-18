@@ -7,7 +7,7 @@
     <Copyright>Akpaev Evgeny</Copyright>
     <PackageProjectUrl></PackageProjectUrl>
     <Description>Служба для экспорта журнала регистрации 1С в ClickHouse и ElasticSearch</Description>
-    <Version>1.0.4</Version>
+    <Version>1.0.6</Version>
     <AssemblyName>EventLogExporter</AssemblyName>
     <RootNamespace>OneSTools.EventLog.Exporter</RootNamespace>
   </PropertyGroup>
@@ -34,5 +34,9 @@
     <ProjectReference Include="..\OneSTools.EventLog.Exporter.Core\OneSTools.EventLog.Exporter.Core.csproj" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties appsettings_1json__JsonSchema="" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

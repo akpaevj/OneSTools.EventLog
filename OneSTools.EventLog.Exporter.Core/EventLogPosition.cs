@@ -2,11 +2,6 @@
 {
     public class EventLogPosition
     {
-        public string FileName { get; }
-        public long EndPosition { get; }
-        public long LgfEndPosition { get; }
-        public long Id { get; }
-
         public EventLogPosition(string fileName, long endPosition, long lgfEndPosition, long id)
         {
             FileName = fileName;
@@ -14,5 +9,10 @@
             LgfEndPosition = lgfEndPosition;
             Id = id;
         }
+
+        public string FileName { get; }
+        public long EndPosition { get; }
+        public long LgfEndPosition { get; }
+        public long Id { get; }
     }
 }

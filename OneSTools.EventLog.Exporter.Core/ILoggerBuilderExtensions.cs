@@ -7,7 +7,7 @@ namespace OneSTools.EventLog.Exporter.Core
         public static ILoggingBuilder AddFile(this ILoggingBuilder loggingBuilder, string path)
         {
             var provider = new FileLoggerProvider(path);
-            
+
             return loggingBuilder.AddProvider(provider);
         }
     }

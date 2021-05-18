@@ -1,13 +1,13 @@
-﻿using NodaTime;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using NodaTime;
 
 namespace OneSTools.EventLog
 {
     internal static class DateTimeZoneExtensions
     {
         public static DateTime ToUtc(this DateTimeZone dateTimeZone, DateTime dateTime)
-            => LocalDateTime.FromDateTime(dateTime).InZoneStrictly(dateTimeZone).ToDateTimeUtc();
+        {
+            return LocalDateTime.FromDateTime(dateTime).InZoneStrictly(dateTimeZone).ToDateTimeUtc();
+        }
     }
 }

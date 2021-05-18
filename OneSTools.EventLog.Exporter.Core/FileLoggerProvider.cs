@@ -7,14 +7,17 @@ namespace OneSTools.EventLog.Exporter.Core
         private readonly string _path;
 
         public FileLoggerProvider(string path)
-            => _path = path;
+        {
+            _path = path;
+        }
 
         public ILogger CreateLogger(string categoryName)
-            => new FileLogger(_path, categoryName);
+        {
+            return new FileLogger(_path, categoryName);
+        }
 
         public void Dispose()
         {
-            
         }
     }
 }
