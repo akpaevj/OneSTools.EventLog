@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
@@ -14,7 +15,7 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
     {
         public static int DefaultMaximumRetries = 2;
         public static int DefaultMaxRetryTimeoutSec = 30;
-        private readonly string _eventLogItemsIndex;
+        private string _eventLogItemsIndex;
 
         private readonly ILogger<ElasticSearchStorage> _logger;
         private readonly int _maximumRetries;
@@ -158,6 +159,14 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
 
             if (_eventLogItemsIndex == string.Empty)
                 throw new Exception("ElasticSearch index name is not specified");
+            else
+                _eventLogItemsIndex = FixIndexName(_eventLogItemsIndex);
+        }
+
+        private static string FixIndexName(string name)
+        {
+            var result = Regex.Replace(name, @"[\\,/,\*,\?,"",<,>,\|, ]", "_", RegexOptions.Compiled);
+            return Regex.Replace(result, "^[-,+,_]*", "", RegexOptions.Compiled);
         }
 
         private async Task ConnectAsync(CancellationToken cancellationToken = default)

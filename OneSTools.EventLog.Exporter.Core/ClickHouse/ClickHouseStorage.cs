@@ -120,7 +120,12 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
 
             if (string.IsNullOrWhiteSpace(_databaseName))
                 throw new Exception("Database name is not specified");
+            else
+                _databaseName = FixDatabaseName(_databaseName);
         }
+
+        private static string FixDatabaseName(string name)
+            => Regex.Replace(name, @"\W", "_", RegexOptions.Compiled);
 
         private async Task CreateConnectionAsync(CancellationToken cancellationToken = default)
         {
