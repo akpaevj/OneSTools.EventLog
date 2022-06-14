@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -10,7 +10,7 @@ using NodaTime;
 
 namespace OneSTools.EventLog.Exporter.Core
 {
-    public class EventLogExporter
+    public class EventLogExporter : IDisposable
     {
         private readonly int _collectedFactor;
         private readonly bool _loadArchive;
@@ -109,7 +109,7 @@ namespace OneSTools.EventLog.Exporter.Core
                 var settings = await GetReaderSettingsAsync(cancellationToken);
                 _eventLogReader = new EventLogReader(settings);
 
-                while (!cancellationToken.IsCancellationRequested)
+                while (!cancellationToken.IsCancellationRequested && !_writeBlock.Completion.IsCompleted)
                 {
                     var forceSending = false;
 
@@ -170,12 +170,23 @@ namespace OneSTools.EventLog.Exporter.Core
                 BoundedCapacity = _portion * _collectedFactor
             };
 
-            _writeBlock =
-                new ActionBlock<EventLogItem[]>(c => _storage.WriteEventLogDataAsync(c.ToList(), cancellationToken),
-                    writeBlockSettings);
-            _batchBlock = new BatchBlock<EventLogItem>(_portion, batchBlockSettings);
+            _writeBlock = new ActionBlock<EventLogItem[]>(async c =>
+            {
+                try
+                {
+                    await _storage.WriteEventLogDataAsync(c.ToList(), cancellationToken);
+                }
+                catch (Exception)
+                {
+                    _batchBlock.Complete();
+                    _writeBlock.Complete();
+                    throw;
+                }
+            },
+            writeBlockSettings);
 
-            _batchBlock.LinkTo(_writeBlock, new DataflowLinkOptions {PropagateCompletion = true});
+            _batchBlock = new BatchBlock<EventLogItem>(_portion, batchBlockSettings);
+            _batchBlock.LinkTo(_writeBlock, new DataflowLinkOptions { PropagateCompletion = true });
         }
 
         private async Task<EventLogReaderSettings> GetReaderSettingsAsync(CancellationToken cancellationToken = default)
@@ -232,7 +243,7 @@ namespace OneSTools.EventLog.Exporter.Core
         private static async Task SendAsync(ITargetBlock<EventLogItem> nextBlock, EventLogItem item,
             CancellationToken stoppingToken = default)
         {
-            while (!stoppingToken.IsCancellationRequested && !nextBlock.Completion.IsFaulted)
+            while (!stoppingToken.IsCancellationRequested && !nextBlock.Completion.IsCompleted)
                 if (await nextBlock.SendAsync(item, stoppingToken))
                     break;
         }
