@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -87,9 +87,16 @@ namespace OneSTools.EventLog
 
         private EventLogItem ReadEventLogItemData(CancellationToken cancellationToken = default)
         {
-            var (data, endPosition) = ReadNextEventLogItemData();
+            while (true)
+            {
+                var (data, endPosition) = ReadNextEventLogItemData();
+                if (data.Length == 0)
+                    return null;
 
-            return data.Length == 0 ? null : ParseEventLogItemData(data, endPosition, cancellationToken);
+                var eventLogItem = ParseEventLogItemData(data, endPosition, cancellationToken);
+                if (eventLogItem != null)
+                    return eventLogItem;
+            }
         }
 
         private EventLogItem ParseEventLogItemData(StringBuilder eventLogItemData, long endPosition,
