@@ -7,7 +7,7 @@ namespace OneSTools.EventLog
     {
         public static DateTime ToUtc(this DateTimeZone dateTimeZone, DateTime dateTime)
         {
-            return LocalDateTime.FromDateTime(dateTime).InZoneStrictly(dateTimeZone).ToDateTimeUtc();
+            return LocalDateTime.FromDateTime(dateTime).InZoneLeniently(dateTimeZone).ToDateTimeUtc();
         }
     }
 }
