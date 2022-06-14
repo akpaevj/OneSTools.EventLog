@@ -136,12 +136,12 @@ namespace OneSTools.EventLog.Exporter.Manager
 
         private void ClstWatcher_InfoBasesDeleted(object sender, ClstEventArgs args)
         {
-            StartExporter(args.Path, args.Name, args.DataBaseName);
+            StopExporter(args.Path, args.Name);
         }
 
         private void ClstWatcher_InfoBasesAdded(object sender, ClstEventArgs args)
         {
-            StopExporter(args.Path, args.Name);
+            StartExporter(args.Path, args.Name, args.DataBaseName);
         }
 
         private void StartExporter(string path, string name, string dataBaseName)
