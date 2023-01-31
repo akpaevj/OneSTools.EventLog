@@ -157,7 +157,7 @@ namespace OneSTools.EventLog
 
             _lgpFilesWatcher = new FileSystemWatcher(_settings.LogFolder, "*.lgp")
             {
-                NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
+                NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size
             };
             _lgpFilesWatcher.Changed += LgpFilesWatcher_Event;
             _lgpFilesWatcher.Created += LgpFilesWatcher_Event;

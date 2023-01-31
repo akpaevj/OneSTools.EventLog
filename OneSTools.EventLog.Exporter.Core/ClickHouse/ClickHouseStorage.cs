@@ -40,7 +40,7 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
             await CreateConnectionAsync(cancellationToken);
 
             var commandText =
-                $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition, Id FROM {TableName} ORDER BY Id DESC";
+                $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition, Id FROM {TableName} ORDER BY DateTime DESC, EndPosition DESC";
 
             await using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
