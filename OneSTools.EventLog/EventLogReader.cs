@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Timers;
+using Timers = System.Timers;
 
 namespace OneSTools.EventLog
 {
@@ -16,7 +16,7 @@ namespace OneSTools.EventLog
         private bool _disposedValue;
         private LgfReader _lgfReader;
         private ManualResetEvent _lgpChangedCreated;        
-        private System.Timers.Timer _Timer;
+        private Timers.Timer _Timer;
         private LgpReader _lgpReader;
 
         public EventLogReader(EventLogReaderSettings settings)
@@ -156,15 +156,14 @@ namespace OneSTools.EventLog
         {
             _lgpChangedCreated = new ManualResetEvent(false);
 
-            _Timer = new System.Timers.Timer(_settings.ReadingTimeout);
+            _Timer = new Timers.Timer(_settings.ReadingTimeout);
             _Timer.Elapsed += OnTimedEvent;
             _Timer.AutoReset = true;
             _Timer.Enabled = true;
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnTimedEvent(Object source, Timers.ElapsedEventArgs e)
         {
-            //Console.WriteLine("Срабатывание таймера: {0:HH:mm:ss.fff}", e.SignalTime);
             _lgpChangedCreated.Set();
         }
 
