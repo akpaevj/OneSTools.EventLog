@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Timers;
 
 namespace OneSTools.EventLog
 {
@@ -14,8 +15,8 @@ namespace OneSTools.EventLog
         private readonly EventLogReaderSettings _settings;
         private bool _disposedValue;
         private LgfReader _lgfReader;
-        private ManualResetEvent _lgpChangedCreated;
-        private FileSystemWatcher _lgpFilesWatcher;
+        private ManualResetEvent _lgpChangedCreated;        
+        private System.Timers.Timer _Timer;
         private LgpReader _lgpReader;
 
         public EventLogReader(EventLogReaderSettings settings)
@@ -57,8 +58,8 @@ namespace OneSTools.EventLog
             if (_lgpReader == null)
                 SetNextLgpReader();
 
-            if (_settings.LiveMode && _lgpFilesWatcher == null)
-                StartLgpFilesWatcher();
+            if (_settings.LiveMode && _Timer == null)
+                StartTimer();
 
             EventLogItem item = null;
 
@@ -151,31 +152,29 @@ namespace OneSTools.EventLog
             return true;
         }
 
-        private void StartLgpFilesWatcher()
+        private void StartTimer()
         {
             _lgpChangedCreated = new ManualResetEvent(false);
 
-            _lgpFilesWatcher = new FileSystemWatcher(_settings.LogFolder, "*.lgp")
-            {
-                NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size
-            };
-            _lgpFilesWatcher.Changed += LgpFilesWatcher_Event;
-            _lgpFilesWatcher.Created += LgpFilesWatcher_Event;
-            _lgpFilesWatcher.EnableRaisingEvents = true;
+            _Timer = new System.Timers.Timer(_settings.ReadingTimeout);
+            _Timer.Elapsed += OnTimedEvent;
+            _Timer.AutoReset = true;
+            _Timer.Enabled = true;
         }
 
-        private void LgpFilesWatcher_Event(object sender, FileSystemEventArgs e)
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Changed)
-                _lgpChangedCreated.Set();
+            //Console.WriteLine("Срабатывание таймера: {0:HH:mm:ss.fff}", e.SignalTime);
+            _lgpChangedCreated.Set();
         }
 
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposedValue)
             {
-                _lgpFilesWatcher?.Dispose();
-                _lgpFilesWatcher = null;
+                _Timer?.Stop();
+                _Timer?.Dispose();
+                _Timer = null;
                 _lgpChangedCreated?.Dispose();
                 _lgpChangedCreated = null;
                 _lgfReader?.Dispose();
