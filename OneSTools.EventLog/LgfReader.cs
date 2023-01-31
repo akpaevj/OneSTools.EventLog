@@ -110,7 +110,8 @@ namespace OneSTools.EventLog
 
             if (_objects.TryGetValue((objectType, number), out value))
                 return value;
-            throw new Exception($"Cannot find objectType {objectType} with number {number} in objects collection");
+            
+            return null;
         }
 
         public (string Value, string Uuid) GetReferencedObjectValue(ObjectType objectType, int number,
@@ -125,8 +126,8 @@ namespace OneSTools.EventLog
 
             if (_referencedObjects.TryGetValue((objectType, number), out value))
                 return value;
-            throw new Exception(
-                $"Cannot find objectType {objectType} with number {number} in referenced objects collection");
+
+            return (null, null);
         }
 
         private void InitializeStreams()

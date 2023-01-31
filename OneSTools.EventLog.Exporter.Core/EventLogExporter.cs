@@ -10,7 +10,7 @@ using NodaTime;
 
 namespace OneSTools.EventLog.Exporter.Core
 {
-    public class EventLogExporter
+    public class EventLogExporter : IDisposable
     {
         private readonly int _collectedFactor;
         private readonly bool _loadArchive;
@@ -24,6 +24,7 @@ namespace OneSTools.EventLog.Exporter.Core
         private readonly DateTimeZone _timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
         private readonly int _writingMaxDop;
         private BatchBlock<EventLogItem> _batchBlock;
+        private readonly DateTime _skipEventsBeforeDate;
 
         private string _currentLgpFile;
 
@@ -46,6 +47,7 @@ namespace OneSTools.EventLog.Exporter.Core
             _loadArchive = settings.LoadArchive;
             _timeZone = settings.TimeZone;
             _readingTimeout = settings.ReadingTimeout;
+            _skipEventsBeforeDate = settings.SkipEventsBeforeDate;
 
             CheckSettings();
         }
@@ -62,6 +64,7 @@ namespace OneSTools.EventLog.Exporter.Core
             _collectedFactor = configuration.GetValue("Exporter:CollectedFactor", 2);
             _loadArchive = configuration.GetValue("Exporter:LoadArchive", false);
             _readingTimeout = configuration.GetValue("Exporter:ReadingTimeout", 1);
+            _skipEventsBeforeDate = configuration.GetValue("Exporter:SkipEventsBeforeDate", DateTime.MinValue);
 
             var timeZone = configuration.GetValue("Exporter:TimeZone", "");
 
@@ -106,7 +109,7 @@ namespace OneSTools.EventLog.Exporter.Core
                 var settings = await GetReaderSettingsAsync(cancellationToken);
                 _eventLogReader = new EventLogReader(settings);
 
-                while (!cancellationToken.IsCancellationRequested)
+                while (!cancellationToken.IsCancellationRequested && !_writeBlock.Completion.IsCompleted)
                 {
                     var forceSending = false;
 
@@ -167,12 +170,23 @@ namespace OneSTools.EventLog.Exporter.Core
                 BoundedCapacity = _portion * _collectedFactor
             };
 
-            _writeBlock =
-                new ActionBlock<EventLogItem[]>(c => _storage.WriteEventLogDataAsync(c.ToList(), cancellationToken),
-                    writeBlockSettings);
-            _batchBlock = new BatchBlock<EventLogItem>(_portion, batchBlockSettings);
+            _writeBlock = new ActionBlock<EventLogItem[]>(async c =>
+            {
+                try
+                {
+                    await _storage.WriteEventLogDataAsync(c.ToList(), cancellationToken);
+                }
+                catch (Exception)
+                {
+                    _batchBlock.Complete();
+                    _writeBlock.Complete();
+                    throw;
+                }
+            },
+            writeBlockSettings);
 
-            _batchBlock.LinkTo(_writeBlock, new DataflowLinkOptions {PropagateCompletion = true});
+            _batchBlock = new BatchBlock<EventLogItem>(_portion, batchBlockSettings);
+            _batchBlock.LinkTo(_writeBlock, new DataflowLinkOptions { PropagateCompletion = true });
         }
 
         private async Task<EventLogReaderSettings> GetReaderSettingsAsync(CancellationToken cancellationToken = default)
@@ -182,7 +196,8 @@ namespace OneSTools.EventLog.Exporter.Core
                 LogFolder = _logFolder,
                 LiveMode = true,
                 ReadingTimeout = _readingTimeout * 1000,
-                TimeZone = _timeZone
+                TimeZone = _timeZone,
+                SkipEventsBeforeDate = _skipEventsBeforeDate
             };
 
             if (!_loadArchive)
@@ -228,7 +243,7 @@ namespace OneSTools.EventLog.Exporter.Core
         private static async Task SendAsync(ITargetBlock<EventLogItem> nextBlock, EventLogItem item,
             CancellationToken stoppingToken = default)
         {
-            while (!stoppingToken.IsCancellationRequested && !nextBlock.Completion.IsFaulted)
+            while (!stoppingToken.IsCancellationRequested && !nextBlock.Completion.IsCompleted)
                 if (await nextBlock.SendAsync(item, stoppingToken))
                     break;
         }
