@@ -16,12 +16,14 @@ namespace OneSTools.EventLog
         private FileStream _fileStream;
         private LgfReader _lgfReader;
         private FileSystemWatcher _lgpFileWatcher;
+        private DateTime _skipEventsBeforeDate;
 
-        public LgpReader(string lgpPath, DateTimeZone timeZone, LgfReader lgfReader)
+        public LgpReader(string lgpPath, DateTimeZone timeZone, LgfReader lgfReader, DateTime skipEventsBeforeDate)
         {
             LgpPath = lgpPath;
             _timeZone = timeZone;
             _lgfReader = lgfReader;
+            _skipEventsBeforeDate = skipEventsBeforeDate;
         }
 
         public string LgpPath { get; }
@@ -85,9 +87,16 @@ namespace OneSTools.EventLog
 
         private EventLogItem ReadEventLogItemData(CancellationToken cancellationToken = default)
         {
-            var (data, endPosition) = ReadNextEventLogItemData();
+            while (true)
+            {
+                var (data, endPosition) = ReadNextEventLogItemData();
+                if (data.Length == 0)
+                    return null;
 
-            return data.Length == 0 ? null : ParseEventLogItemData(data, endPosition, cancellationToken);
+                var eventLogItem = ParseEventLogItemData(data, endPosition, cancellationToken);
+                if (eventLogItem != null)
+                    return eventLogItem;
+            }
         }
 
         private EventLogItem ParseEventLogItemData(StringBuilder eventLogItemData, long endPosition,
@@ -95,23 +104,28 @@ namespace OneSTools.EventLog
         {
             var parsedData = BracketsParser.ParseBlock(eventLogItemData);
 
+            DateTime dateTime = default;
+            try
+            {
+                dateTime = _timeZone.ToUtc(DateTime.ParseExact(parsedData[0], "yyyyMMddHHmmss",
+                    CultureInfo.InvariantCulture));
+            }
+            catch
+            {
+                dateTime = DateTime.MinValue;
+            }
+
+            if (dateTime < _skipEventsBeforeDate)
+                return null;
+
             var eventLogItem = new EventLogItem
             {
+                DateTime = dateTime,
                 TransactionStatus = GetTransactionPresentation(parsedData[1]),
                 FileName = LgpFileName,
                 EndPosition = endPosition,
                 LgfEndPosition = _lgfReader.GetPosition()
             };
-
-            try
-            {
-                eventLogItem.DateTime = _timeZone.ToUtc(DateTime.ParseExact(parsedData[0], "yyyyMMddHHmmss",
-                    CultureInfo.InvariantCulture));
-            }
-            catch
-            {
-                eventLogItem.DateTime = DateTime.MinValue;
-            }
 
             var transactionData = parsedData[2];
             eventLogItem.TransactionNumber = Convert.ToInt64(transactionData[1], 16);
@@ -135,7 +149,7 @@ namespace OneSTools.EventLog
             var ev = _lgfReader.GetObjectValue(ObjectType.Events, parsedData[7], cancellationToken);
             eventLogItem.Event = GetEventPresentation(ev);
 
-            var severity = (string) parsedData[8];
+            var severity = (string)parsedData[8];
             eventLogItem.Severity = GetSeverityPresentation(severity);
 
             eventLogItem.Comment = parsedData[9];
@@ -163,7 +177,7 @@ namespace OneSTools.EventLog
 
         private static string GetData(BracketsNode node)
         {
-            var dataType = (string) node[0];
+            var dataType = (string)node[0];
 
             switch (dataType)
             {
@@ -174,7 +188,7 @@ namespace OneSTools.EventLog
                 case "S": // String
                     return node[1];
                 case "B": // Boolean
-                    return (string) node[1] == "0" ? "false" : "true";
+                    return (string)node[1] == "0" ? "false" : "true";
                 case "P": // Complex data
                     var str = new StringBuilder();
 

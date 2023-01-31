@@ -39,10 +39,10 @@ namespace OneSTools.EventLog.Exporter
                     switch (storageType)
                     {
                         case StorageType.ClickHouse:
-                            services.AddSingleton<IEventLogStorage, ClickHouseStorage>();
+                            services.AddTransient<IEventLogStorage, ClickHouseStorage>();
                             break;
                         case StorageType.ElasticSearch:
-                            services.AddSingleton<IEventLogStorage, ElasticSearchStorage>();
+                            services.AddTransient<IEventLogStorage, ElasticSearchStorage>();
                             break;
                         case StorageType.None:
                             throw new Exception("You must set StorageType parameter before starting the exporter");
@@ -50,7 +50,7 @@ namespace OneSTools.EventLog.Exporter
                             throw new Exception($"{storageType} is not available value of StorageType enum");
                     }
 
-                    services.AddSingleton<EventLogExporter>();
+                    services.AddTransient<EventLogExporter>();
                     services.AddHostedService<EventLogExporterService>();
                 });
         }

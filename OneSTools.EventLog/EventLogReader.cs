@@ -29,7 +29,7 @@ namespace OneSTools.EventLog
             {
                 var file = Path.Combine(_settings.LogFolder, settings.LgpFileName);
 
-                _lgpReader = new LgpReader(file, settings.TimeZone, _lgfReader);
+                _lgpReader = new LgpReader(file, settings.TimeZone, _lgfReader, settings.SkipEventsBeforeDate);
                 _lgpReader.SetPosition(settings.LgpStartPosition);
             }
         }
@@ -118,6 +118,8 @@ namespace OneSTools.EventLog
 
             if (_lgpReader != null)
                 currentReaderLastWriteDateTime = new FileInfo(_lgpReader.LgpPath).LastWriteTime;
+            else if(_settings.SkipEventsBeforeDate != DateTime.MinValue)
+                currentReaderLastWriteDateTime = _settings.SkipEventsBeforeDate.AddSeconds(-1);
 
             var filesDateTime = new List<(string, DateTime)>();
 
@@ -146,7 +148,7 @@ namespace OneSTools.EventLog
             _lgpReader?.Dispose();
             _lgpReader = null;
 
-            _lgpReader = new LgpReader(item1, _settings.TimeZone, _lgfReader);
+            _lgpReader = new LgpReader(item1, _settings.TimeZone, _lgfReader, _settings.SkipEventsBeforeDate);
 
             return true;
         }
@@ -157,7 +159,7 @@ namespace OneSTools.EventLog
 
             _lgpFilesWatcher = new FileSystemWatcher(_settings.LogFolder, "*.lgp")
             {
-                NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
+                NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size
             };
             _lgpFilesWatcher.Changed += LgpFilesWatcher_Event;
             _lgpFilesWatcher.Created += LgpFilesWatcher_Event;

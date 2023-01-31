@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -40,7 +40,7 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
             await CreateConnectionAsync(cancellationToken);
 
             var commandText =
-                $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition, Id FROM {TableName} ORDER BY Id DESC";
+                $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition, Id FROM {TableName} ORDER BY DateTime DESC, EndPosition DESC";
 
             await using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
@@ -125,7 +125,7 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
         }
 
         private static string FixDatabaseName(string name)
-            => Regex.Replace(name, @"\W", "_", RegexOptions.Compiled);
+            => Regex.Replace(name, @"(?:\W|-)", "_", RegexOptions.Compiled);
 
         private async Task CreateConnectionAsync(CancellationToken cancellationToken = default)
         {
