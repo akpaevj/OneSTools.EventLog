@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using OneSTools.BracketsFile;
+using System.Threading;
 
 namespace OneSTools.EventLog.Exporter.Manager
 {
@@ -47,7 +48,27 @@ namespace OneSTools.EventLog.Exporter.Manager
         {
             var items = new Dictionary<string, (string, string)>();
 
-            var fileData = File.ReadAllText(_path);
+            String fileData = null;
+            int tryCount = 10;
+            const int sleepTimeout = 1000;
+            while (fileData == null && tryCount > 0)
+            {
+                try
+                {
+                    using StreamReader stream = new StreamReader(new FileStream(_path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)); 
+                    {
+                        fileData = stream.ReadToEnd();
+                    }
+                }
+                catch (Exception e)
+                {
+                    tryCount--;
+                    if (tryCount == 0)
+                        throw new Exception("Ошибка чтения файла списка баз", e);
+                    Thread.Sleep(sleepTimeout);
+                }                
+            }
+            
             var parsedData = BracketsParser.ParseBlock(fileData);
 
             var infoBasesNode = parsedData[2];
