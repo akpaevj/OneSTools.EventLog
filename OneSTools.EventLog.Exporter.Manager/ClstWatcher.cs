@@ -46,8 +46,10 @@ namespace OneSTools.EventLog.Exporter.Manager
         private Dictionary<string, (string Name, string DataBaseName)> ReadInfoBases()
         {
             var items = new Dictionary<string, (string, string)>();
-
-            var fileData = File.ReadAllText(_path);
+            
+            using var fs = new FileStream(_path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); 
+            using var stream = new StreamReader(fs); 
+            var fileData = stream.ReadToEnd();
             var parsedData = BracketsParser.ParseBlock(fileData);
 
             var infoBasesNode = parsedData[2];
