@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using OneSTools.BracketsFile;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace OneSTools.EventLog.Exporter.Manager
 {
@@ -44,14 +44,13 @@ namespace OneSTools.EventLog.Exporter.Manager
         public event InfoBaseAddedHandler InfoBasesAdded;
         public event InfoBaseDeletedHandler InfoBasesDeleted;
 
-        private Dictionary<string, (string Name, string DataBaseName)> ReadInfoBases()
+        private async Task<Dictionary<string, (string Name, string DataBaseName)>> ReadInfoBases()
         {
             var items = new Dictionary<string, (string, string)>();
 
             String fileData = null;
-            int tryCount = 10;
-            const int sleepTimeout = 1000;
-            while (fileData == null && tryCount > 0)
+            int tryCount = 10;            
+            while (fileData == null)
             {
                 try
                 {
@@ -65,7 +64,7 @@ namespace OneSTools.EventLog.Exporter.Manager
                     tryCount--;
                     if (tryCount == 0)
                         throw new Exception("Ошибка чтения файла списка баз", e);
-                    Thread.Sleep(sleepTimeout);
+                    await Task.Delay(1000);
                 }                
             }
             
