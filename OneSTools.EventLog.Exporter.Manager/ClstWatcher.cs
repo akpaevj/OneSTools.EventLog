@@ -28,8 +28,7 @@ namespace OneSTools.EventLog.Exporter.Manager
             _path = Path.Combine(_folder, "1CV8Clst.lst");
             if (!File.Exists(_path))
                 throw new Exception("Couldn't find LST \"1CV8Clst.lst\" file");
-
-            _infoBases = ReadInfoBases();
+            
             InitializeWatcher();
         }
 
@@ -94,9 +93,9 @@ namespace OneSTools.EventLog.Exporter.Manager
             return items;
         }
 
-        private void ReadInfoBasesAndRaiseEvents()
+        private async void ReadInfoBasesAndRaiseEvents()
         {
-            var newInfoBases = ReadInfoBases();
+            var newInfoBases = await ReadInfoBases();
 
             var added = newInfoBases.Except(_infoBases);
             foreach (var (key, (item1, item2)) in added)
@@ -109,8 +108,9 @@ namespace OneSTools.EventLog.Exporter.Manager
             _infoBases = newInfoBases;
         }
 
-        private void InitializeWatcher()
+        private async void InitializeWatcher()
         {
+            _infoBases = await ReadInfoBases();
             _clstWatcher = new FileSystemWatcher(_folder, "1CV8Clst.lst")
             {
                 NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
