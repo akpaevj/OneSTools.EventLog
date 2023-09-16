@@ -88,10 +88,17 @@
 
 **ClickHouse:**
 ```json
-"ConnectionStrings": {
-    "Default": "Host=localhost;Port=8123;Username=default;password=;Database=database_name;"
+"ClickHouse": {
+    "ConnectionString": "Host=localhost;Port=8123;Username=default;password=;Database=database_name;",
+    "StoreMode": 1
   }
 ```
+где:</br>
+1. *ConnectionString* - строка подключения к ClickHouse
+2. *StoreMode* - как хранить различные журналы регистраций:c</br>
+   *1* - Каждый журнал регистрации - отдельная **база данных**c</br>
+   *2* - Каждый журнал регитрации - отдельная **таблица**
+
 **ElasticSearch:**
 ```json
 "ElasticSearch": {
@@ -169,7 +176,8 @@
     "LoadArchive": false
   },
   "ClickHouse": {
-    "ConnectionString": "Host=192.168.0.93;Port=8123;Database=upp_main_el;Username=default;password=;"
+    "ConnectionString": "Host=192.168.0.93;Port=8123;Database=upp_main_el;Username=default;password=;",
+    "StoreMode": 1
   },
   "ElasticSearch": {
     "Nodes": [
