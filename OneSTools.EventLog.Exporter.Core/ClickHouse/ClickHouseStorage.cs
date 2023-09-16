@@ -8,7 +8,6 @@ using ClickHouse.Client.ADO;
 using ClickHouse.Client.Copy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Nest;
 
 namespace OneSTools.EventLog.Exporter.Core.ClickHouse
 {
