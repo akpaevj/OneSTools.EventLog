@@ -24,6 +24,7 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
 
         public ClickHouseStorage(string connectionsString, ILogger<ClickHouseStorage> logger = null, string targetName = "", int storeMode = 1)
         {
+            // Constructor - EventLogExportersManager
             _logger = logger;
             _connectionString = connectionsString;
             _storeMode = storeMode;
@@ -34,9 +35,13 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
 
         public ClickHouseStorage(ILogger<ClickHouseStorage> logger, IConfiguration configuration)
         {
+            // Constructor - EventLogExporter
             _logger = logger;
             _connectionString = configuration.GetValue("ClickHouse:ConnectionString", "");
-            
+            // Use DB from connection string + default table name
+            _storeMode = 2;
+            _targetName = TableName;
+
             Init();
         }
 
