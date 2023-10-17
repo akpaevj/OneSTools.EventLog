@@ -26,6 +26,7 @@ namespace OneSTools.EventLog.Exporter.Manager
         private readonly bool _loadArchive;
         private readonly ILogger<ExportersManager> _logger;
         private readonly int _maximumRetries;
+        private readonly int _storeMode;
 
         private readonly TimeSpan _maxRetryTimeout;
 
@@ -72,6 +73,7 @@ namespace OneSTools.EventLog.Exporter.Manager
                 case StorageType.ClickHouse:
                     {
                         _connectionString = configuration.GetValue("ClickHouse:ConnectionString", "");
+                        _storeMode = configuration.GetValue("ClickHouse:StoreMode", 1);
                         if (_connectionString == string.Empty)
                             throw new Exception("Connection string is not specified");
                         break;
@@ -227,11 +229,10 @@ namespace OneSTools.EventLog.Exporter.Manager
             {
                 case StorageType.ClickHouse:
                     {
-                        var logger =
-                            (ILogger<ClickHouseStorage>)_serviceProvider.GetService(typeof(ILogger<ClickHouseStorage>));
-                        var connectionString = $"{_connectionString}Database={dataBaseName};";
+                        var logger = (ILogger<ClickHouseStorage>)_serviceProvider.GetService(typeof(ILogger<ClickHouseStorage>));
+                        //var connectionString = $"{_connectionString}Database={dataBaseName};";
 
-                        return new ClickHouseStorage(connectionString, logger);
+                        return new ClickHouseStorage(_connectionString, logger,  dataBaseName, _storeMode);
                     }
                 case StorageType.ElasticSearch:
                     {

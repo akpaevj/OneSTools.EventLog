@@ -18,19 +18,29 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
         private ClickHouseConnection _connection;
         private string _connectionString;
         private string _databaseName;
+        private string _tableName;
+        private readonly int _storeMode;
+        private readonly string _targetName;
 
-        public ClickHouseStorage(string connectionsString, ILogger<ClickHouseStorage> logger = null)
+        public ClickHouseStorage(string connectionsString, ILogger<ClickHouseStorage> logger = null, string targetName = "", int storeMode = 1)
         {
+            // Constructor - EventLogExportersManager
             _logger = logger;
             _connectionString = connectionsString;
+            _storeMode = storeMode;
+            _targetName = targetName;
 
             Init();
         }
 
         public ClickHouseStorage(ILogger<ClickHouseStorage> logger, IConfiguration configuration)
         {
+            // Constructor - EventLogExporter
             _logger = logger;
             _connectionString = configuration.GetValue("ClickHouse:ConnectionString", "");
+            // Use DB from connection string + default table name
+            _storeMode = 2;
+            _targetName = TableName;
 
             Init();
         }
@@ -40,7 +50,7 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
             await CreateConnectionAsync(cancellationToken);
 
             var commandText =
-                $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition, Id FROM {TableName} ORDER BY DateTime DESC, EndPosition DESC";
+                $"SELECT TOP 1 FileName, EndPosition, LgfEndPosition, Id FROM {_tableName} ORDER BY DateTime DESC, EndPosition DESC";
 
             await using var cmd = _connection.CreateCommand();
             cmd.CommandText = commandText;
@@ -60,7 +70,7 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
 
             using var copy = new ClickHouseBulkCopy(_connection)
             {
-                DestinationTableName = TableName,
+                DestinationTableName = _tableName,
                 BatchSize = entities.Count
             };
 
@@ -98,11 +108,11 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, $"Failed to write data to {_databaseName}");
+                _logger?.LogError(ex, $"Failed to write data to {_databaseName}.{_tableName}");
                 throw;
             }
 
-            _logger?.LogDebug($"{entities.Count} items were being written to {_databaseName}");
+            _logger?.LogDebug($"{entities.Count} items were being written to {_databaseName}.{_tableName}");
         }
 
         public void Dispose()
@@ -122,6 +132,16 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
                 throw new Exception("Database name is not specified");
             else
                 _databaseName = FixDatabaseName(_databaseName);
+
+            if (_storeMode == 2) {
+                // in tables
+                _tableName = _targetName;
+
+            } else {
+                // in databases
+                _tableName = TableName;
+                _databaseName = _targetName;
+            }
         }
 
         private static string FixDatabaseName(string name)
@@ -149,7 +169,7 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
             await _connection.ChangeDatabaseAsync(_databaseName, cancellationToken);
 
             var commandText =
-                $@"CREATE TABLE IF NOT EXISTS {TableName}
+                $@"CREATE TABLE IF NOT EXISTS {_tableName}
                 (
                     FileName LowCardinality(String),
                     EndPosition Int64 Codec(DoubleDelta, LZ4),
