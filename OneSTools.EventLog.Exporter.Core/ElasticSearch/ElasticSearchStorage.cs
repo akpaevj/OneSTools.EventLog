@@ -53,7 +53,7 @@ namespace OneSTools.EventLog.Exporter.Core.ElasticSearch
             CheckSettings();
         }
 
-        public async Task<EventLogPosition> ReadEventLogPositionAsync(CancellationToken cancellationToken = default)
+        public async Task<EventLogPosition> ReadEventLogPositionAsync(CancellationToken cancellationToken = default, string filename = "")
         {
             if (_client is null)
                 await ConnectAsync(cancellationToken);
