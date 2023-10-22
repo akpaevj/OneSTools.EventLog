@@ -140,6 +140,8 @@ namespace OneSTools.EventLog.Exporter.Core
                             _logger?.LogInformation($"Reader changed to {_eventLogReader.LgpFileName}");
 
                             _currentLgpFile = _eventLogReader.LgpFileName;
+                            // Need fix batch
+                            forceSending = true;
 
                             var newPos = await _storage.ReadEventLogPositionAsync(cancellationToken, _eventLogReader.LgpFileName);
                             if (newPos != null) {
@@ -158,6 +160,7 @@ namespace OneSTools.EventLog.Exporter.Core
                             }
                         } else {
                             _counterSkip++;
+                            _eventLogReader.BackId();
                         }
                     }
                     else if (!settings.LiveMode)
