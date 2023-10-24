@@ -39,6 +39,7 @@ namespace OneSTools.EventLog.Exporter.Core
         public EventLogExporter(EventLogExporterSettings settings, IEventLogStorage storage,
             ILogger<EventLogExporter> logger = null)
         {
+            // Constructor - EventLogExportersManager
             _logger = logger;
             _storage = storage;
 
@@ -57,6 +58,7 @@ namespace OneSTools.EventLog.Exporter.Core
         public EventLogExporter(ILogger<EventLogExporter> logger, IConfiguration configuration,
             IEventLogStorage storage)
         {
+            // Constructor - EventLogExporter
             _logger = logger;
             _storage = storage;
 
@@ -137,6 +139,12 @@ namespace OneSTools.EventLog.Exporter.Core
                     if (item != null)
                     {
                         if (!string.IsNullOrEmpty(_eventLogReader.LgpFileName) && _currentLgpFile != _eventLogReader.LgpFileName) {
+                            if (_counterSkip > 0)
+                            {
+                                _logger?.LogInformation($"Reader skipped {_counterSkip} items. {_eventLogReader.LgpFileName}");
+                                _counterSkip = 0;
+                            }
+
                             _logger?.LogInformation($"Reader changed to {_eventLogReader.LgpFileName}");
 
                             _currentLgpFile = _eventLogReader.LgpFileName;
@@ -152,13 +160,12 @@ namespace OneSTools.EventLog.Exporter.Core
                         }
 
                         //await SendAsync(_batchBlock, item, cancellationToken);
-                        if (item.EndPosition > _currentPos.EndPosition) {
+                        if (item.EndPosition > _currentPos.EndPosition)
+                        {
                             await SendAsync(_batchBlock, item, cancellationToken);
-                            if (_counterSkip > 0) {
-                                _logger?.LogInformation($"Reader skipped {_counterSkip} items. {_eventLogReader.LgpFileName}");
-                                _counterSkip = 0;
-                            }
-                        } else {
+                        }
+                        else
+                        {
                             _counterSkip++;
                             _eventLogReader.BackId();
                         }
