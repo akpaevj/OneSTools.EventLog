@@ -46,6 +46,11 @@ namespace OneSTools.EventLog
             GC.SuppressFinalize(this);
         }
 
+        public void BackId()
+        {
+            _settings.ItemId--;
+        }
+
         /// <summary>
         ///     The behaviour of the method depends on the mode of the reader. In the "live" mode it'll be waiting for an appearing
         ///     of the new event item, otherwise It'll just return null

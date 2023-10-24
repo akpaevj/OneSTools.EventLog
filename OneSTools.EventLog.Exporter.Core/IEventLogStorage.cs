@@ -7,7 +7,7 @@ namespace OneSTools.EventLog.Exporter.Core
 {
     public interface IEventLogStorage : IDisposable
     {
-        Task<EventLogPosition> ReadEventLogPositionAsync(CancellationToken cancellationToken = default);
+        Task<EventLogPosition> ReadEventLogPositionAsync(CancellationToken cancellationToken = default, string filename = "");
         Task WriteEventLogDataAsync(List<EventLogItem> entities, CancellationToken cancellationToken = default);
     }
 }
