@@ -92,14 +92,23 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
                 item.Session
             }).AsEnumerable();
 
-            try
+            for (int number_try = 0; number_try < 100; number_try++)
             {
-                await copy.WriteToServerAsync(data, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger?.LogError(ex, $"Failed to write data to {_databaseName}");
-                throw;
+                try
+                {
+                    await copy.WriteToServerAsync(data, cancellationToken);
+                    break;
+                }
+                catch (Exception ex)
+                {
+
+                    await Task.Delay(1000);
+                    if (number_try == 99) 
+                        {
+                        _logger?.LogError(ex, $"Failed to write data to {_databaseName}");
+                        throw;
+                    }
+                }
             }
 
             _logger?.LogDebug($"{entities.Count} items were being written to {_databaseName}");
