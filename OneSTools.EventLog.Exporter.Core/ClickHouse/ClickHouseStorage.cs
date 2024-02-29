@@ -23,7 +23,7 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
         {
             _logger = logger;
             _connectionString = connectionsString;
-
+            
             Init();
         }
 
@@ -31,7 +31,13 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
         {
             _logger = logger;
             _connectionString = configuration.GetValue("ClickHouse:ConnectionString", "");
-
+            var useVault = configuration.GetValue("Vault:UseVault", false);
+            if (useVault) {
+                var vault = new Vault();
+                var arr = vault.GetSecretWithAppRole(configuration);
+                var username = arr[0];
+                var password = arr[1];
+                _connectionString = _connectionString.Replace("Username=test","Username:" + username).Replace("password=","password=" + password); }
             Init();
         }
 

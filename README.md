@@ -11,6 +11,7 @@
 |[OneSTools.EventLog.Exporter.Core](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Core)|Библиотека-ядро для инструментов экспорта журнала регистрации||
 |[EventLogExporter](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter)|Служба для экспорта журнала регистрации в [ClickHouse](https://clickhouse.tech/) и [ElasticSearch](https://www.elastic.co/)|![EventLogExporter .NET 5](https://github.com/akpaevj/OneSTools.EventLog/workflows/EventLogExporter%20.NET%205/badge.svg)|
 |[EventLogExportersManager](https://github.com/akpaevj/OneSTools.EventLog/tree/master/OneSTools.EventLog.Exporter.Manager)|Служба, выполняющая роль менеджера и наблюдающая каталоги серверов на предмет появления/удаления информационных баз с автоматическим подключением/отключением экспорта их журналов регистраций||
+|[Vault](https://github.com/rajanadar/VaultSharp)|HashiCorp Vault — это инструмент с открытым исходным кодом, который обеспечивает безопасный и надежный способ хранения и распространения секретов, таких как ключи API, токены доступа и пароли||
 
 ## Get started:
 
