@@ -37,7 +37,7 @@ namespace OneSTools.EventLog.Exporter.Core.ClickHouse
                 var arr = vault.GetSecretWithAppRole(configuration);
                 var username = arr[0];
                 var password = arr[1];
-                _connectionString = _connectionString.Replace("Username=test","Username:" + username).Replace("password=","password=" + password); }
+                _connectionString = _connectionString.Replace("Username=test","Username=" + username).Replace("password=","password=" + password); }
             Init();
         }
 
