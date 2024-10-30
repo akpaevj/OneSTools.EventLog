@@ -123,10 +123,10 @@ namespace OneSTools.EventLog.Exporter.Core
                     {
                         forceSending = true;
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        _batchBlock.Complete();
-                        throw;
+                        _logger?.LogError($"Reader returned an error: {ex.Message}");
+                        forceSending = true;
                     }
 
                     if (item != null)
